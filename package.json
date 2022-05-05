@@ -9,16 +9,40 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@prisma/client": "^3.13.0",
     "next": "12.1.5",
     "react": "18.0.0",
-    "react-dom": "18.0.0"
+    "react-dom": "18.0.0",
+    "yarn": "^1.22.18",
+    "redux": "4.0.5",
+    "react-redux": "^7.2.0",
+    "@reduxjs/toolkit": "^1.3.6",
+    "next-redux-wrapper": "^7.0.2",
+    "redux-devtools-extension": "2.13.8",
+    "redux-thunk": "2.3.0"
   },
   "devDependencies": {
-    "@types/node": "17.0.25",
+    "@types/node": "^17.0.25",
     "@types/react": "18.0.5",
     "@types/react-dom": "18.0.1",
+    "@types/react-redux": "^7.1.18",
     "eslint": "8.13.0",
     "eslint-config-next": "12.1.5",
-    "typescript": "4.6.3"
-  }
+    "ts-node": "^10.2.1",
+    "typescript": "^4.6.3",
+    "prisma": "^3.13.0"
+  },
+  "description": "This is a beta for the Wave application frontend",
+  "main": "next.config.js",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/GiacomoGuidotto/Wave.git"
+  },
+  "keywords": [],
+  "author": "Giacomo Guidotto",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/GiacomoGuidotto/Wave/issues"
+  },
+  "homepage": "https://github.com/GiacomoGuidotto/Wave#readme"
 }
