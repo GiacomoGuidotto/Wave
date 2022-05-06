@@ -1,0 +1,64 @@
+// Prisma schema file
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model Contact {
+  id              Int       @id @default(autoincrement())
+  username        String    @unique
+  name            String
+  surname         String
+  status          String
+  active          Boolean
+  messages        Message[] @relation("MessagesOfAContactChat")
+  writtenMessages Message[] @relation("MessagesWroteByAContact")
+}
+
+model Group {
+  id       Int       @id @default(autoincrement())
+  uuid     String    @unique
+  name     String
+  info     String
+  state    String
+  muted    Boolean
+  active   Boolean
+  members  Member[]  @relation("MembersOfAGroup")
+  messages Message[] @relation("MessagesOfAGroupChat")
+}
+
+model Member {
+  id                 Int      @id @default(autoincrement())
+  groupUuid          String
+  username           String   @unique
+  name               String
+  surname            String
+  lastSeenMessageKey String?
+  permissions        Int
+  active             Boolean
+  group              Group    @relation(name: "MembersOfAGroup", fields: [groupUuid], references: [uuid])
+  lastSeenMessage    Message? @relation(name: "MembersLastSeenMessages", fields: [lastSeenMessageKey], references: [key])
+}
+
+model Message {
+  id                   Int      @id @default(autoincrement())
+  groupUuid            String?
+  contactUsername      String?
+  key                  String   @unique
+  timestamp            DateTime
+  content              String
+  text                 String
+  pinned               Boolean
+  writtenByUser        Boolean
+  authorUsername       String?
+  active               Boolean
+  author               Contact? @relation(name: "MessagesWroteByAContact", fields: [authorUsername], references: [username])
+  group                Group?   @relation(name: "MessagesOfAGroupChat", fields: [groupUuid], references: [uuid])
+  contact              Contact? @relation(name: "MessagesOfAContactChat", fields: [contactUsername], references: [username])
+  membersWhoSeenItLast Member[] @relation(name: "MembersLastSeenMessages")
+}
