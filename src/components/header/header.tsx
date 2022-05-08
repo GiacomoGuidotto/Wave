@@ -10,6 +10,8 @@ const Header: React.FC<Props> = ({YofAppearance, children}) => {
   const [hiddenFlag, setHiddenFlag] = useState(true)
 
   useEffect(() => {
+    if (window.scrollY >= window.innerHeight * YofAppearance) setHiddenFlag(false)
+
     const onScroll = () => window.scrollY < window.innerHeight * YofAppearance ?
       setHiddenFlag(true) :
       setHiddenFlag(false)

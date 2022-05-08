@@ -1,8 +1,12 @@
+// noinspection JSIgnoredPromiseFromCall
+
 import React, {useContext} from "react";
 import {GlobalsContext} from "../../../lib/global_consts";
 import {useDispatch} from "react-redux";
 import Select, {ActionMeta, SingleValue} from "react-select";
-import {updateLanguage} from "../../../store/slices/user";
+import {retrieveLanguage, updateLanguage} from "../../../store/slices/user";
+import {useTranslation} from "react-i18next";
+import {useReduxSelector} from "../../../store/hooks";
 
 type Props = {
   persistent: boolean
@@ -19,11 +23,16 @@ const LanguageButton: React.FC<Props> = ({persistent}) => {
     label: name,
     value: value
   }))
+  const storeLanguage = useReduxSelector(retrieveLanguage);
 
   // change language
+  const {i18n} = useTranslation();
   const dispatch = useDispatch()
-  const onChange = (newLanguage: SingleValue<SelectOption>, _: ActionMeta<SelectOption>) => {
-    dispatch(updateLanguage(newLanguage!.value))
+  const onChange = (newValue: SingleValue<SelectOption>, _: ActionMeta<SelectOption>) => {
+    const newLanguage = newValue!.value
+
+    dispatch(updateLanguage(newLanguage))
+    i18n.changeLanguage(newLanguage.toLowerCase())
 
     if (persistent) {
       // call API
@@ -35,7 +44,7 @@ const LanguageButton: React.FC<Props> = ({persistent}) => {
       id="languages"
       instanceId="languages"
       options={languagesOptions}
-      defaultValue={languagesOptions[0]}
+      defaultValue={languagesOptions.find(value => value.value === storeLanguage)}
       onChange={onChange}
     />
   )

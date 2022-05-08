@@ -1,11 +1,13 @@
 import styles from "./welcome.module.css"
 import React from "react";
+import {useTranslation} from "next-i18next";
 
 type Props = {
   onGetStarted: () => void
 }
 
 const Welcome: React.FC<Props> = ({onGetStarted}) => {
+  const {t} = useTranslation("index")
   return (
     <>
       <div className={styles.bannerBox}>
@@ -13,7 +15,7 @@ const Welcome: React.FC<Props> = ({onGetStarted}) => {
           Wave
         </div>
         <button className={styles.getStartedButton} onClick={onGetStarted}>
-          Get started
+          {t("getStarted")}
         </button>
       </div>
     </>
