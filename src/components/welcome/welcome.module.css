@@ -1,0 +1,22 @@
+.bannerBox {
+  @apply
+  w-full h-screen
+  pl-52
+  flex flex-col place-content-center
+  gap-8
+}
+
+.title {
+  @apply
+  text-4xl
+}
+
+.getStartedButton {
+  @apply
+  transition-all duration-300 ease-in-out
+  h-10 w-32
+  border
+  hover:bg-black
+  hover:text-white
+  hover:drop-shadow-md
+}

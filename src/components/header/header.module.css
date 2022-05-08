@@ -1,0 +1,13 @@
+.headerBox {
+  @apply
+  transition-all duration-300 ease-in-out
+  fixed top-0 pr-2 h-12 w-full
+  bg-white
+  flex items-center justify-end
+  inline-flex flex-wrap gap-x-3;
+}
+
+.headerBoxHidden {
+  @apply
+  -top-12
+}

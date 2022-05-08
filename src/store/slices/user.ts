@@ -16,40 +16,40 @@ export interface userState {
 
 // user slice initial state
 const initialState: userState = {
-  token: "",
+  token:    "",
   username: "",
-  name: "",
-  surname: "",
-  picture: "",
-  phone: "",
-  theme: "",
-  language: "",
+  name:     "",
+  surname:  "",
+  picture:  "",
+  phone:    "",
+  theme:    "L",
+  language: "EN",
 }
 
 // redux store partition ("slice") for the user information management
 export const userSlice = createSlice({
-  name: "user",
+  name:     "user",
   initialState,
   reducers: {
-    updateToken: (state, action: PayloadAction<string>) => {
+    updateToken:    (state, action: PayloadAction<string>) => {
       state.token = action.payload
     },
     updateUsername: (state, action: PayloadAction<string>) => {
       state.surname = action.payload
     },
-    updateName: (state, action: PayloadAction<string>) => {
+    updateName:     (state, action: PayloadAction<string>) => {
       state.name = action.payload
     },
-    updateSurname: (state, action: PayloadAction<string>) => {
+    updateSurname:  (state, action: PayloadAction<string>) => {
       state.surname = action.payload
     },
-    updatePicture: (state, action: PayloadAction<string>) => {
+    updatePicture:  (state, action: PayloadAction<string>) => {
       state.picture = action.payload
     },
-    updatePhone: (state, action: PayloadAction<string>) => {
+    updatePhone:    (state, action: PayloadAction<string>) => {
       state.phone = action.payload
     },
-    updateTheme: (state, action: PayloadAction<string>) => {
+    updateTheme:    (state, action: PayloadAction<string>) => {
       state.theme = action.payload
     },
     updateLanguage: (state, action: PayloadAction<string>) => {
