@@ -1,3 +1,23 @@
 {
-  "title": "Create a new account"
+  "title": "Create a new account",
+  "username": "Username",
+  "usernameRequired": "The username is required",
+  "usernameTooShort": "The username is too short",
+  "usernameTooLong": "The username is too long",
+  "usernameIncorrect": "The username must contain only lowercase letters or digits or \"_\"",
+  "name": "Name",
+  "nameRequired": "The name is required",
+  "nameTooShort": "The name is too short",
+  "nameTooLong": "The name is too long",
+  "surname": "Surname",
+  "surnameRequired": "The surname is required",
+  "surnameTooShort": "The surname is too short",
+  "surnameTooLong": "The surname is too long",
+  "picture": "Profile picture",
+  "phone": "Phone",
+  "phoneRequired": "The phone is required",
+  "phoneTooShort": "The phone is too short",
+  "phoneTooLong": "The phone is too long",
+  "phoneIncorrect": "The phone must contain only digits",
+  "create": "Create"
 }

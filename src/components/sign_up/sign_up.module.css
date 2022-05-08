@@ -1,5 +1,32 @@
 .startBox {
   @apply
   h-screen w-full
-  flex place-content-center place-items-center
+  flex flex-col place-content-center place-items-center
+
+}
+
+.form {
+  @apply
+  flex flex-col
+  border
+}
+
+.label {
+  @apply
+  border
+}
+
+.field {
+  @apply
+  border
+}
+
+.error {
+  @apply
+  border
+}
+
+.submit {
+  @apply
+  border
 }

@@ -22,7 +22,7 @@ const initialState: userState = {
   surname:  "",
   picture:  "",
   phone:    "",
-  theme:    "L",
+  theme:    "D",
   language: "EN",
 }
 

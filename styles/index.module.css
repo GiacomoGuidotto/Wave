@@ -2,4 +2,5 @@
   @apply
   h-12
   flex place-items-center place-content-center
+  dark:bg-black
 }

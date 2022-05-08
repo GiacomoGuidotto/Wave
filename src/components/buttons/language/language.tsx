@@ -33,6 +33,7 @@ const LanguageButton: React.FC<Props> = ({persistent}) => {
 
     dispatch(updateLanguage(newLanguage))
     i18n.changeLanguage(newLanguage.toLowerCase())
+    // TODO fix bug: functionality of changeLanguage on default locale
 
     if (persistent) {
       // call API

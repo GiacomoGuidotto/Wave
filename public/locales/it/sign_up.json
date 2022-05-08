@@ -1,3 +1,23 @@
 {
-  "title": "Crea un nuovo account"
+  "title": "Crea un nuovo account",
+  "username": "Username",
+  "usernameRequired": "L'username è richiesto",
+  "usernameTooShort": "L'username è troppo corto",
+  "usernameTooLong": "L'username è troppo lungo",
+  "usernameIncorrect": "L'username deve contenere solo lettere minuscole o cifre o \"_\"",
+  "name": "Nome",
+  "nameRequired": "Il name è richiesto",
+  "nameTooShort": "Il name è troppo corto",
+  "nameTooLong": "Il name è troppo lungo",
+  "surname": "Cognome",
+  "surnameRequired": "Il cognome è richiesto",
+  "surnameTooShort": "Il cognome è troppo corto",
+  "surnameTooLong": "Il cognome è troppo lungo",
+  "picture": "Foto profilo",
+  "phone": "Telefono",
+  "phoneRequired": "Il numero di telefono è richiesto",
+  "phoneTooShort": "Il numero di telefono è troppo corto",
+  "phoneTooLong": "Il numero di telefono è troppo lungo",
+  "phoneIncorrect": "Il numero di telefono deve contenere solo cifre",
+  "create": "Crea"
 }
