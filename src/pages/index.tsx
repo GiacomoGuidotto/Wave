@@ -1,6 +1,6 @@
 import type {NextPage} from 'next'
 import Head from "next/head";
-import {Header, LanguageButton, SignUp, ThemeButton, Welcome} from "../components";
+import {Access, Header, LanguageButton, ThemeButton, Welcome} from "../components";
 import React, {useRef} from "react";
 import {serverSideTranslations} from "next-i18next/serverSideTranslations";
 import {useTranslation} from "next-i18next";
@@ -28,7 +28,7 @@ const Home: NextPage = () => {
       <Welcome onGetStarted={() => scrollToRef(startRef)}/>
       <div className={styles.intro}>{t("intro")}</div>
       <div ref={startRef}>
-        <SignUp/>
+        <Access/>
       </div>
     </>
   )

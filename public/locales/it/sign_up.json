@@ -5,6 +5,11 @@
   "usernameTooShort": "L'username è troppo corto",
   "usernameTooLong": "L'username è troppo lungo",
   "usernameIncorrect": "L'username deve contenere solo lettere minuscole o cifre o \"_\"",
+  "password": "Password",
+  "passwordRequired": "La password è richiesta",
+  "passwordTooShort": "La password è troppo corta",
+  "passwordTooLong": "La password è troppo lunga",
+  "passwordIncorrect": "La password deve contenere almeno una lettera minuscola, una lettera maiuscola, una cifra e un carattere speciale: \"_-:.;,!'\"£$%&/=?^{}[]()\"",
   "name": "Nome",
   "nameRequired": "Il name è richiesto",
   "nameTooShort": "Il name è troppo corto",
@@ -19,5 +24,6 @@
   "phoneTooShort": "Il numero di telefono è troppo corto",
   "phoneTooLong": "Il numero di telefono è troppo lungo",
   "phoneIncorrect": "Il numero di telefono deve contenere solo cifre",
-  "create": "Crea"
+  "create": "Crea",
+  "confirmation": "Sicuro?"
 }

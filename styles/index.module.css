@@ -1,6 +1,8 @@
 .intro {
   @apply
+  transition-all duration-300 ease-in-out
   h-12
   flex place-items-center place-content-center
-  dark:bg-black
+  dark:bg-gray-900
+  dark:text-white
 }

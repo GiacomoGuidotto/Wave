@@ -1,7 +1,8 @@
 .themeButton {
   @apply
   transition-all duration-200 ease-in-out
-  hover:text-white hover:bg-black
+  hover:text-white hover:bg-gray-900
+  dark:text-white dark:bg-gray-900
   dark:hover:text-black dark:hover:bg-white
   focus:outline-none rounded-md text-sm p-2.5;
 }

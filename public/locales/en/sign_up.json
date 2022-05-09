@@ -5,6 +5,11 @@
   "usernameTooShort": "The username is too short",
   "usernameTooLong": "The username is too long",
   "usernameIncorrect": "The username must contain only lowercase letters or digits or \"_\"",
+  "password": "Password",
+  "passwordRequired": "The password is required",
+  "passwordTooShort": "The password is too short",
+  "passwordTooLong": "The password is too long",
+  "passwordIncorrect": "The password must contain at least one lowercase letter, one uppercase letter, one digit and one special character: \"_-:.;,!'\"£$%&/=?^{}[]()\"",
   "name": "Name",
   "nameRequired": "The name is required",
   "nameTooShort": "The name is too short",
@@ -19,5 +24,6 @@
   "phoneTooShort": "The phone is too short",
   "phoneTooLong": "The phone is too long",
   "phoneIncorrect": "The phone must contain only digits",
-  "create": "Create"
+  "create": "Create",
+  "confirmation": "Sure?"
 }

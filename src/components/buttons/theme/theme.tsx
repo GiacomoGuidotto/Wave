@@ -36,7 +36,6 @@ const ThemeButton: React.FC<Props> = ({persistent}) => {
     darkIcon.classList.toggle('hidden');
     lightIcon.classList.toggle('hidden');
 
-    // TODO fix bug: dark theme rendering by tailwind
     if (storeTheme === "L") {
       document.documentElement.classList.add("dark")
       dispatch(updateTheme("D"))
