@@ -1,4 +1,4 @@
-.signUpBox {
+.loginBox {
   @apply
   w-screen min-h-screen
   py-4
@@ -22,24 +22,10 @@
   w-full max-w-lg
 }
 
-.formRow {
+.field {
   @apply
-  flex flex-wrap -mx-3 mb-6
-}
-
-.formFirstColumn {
-  @apply
-  w-full md:w-1/2 px-3 mb-6 md:mb-0
-}
-
-.formSecondColumn {
-  @apply
-  w-full md:w-1/2 px-3
-}
-
-.formFullRowColumn {
-  @apply
-  w-full px-3
+  w-full
+  px-3 mb-6
 }
 
 .label {
@@ -53,7 +39,7 @@
 .input {
   @apply
   appearance-none block
-  w-full py-3 px-4 mb-6
+  w-full py-3 px-4 mb-12
   bg-gray-200 text-gray-700
   dark:bg-gray-700 dark:text-gray-200
   border border-gray-200

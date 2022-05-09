@@ -1,4 +1,4 @@
-.intro {
+.introBox {
   @apply
   transition-all duration-300 ease-in-out
   h-12

@@ -1,4 +1,6 @@
 {
   "getStarted": "Get started",
-  "intro": "Enter the world of Wave, the new frontier of direct messaging"
+  "intro": "Enter the world of Wave, the new frontier of direct messaging",
+  "toggleLogin": "Enter directly",
+  "toggleSignUp": "Back to creating"
 }

@@ -1,0 +1,14 @@
+{
+  "title": "Entra con un account già creato",
+  "username": "Username",
+  "usernameRequired": "L'username è richiesto",
+  "usernameTooShort": "L'username è troppo corto",
+  "usernameTooLong": "L'username è troppo lungo",
+  "usernameIncorrect": "L'username deve contenere solo lettere minuscole o cifre o \"_\"",
+  "password": "Password",
+  "passwordRequired": "La password è richiesta",
+  "passwordTooShort": "La password è troppo corta",
+  "passwordTooLong": "La password è troppo lunga",
+  "passwordIncorrect": "La password deve contenere almeno una lettera minuscola, una lettera maiuscola, una cifra e un carattere speciale: \"_-:.;,!'\"£$%&/=?^{}[]()\"",
+  "enter": "Entra"
+}

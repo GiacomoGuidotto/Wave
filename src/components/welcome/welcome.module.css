@@ -1,4 +1,4 @@
-.bannerBox {
+.welcomeBox {
   @apply
   transition-all duration-300 ease-in-out
   w-full h-screen

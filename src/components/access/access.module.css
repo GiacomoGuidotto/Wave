@@ -1,0 +1,53 @@
+.accessBox {
+  @apply
+  flex place-content-center place-items-center w-screen
+}
+
+.signUp {
+  @apply
+  relative
+  transition-all duration-1000 ease-in-out
+  left-1/2
+}
+
+.signUpHidden {
+  @apply -left-1/2
+}
+
+.login {
+  @apply
+  relative
+  transition-all duration-1000 ease-in-out
+  right-1/2
+}
+
+.loginHidden {
+  @apply -right-1/2
+}
+
+.toggle {
+  @apply
+  absolute
+  w-screen flex place-content-center
+}
+
+.toggle > div {
+  @apply
+  relative
+  left-[40%]
+  z-10
+  border-b
+  text-black
+  block uppercase tracking-wide
+  text-sm font-bold
+  text-gray-200
+  cursor-pointer
+
+  transition-all duration-1000 ease-in-out
+}
+
+
+.toggled > div {
+  @apply
+  -left-[40%]
+}

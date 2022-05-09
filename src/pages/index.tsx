@@ -1,15 +1,12 @@
 import type {NextPage} from 'next'
 import Head from "next/head";
-import {Access, Header, LanguageButton, ThemeButton, Welcome} from "../components";
+import {Access, Header, Intro, LanguageButton, ThemeButton, Welcome} from "../components";
 import React, {useRef} from "react";
 import {serverSideTranslations} from "next-i18next/serverSideTranslations";
-import {useTranslation} from "next-i18next";
-import styles from "../../styles/index.module.css"
 import wrapper from "../store/store";
 import {updateLanguage} from "../store/slices/user";
 
 const Home: NextPage = () => {
-  const {t} = useTranslation("index")
   const startRef = useRef(null)
   const scrollToRef = (ref: React.RefObject<any>) => window.scrollTo({
     top:      ref.current.offsetTop,
@@ -26,7 +23,7 @@ const Home: NextPage = () => {
         <LanguageButton persistent={false}/>
       </Header>
       <Welcome onGetStarted={() => scrollToRef(startRef)}/>
-      <div className={styles.intro}>{t("intro")}</div>
+      <Intro/>
       <div ref={startRef}>
         <Access/>
       </div>
@@ -41,7 +38,7 @@ export const getServerSideProps = wrapper.getServerSideProps(store => async ({lo
 
   return {
     props: {
-      ...(await serverSideTranslations(locale, ["index", "sign_up"])),
+      ...(await serverSideTranslations(locale, ["index", "sign_up", "login"])),
     },
   };
 })

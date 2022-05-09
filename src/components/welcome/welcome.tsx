@@ -10,7 +10,7 @@ const Welcome: React.FC<Props> = ({onGetStarted}) => {
   const {t} = useTranslation("index")
   return (
     <>
-      <div className={styles.bannerBox}>
+      <div className={styles.welcomeBox}>
         <div className={styles.title}>
           Wave
         </div>

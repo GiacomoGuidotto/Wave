@@ -1,0 +1,14 @@
+{
+  "title": "Enter with an existing account",
+  "username": "Username",
+  "usernameRequired": "The username is required",
+  "usernameTooShort": "The username is too short",
+  "usernameTooLong": "The username is too long",
+  "usernameIncorrect": "The username must contain only lowercase letters or digits or \"_\"",
+  "password": "Password",
+  "passwordRequired": "The password is required",
+  "passwordTooShort": "The password is too short",
+  "passwordTooLong": "The password is too long",
+  "passwordIncorrect": "The password must contain at least one lowercase letter, one uppercase letter, one digit and one special character: \"_-:.;,!'\"£$%&/=?^{}[]()\"",
+  "enter": "Enter"
+}

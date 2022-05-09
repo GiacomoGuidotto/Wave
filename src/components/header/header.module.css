@@ -2,10 +2,12 @@
   @apply
   transition-all duration-300 ease-in-out
   fixed top-0 pr-2 h-12 w-full
-  bg-white
-  dark:bg-gray-900
+    /*bg-white*/
+    /*dark:bg-gray-900*/
+  bg-transparent
   flex items-center justify-end
-  inline-flex flex-wrap gap-x-3;
+  inline-flex flex-wrap gap-x-3
+  z-10
 }
 
 .headerBoxHidden {

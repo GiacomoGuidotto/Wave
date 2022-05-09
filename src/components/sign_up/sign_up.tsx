@@ -76,7 +76,7 @@ const SignUp: React.FC = () => {
   const [confirmation, setConfirmation] = useState(false);
 
   return (
-    <div className={styles.box}>
+    <div className={styles.signUpBox}>
       <div className={styles.title}>
         {t("title")}
       </div>

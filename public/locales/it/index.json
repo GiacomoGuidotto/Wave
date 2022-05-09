@@ -1,4 +1,6 @@
 {
   "getStarted": "Iniziamo",
-  "intro": "Entra nel mondo di Wave, la nuova frontiera delle applicazioni di messagistica"
+  "intro": "Entra nel mondo di Wave, la nuova frontiera delle applicazioni di messagistica",
+  "toggleLogin": "Entra direttamente",
+  "toggleSignUp": "Ritorna a creare"
 }
