@@ -8,19 +8,27 @@ type Props = {
 }
 
 const Access: React.FC<Props> = ({login = false}) => {
-  const [showLogin, setShowLogin] = useState(login)
-  const {t} = useTranslation("index");
+  const [rightPage, setRightPage] = useState(false)
+  const {t} = useTranslation("access");
 
   return (
     <div className={styles.accessBox}>
-      <div
-        className={`${styles.toggle} ${showLogin && styles.toggled}`}
-        onClick={() => setShowLogin(!showLogin)}
-      >
-        <div>{!showLogin ? t("toggleLogin") : t("toggleSignUp")}</div>
+      <div className={`${styles.leftPage} ${rightPage && styles.leftPageHidden}`}>
+        {login ? <Login/> : <SignUp/>}
       </div>
-      <div className={`${styles.signUp} ${showLogin && styles.signUpHidden}`}><SignUp/></div>
-      <div className={`${styles.login} ${!showLogin && styles.loginHidden}`}><Login/></div>
+      <div
+        className={`${styles.toggle} ${rightPage && styles.toggled}`}
+        onClick={() => setRightPage(!rightPage)}
+      >
+        <div>{
+          login ?
+            rightPage ? t("backToLogin") : t("toggleSignUp") :
+            rightPage ? t("backToSignUp") : t("toggleLogin")
+        }</div>
+      </div>
+      <div className={`${styles.rightPage} ${!rightPage && styles.rightPageHidden}`}>
+        {login ? <SignUp/> : <Login/>}
+      </div>
     </div>
   )
 }

@@ -54,19 +54,6 @@
   display: none;
 }
 
-.pictureInput {
-  @apply
-  appearance-none block
-  w-full py-3 px-4 mb-6
-  bg-gray-200 text-gray-400
-  dark:bg-gray-700
-  border border-gray-200
-  dark:border-gray-700
-  rounded leading-tight
-  transition-colors duration-200 ease-in-out
-  cursor-pointer
-}
-
 .errorInput {
   @apply
   mb-2
@@ -110,8 +97,3 @@
   dark:hover:text-black
 }
 
-.picture {
-  @apply
-  absolute
-  h-16
-}

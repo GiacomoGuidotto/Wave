@@ -1,6 +1,6 @@
 import type {NextPage} from 'next'
 import Head from "next/head";
-import {Access, Header, Intro, LanguageButton, ThemeButton, Welcome} from "../components";
+import {AccessPage, Header, Intro, LanguageButton, ThemeButton, Welcome} from "../components";
 import React, {useRef} from "react";
 import {serverSideTranslations} from "next-i18next/serverSideTranslations";
 import wrapper from "../store/store";
@@ -23,10 +23,10 @@ const Home: NextPage = () => {
         <LanguageButton persistent={false}/>
       </Header>
       <Welcome onGetStarted={() => scrollToRef(startRef)}/>
-      <Intro/>
       <div ref={startRef}>
-        <Access/>
+        <Intro/>
       </div>
+      <AccessPage/>
     </>
   )
 }
@@ -38,7 +38,7 @@ export const getServerSideProps = wrapper.getServerSideProps(store => async ({lo
 
   return {
     props: {
-      ...(await serverSideTranslations(locale, ["index", "sign_up", "login"])),
+      ...(await serverSideTranslations(locale, ["index", "access", "sign_up", "login"])),
     },
   };
 })
