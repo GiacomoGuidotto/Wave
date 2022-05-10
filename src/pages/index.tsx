@@ -1,45 +1,54 @@
-import type {NextPage} from 'next'
-import Head from "next/head";
-import {AccessPage, Header, Intro, LanguageButton, ThemeButton, Welcome} from "../components";
-import React, {useRef} from "react";
-import {serverSideTranslations} from "next-i18next/serverSideTranslations";
+import { AccessPage, IndexLayout, Intro, Layout, Welcome } from "../components";
+import React, { ReactElement, useRef, useState } from "react";
+import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 import wrapper from "../store/store";
-import {updateLanguage} from "../store/slices/user";
+import { updateLanguage } from "../store/slices/user";
+import { NextPageWithLayout } from "./_app";
+import { GetServerSideProps } from "next";
 
-const Home: NextPage = () => {
-  const startRef = useRef(null)
-  const scrollToRef = (ref: React.RefObject<any>) => window.scrollTo({
-    top:      ref.current.offsetTop,
-    behavior: "smooth"
-  })
+const Index: NextPageWithLayout = () => {
+  const startRef = useRef(null);
+  const scrollToRef = (ref: React.RefObject<HTMLDivElement>) =>
+    window.scrollTo({
+      top: ref.current?.offsetTop,
+      behavior: "smooth",
+    });
+
+  const [connected, setConnected] = useState(true);
 
   return (
     <>
-      <Head>
-        <title>Wave</title>
-      </Head>
-      <Header YofAppearance={.75}>
-        <ThemeButton persistent={false}/>
-        <LanguageButton persistent={false}/>
-      </Header>
-      <Welcome onGetStarted={() => scrollToRef(startRef)}/>
+      <Welcome onGetStarted={() => scrollToRef(startRef)} />
       <div ref={startRef}>
-        <Intro/>
+        <Intro />
       </div>
-      <AccessPage/>
+      <AccessPage onConnectionFail={() => setConnected(false)} />
     </>
-  )
-}
+  );
+};
 
-export default Home
+Index.getLayout = (page: ReactElement) => (
+  <Layout>
+    <IndexLayout>{page}</IndexLayout>
+  </Layout>
+);
 
-export const getServerSideProps = wrapper.getServerSideProps(store => async ({locale}: any) => {
-  store.dispatch(updateLanguage(locale?.toUpperCase()))
+export const getServerSideProps = wrapper.getServerSideProps(
+  (store): GetServerSideProps =>
+    async ({ locale }) => {
+      store.dispatch(updateLanguage(locale?.toUpperCase() ?? "EN"));
 
-  return {
-    props: {
-      ...(await serverSideTranslations(locale, ["index", "access", "sign_up", "login"])),
-    },
-  };
-})
+      return {
+        props: {
+          ...(await serverSideTranslations(locale ?? "en", [
+            "index",
+            "access",
+            "sign_up",
+            "login",
+          ])),
+        },
+      };
+    }
+);
 
+export default Index;

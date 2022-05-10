@@ -2,60 +2,62 @@ import React from "react";
 
 type Globals = {
   languages: {
-    name: string
-    value: string
-  }[],
+    name: string;
+    value: string;
+  }[];
   themes: {
-    name: string
-    value: string
-  }[],
+    name: string;
+    value: string;
+  }[];
   server: {
-    hostname: string,
+    protocol: string;
+    hostname: string;
     endpoints: {
-      root: string,
-      auth: string,
-      user: string,
-      contact: string,
-      group: string,
-      member: string,
-      message: string,
-    }
-  }
-}
+      root: string;
+      auth: string;
+      user: string;
+      contact: string;
+      group: string;
+      member: string;
+      message: string;
+    };
+  };
+};
 
 export const globals: Globals = {
   languages: [
     {
-      name:  "English",
-      value: "EN"
+      name: "English",
+      value: "EN",
     },
     {
-      name:  "Italiano",
-      value: "IT"
-    }
+      name: "Italiano",
+      value: "IT",
+    },
   ],
-  themes:    [
+  themes: [
     {
-      name:  "Light",
-      value: "L"
+      name: "Light",
+      value: "L",
     },
     {
-      name:  "Dark",
-      value: "D"
-    }
+      name: "Dark",
+      value: "D",
+    },
   ],
-  server:    {
-    hostname:  "server.wave.com/api",
+  server: {
+    protocol: "http",
+    hostname: "server.wave.com/api",
     endpoints: {
-      root:    "/",
-      auth:    "/auth",
-      user:    "/user",
+      root: "/",
+      auth: "/auth",
+      user: "/user",
       contact: "/contact",
-      group:   "/group",
-      member:  "/member",
+      group: "/group",
+      member: "/member",
       message: "/message",
-    }
-  }
-}
+    },
+  },
+};
 
 export const GlobalsContext = React.createContext(globals);

@@ -1,26 +1,34 @@
-const withPlugins = require('next-compose-plugins');
-const {i18n} = require('./next-i18next.config')
+/* eslint-disable @typescript-eslint/no-var-requires */
+/** @type {import("next").NextConfig} */
+const { i18n } = require("./next-i18next.config");
+const withPWA = require("next-pwa");
 
-/** @type {import('next').NextConfig} */
 const nextConfig = {
   i18n: i18n,
+  pwa: {
+    dest: "public",
+    disable: process.env.NODE_ENV === "development",
+  },
   reactStrictMode: true,
-  webpack: config => {
-
+  webpack: (config) => {
     // Find the base rule that contains nested rules (which contains css-loader)
-    const rules = config.module.rules.find(r => !!r.oneOf);
+    const rules = config.module.rules.find((r) => !!r.oneOf);
 
     // Integrate over the found rules
-    rules.oneOf.forEach(loaders => {
+    rules.oneOf.forEach((loaders) => {
       // Focus on the loaders that have an array of `use` statements
       if (Array.isArray(loaders.use)) {
         // Iterate over each of the loaders
-        loaders.use.forEach(l => {
+        loaders.use.forEach((l) => {
           // Only focus on loaders that are an object and have a `loader` property set to `css-loader`
-          if (typeof l !== 'string' && typeof l.loader === 'string' && /(?<!post)css-loader/.test(l.loader)) {
+          if (
+            typeof l !== "string" &&
+            typeof l.loader === "string" &&
+            /(?<!post)css-loader/.test(l.loader)
+          ) {
             // If there are no module options originally set, skip this loader
             if (!l.options.modules) return;
-            const {getLocalIdent, ...others} = l.options.modules;
+            const { getLocalIdent, ...others } = l.options.modules;
 
             // Create a new options object with the `getLocalIdent` property set to a function
             l.options = {
@@ -29,11 +37,11 @@ const nextConfig = {
                 ...others,
                 getLocalIdent: (ctx, localIdentName, localName) => {
                   // If the class name is `dark`, return it instead of hashing it
-                  if (localName === 'dark') return localName;
+                  if (localName === "dark") return localName;
                   // Otherwise, call the original function and return the value
                   return getLocalIdent(ctx, localIdentName, localName);
-                }
-              }
+                },
+              },
             };
           }
         });
@@ -41,7 +49,7 @@ const nextConfig = {
     });
 
     return config;
-  }
-}
+  },
+};
 
-module.exports = withPlugins([], nextConfig)
+module.exports = withPWA(nextConfig);

@@ -1,30 +1,30 @@
-import {createSlice, PayloadAction} from "@reduxjs/toolkit";
-import {HYDRATE} from "next-redux-wrapper";
-import {ReduxState} from "../store";
+import { createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { HYDRATE } from "next-redux-wrapper";
+import { ReduxState } from "../store";
 
 // user slice type
 export interface userState {
-  token: string,
-  username: string,
-  name: string,
-  surname: string,
-  picture: string, // TODO forward study
-  phone: string,
-  theme: string,
-  language: string,
+  token: string;
+  username: string;
+  name: string;
+  surname: string;
+  picture: string; // TODO forward study
+  phone: string;
+  theme: string;
+  language: string;
 }
 
 // user slice initial state
 const initialState: userState = {
-  token:    "",
+  token: "",
   username: "",
-  name:     "",
-  surname:  "",
-  picture:  "",
-  phone:    "",
-  theme:    "D",
+  name: "",
+  surname: "",
+  picture: "",
+  phone: "",
+  theme: "D",
   language: "EN",
-}
+};
 
 // redux store partition ("slice") for the user information management
 export const userSlice = createSlice({
@@ -32,40 +32,40 @@ export const userSlice = createSlice({
   initialState,
   reducers: {
     updateToken:    (state, action: PayloadAction<string>) => {
-      state.token = action.payload
+      state.token = action.payload;
     },
     updateUsername: (state, action: PayloadAction<string>) => {
-      state.surname = action.payload
+      state.surname = action.payload;
     },
     updateName:     (state, action: PayloadAction<string>) => {
-      state.name = action.payload
+      state.name = action.payload;
     },
     updateSurname:  (state, action: PayloadAction<string>) => {
-      state.surname = action.payload
+      state.surname = action.payload;
     },
     updatePicture:  (state, action: PayloadAction<string>) => {
-      state.picture = action.payload
+      state.picture = action.payload;
     },
     updatePhone:    (state, action: PayloadAction<string>) => {
-      state.phone = action.payload
+      state.phone = action.payload;
     },
     updateTheme:    (state, action: PayloadAction<string>) => {
-      state.theme = action.payload
+      state.theme = action.payload;
     },
     updateLanguage: (state, action: PayloadAction<string>) => {
-      state.language = action.payload
+      state.language = action.payload;
     },
     // test
     updateState: (state, action: PayloadAction<userState>) => {
-      state.token = action.payload.token
-      state.username = action.payload.username
-      state.name = action.payload.name
-      state.surname = action.payload.surname
-      state.picture = action.payload.picture
-      state.phone = action.payload.phone
-      state.theme = action.payload.theme
-      state.language = action.payload.language
-    }
+      state.token = action.payload.token;
+      state.username = action.payload.username;
+      state.name = action.payload.name;
+      state.surname = action.payload.surname;
+      state.picture = action.payload.picture;
+      state.phone = action.payload.phone;
+      state.theme = action.payload.theme;
+      state.language = action.payload.language;
+    },
   },
 
   // reducer called after server side rendering,
@@ -74,11 +74,11 @@ export const userSlice = createSlice({
     [HYDRATE]: (state, action) => {
       return {
         ...state,
-        ...action.payload.user
-      }
-    }
-  }
-})
+        ...action.payload.user,
+      };
+    },
+  },
+});
 
 // user slice reducers
 export const {
@@ -91,7 +91,7 @@ export const {
   updateTheme,
   updateLanguage,
   updateState,
-} = userSlice.actions
+} = userSlice.actions;
 
 // user slice selectors, for the extract of the single element in the user state
 export const retrieveToken = (state: ReduxState) => state.user.token;

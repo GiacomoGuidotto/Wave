@@ -1,54 +1,43 @@
-import React, {useEffect} from "react";
-import {useDispatch} from "react-redux";
-import styles from "./theme.module.css"
-import {retrieveTheme, updateTheme} from "../../../store/slices/user";
-import {useReduxSelector} from "../../../store/hooks";
+import React, { useEffect } from "react";
+import { useDispatch } from "react-redux";
+import styles from "./theme.module.css";
+import { retrieveTheme, updateTheme } from "../../../store/slices/user";
+import { useReduxSelector } from "../../../store/hooks";
 
 type Props = {
-  persistent: boolean
-}
+  persistent: boolean;
+};
 
-// https://www.freecodecamp.org/news/how-to-build-a-dark-mode-switcher-with-tailwind-css-and-flowbite/
-const ThemeButton: React.FC<Props> = ({persistent}) => {
-  const storeTheme = useReduxSelector(retrieveTheme)
+const ThemeButton: React.FC<Props> = ({ persistent }) => {
+  const storeTheme = useReduxSelector(retrieveTheme);
 
-
+  // change icon on store change
   useEffect(() => {
-    const darkIcon = document.getElementById('theme-toggle-dark-icon')!;
-    const lightIcon = document.getElementById('theme-toggle-light-icon')!;
+    const darkIcon = document.getElementById("theme-toggle-dark-icon");
+    const lightIcon = document.getElementById("theme-toggle-light-icon");
 
-    if (storeTheme === "D" && window.matchMedia('(prefers-color-scheme: dark)').matches) {
-      document.documentElement.classList.add("dark")
-      lightIcon.classList.add("hidden")
+    if (storeTheme === "D") {
+      lightIcon?.classList.add("hidden");
+      darkIcon?.classList.remove("hidden");
     } else {
-      document.documentElement.classList.remove("dark")
-      darkIcon.classList.add("hidden")
+      darkIcon?.classList.add("hidden");
+      lightIcon?.classList.remove("hidden");
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [])
+  }, [storeTheme]);
 
   // change language
-  const dispatch = useDispatch()
+  const dispatch = useDispatch();
   const onChange = () => {
-    const darkIcon = document.getElementById('theme-toggle-dark-icon')!;
-    const lightIcon = document.getElementById('theme-toggle-light-icon')!;
-
-    darkIcon.classList.toggle('hidden');
-    lightIcon.classList.toggle('hidden');
-
     if (storeTheme === "L") {
-      document.documentElement.classList.add("dark")
-      dispatch(updateTheme("D"))
+      dispatch(updateTheme("D"));
     } else if (storeTheme === "D") {
-      document.documentElement.classList.remove("dark")
-      dispatch(updateTheme("L"))
-
+      dispatch(updateTheme("L"));
     }
 
     if (persistent) {
       // call API, for MZ usage
     }
-  }
+  };
 
   return (
     <button
@@ -64,9 +53,7 @@ const ThemeButton: React.FC<Props> = ({persistent}) => {
         viewBox="0 0 20 20"
         xmlns="http://www.w3.org/2000/svg"
       >
-        <path
-          d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z"
-        />
+        <path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z" />
       </svg>
       <svg
         id="theme-toggle-light-icon"
@@ -82,7 +69,7 @@ const ThemeButton: React.FC<Props> = ({persistent}) => {
         />
       </svg>
     </button>
-  )
-}
+  );
+};
 
-export default ThemeButton
+export default ThemeButton;

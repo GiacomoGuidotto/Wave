@@ -1,8 +1,13 @@
-export {default as Header} from "./header";
-export {default as Welcome} from "./welcome";
-export {default as SignUp} from "./sign_up";
-export {default as LanguageButton} from "./buttons/language"
-export {default as ThemeButton} from "./buttons/theme"
-export {default as AccessPage} from "./access"
-export {default as Login} from "./login"
-export {default as Intro} from "./intro"
+export { default as Header } from "./fragments/header";
+export { default as Welcome } from "./fragments/welcome";
+export { default as SignUp } from "./fragments/sign_up";
+export { default as LanguageButton } from "./buttons/language";
+export { default as ThemeButton } from "./buttons/theme";
+export { default as AccessPage } from "./fragments/access";
+export { default as Login } from "./fragments/login";
+export { default as Intro } from "./fragments/intro";
+export { default as Layout } from "./layouts/layout";
+export { default as IndexLayout } from "./layouts/index";
+export { default as HomeLayout } from "./layouts/home";
+export { default as AccessLayout } from "./layouts/access";
+export { default as OfflineLayout } from "./layouts/offline";

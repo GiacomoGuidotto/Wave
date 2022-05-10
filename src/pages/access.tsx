@@ -1,30 +1,41 @@
-import {NextPage} from "next";
-import {AccessPage, Header, LanguageButton, ThemeButton} from "../components";
-import {serverSideTranslations} from "next-i18next/serverSideTranslations";
-import React from "react";
-import Head from "next/head";
+import { AccessLayout, AccessPage, Layout } from "../components";
+import { serverSideTranslations } from "next-i18next/serverSideTranslations";
+import React, { useState } from "react";
+import { NextPageWithLayout } from "./_app";
+import { GetServerSideProps } from "next";
+import wrapper from "../store/store";
+import { updateLanguage } from "../store/slices/user";
 
-const Access: NextPage = () => {
+const Access: NextPageWithLayout = () => {
+  const [connected, setConnected] = useState(true);
+
   return (
     <>
-      <Head>
-        <title>Wave | Access</title>
-      </Head>
-      <Header YofAppearance={0}>
-        <ThemeButton persistent={false}/>
-        <LanguageButton persistent={false}/>
-      </Header>
-      <AccessPage login/>
+      <AccessPage login onConnectionFail={() => setConnected(false)} />
     </>
-  )
-}
+  );
+};
 
-export default Access
+Access.getLayout = (page) => (
+  <Layout>
+    <AccessLayout>{page}</AccessLayout>
+  </Layout>
+);
 
-export const getServerSideProps = async ({locale}: any) => {
-  return {
-    props: {
-      ...(await serverSideTranslations(locale, ["sign_up", "login", "access"])),
-    },
-  };
-}
+export const getServerSideProps = wrapper.getServerSideProps(
+  (store): GetServerSideProps =>
+    async ({ locale }) => {
+      store.dispatch(updateLanguage(locale?.toUpperCase() ?? "EN"));
+      return {
+        props: {
+          ...(await serverSideTranslations(locale ?? "en", [
+            "sign_up",
+            "login",
+            "access",
+          ])),
+        },
+      };
+    }
+);
+
+export default Access;

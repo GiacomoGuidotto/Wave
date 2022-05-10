@@ -10,6 +10,8 @@
   "passwordTooShort": "La password è troppo corta",
   "passwordTooLong": "La password è troppo lunga",
   "passwordIncorrect": "La password deve contenere almeno una lettera minuscola, una lettera maiuscola, una cifra e un carattere speciale: \"_-:.;,!'\"£$%&/=?^{}[]()\"",
+  "showPassword": "Mostra password",
+  "hidePassword": "Nascondi password",
   "name": "Nome",
   "nameRequired": "Il name è richiesto",
   "nameTooShort": "Il name è troppo corto",

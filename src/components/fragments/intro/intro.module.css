@@ -1,0 +1,8 @@
+.introBox {
+  @apply
+  transition-all duration-200 ease-in-out
+  h-52
+  flex place-items-center place-content-center
+  dark:bg-gray-900
+  dark:text-white
+}

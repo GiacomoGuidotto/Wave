@@ -10,6 +10,8 @@
   "passwordTooShort": "The password is too short",
   "passwordTooLong": "The password is too long",
   "passwordIncorrect": "The password must contain at least one lowercase letter, one uppercase letter, one digit and one special character: \"_-:.;,!'\"£$%&/=?^{}[]()\"",
+  "showPassword": "Show password",
+  "hidePassword": "Hide password",
   "name": "Name",
   "nameRequired": "The name is required",
   "nameTooShort": "The name is too short",

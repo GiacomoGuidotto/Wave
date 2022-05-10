@@ -1,0 +1,29 @@
+.welcomeBox {
+  @apply
+  transition-all duration-200 ease-in-out
+  w-full h-screen
+  pl-52
+  flex flex-col place-content-center
+  gap-8
+  dark:bg-gray-900
+  dark:text-white
+}
+
+.title {
+  @apply
+  text-4xl
+}
+
+.getStartedButton {
+  @apply
+  transition-all duration-200 ease-in-out
+  h-10 w-32
+  border
+  hover:bg-black
+  hover:text-white
+  hover:border-black
+  hover:drop-shadow-md
+  dark:hover:bg-gray-300
+  dark:hover:text-black
+  dark:hover:border-gray-300
+}
