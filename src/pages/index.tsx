@@ -1,12 +1,14 @@
 import { AccessPage, IndexLayout, Intro, Layout, Welcome } from "../components";
-import React, { ReactElement, useRef, useState } from "react";
+import React, { ReactElement, useRef } from "react";
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 import wrapper from "../store/store";
 import { updateLanguage } from "../store/slices/user";
 import { NextPageWithLayout } from "./_app";
 import { GetServerSideProps } from "next";
+import { useRouter } from "next/router";
 
 const Index: NextPageWithLayout = () => {
+  const router = useRouter();
   const startRef = useRef(null);
   const scrollToRef = (ref: React.RefObject<HTMLDivElement>) =>
     window.scrollTo({
@@ -14,15 +16,13 @@ const Index: NextPageWithLayout = () => {
       behavior: "smooth",
     });
 
-  const [connected, setConnected] = useState(true);
-
   return (
     <>
       <Welcome onGetStarted={() => scrollToRef(startRef)} />
       <div ref={startRef}>
         <Intro />
       </div>
-      <AccessPage onConnectionFail={() => setConnected(false)} />
+      <AccessPage onConnectionFail={() => router.push("/offline", "/")} />
     </>
   );
 };

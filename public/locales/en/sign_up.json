@@ -27,5 +27,6 @@
   "phoneTooLong": "The phone is too long",
   "phoneIncorrect": "The phone must contain only digits",
   "create": "Create",
-  "confirmation": "Sure?"
+  "confirmation": "Sure?",
+  "alreadyExist": "Username already exist"
 }

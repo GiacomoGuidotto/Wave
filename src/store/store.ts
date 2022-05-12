@@ -19,7 +19,7 @@ export type ReduxThunk<ReturnType = void> = ThunkAction<
 // Redux store instance constructor
 const makeStore = () =>
   configureStore({
-    reducer:  {
+    reducer: {
       user: userReducer,
     },
     devTools: true,

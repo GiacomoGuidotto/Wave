@@ -5,8 +5,8 @@ import { GlobalsContext } from "../../../lib/global_consts";
 import { useDispatch } from "react-redux";
 import Select, { MultiValue, SingleValue } from "react-select";
 import { retrieveLanguage, updateLanguage } from "../../../store/slices/user";
-import { useTranslation } from "react-i18next";
 import { useReduxSelector } from "../../../store/hooks";
+import { useRouter } from "next/router";
 
 type Props = {
   persistent: boolean;
@@ -26,7 +26,7 @@ const LanguageButton: React.FC<Props> = ({ persistent }) => {
   const storeLanguage = useReduxSelector(retrieveLanguage);
 
   // change language
-  const { i18n } = useTranslation();
+  const router = useRouter();
   const dispatch = useDispatch();
   const onChange = (
     newValue: SingleValue<SelectOption> | MultiValue<SelectOption>
@@ -35,12 +35,15 @@ const LanguageButton: React.FC<Props> = ({ persistent }) => {
 
     const newLanguage = newValue?.value ?? "EN";
     dispatch(updateLanguage(newLanguage));
-    i18n.changeLanguage(newLanguage.toLowerCase());
-    // TODO fix bug: functionality of changeLanguage on default locale
 
     if (persistent) {
       // call API
     }
+
+    router.push(router.pathname, router.pathname, {
+      locale: newLanguage.toLowerCase(),
+      scroll: false,
+    });
   };
 
   const isSingleValue = (

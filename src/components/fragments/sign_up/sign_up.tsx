@@ -12,6 +12,7 @@ import { useReduxSelector } from "../../../store/hooks";
 import React, { useEffect, useState } from "react";
 import Image from "next/image";
 import { useRouter } from "next/router";
+import { login, logMessages, signUp } from "../../../lib/service/api_server";
 
 const getBase64 = (file: File) =>
   new Promise<string>((resolve, reject) => {
@@ -39,6 +40,7 @@ const SignUp: React.FC = () => {
     reset,
     watch,
     getValues,
+    setError,
   } = useForm<Inputs>();
   const dispatch = useDispatch();
   const theme = useReduxSelector(retrieveTheme);
@@ -63,11 +65,56 @@ const SignUp: React.FC = () => {
       const file = data.picture.item(0);
       if (file) setPicture(await getBase64(file));
 
-      // use API
+      // call API
+      let response = await signUp(
+        data.username,
+        data.password,
+        data.name,
+        data.surname,
+        picture,
+        data.phone
+      );
+      let payload = await response.json();
+
+      // error cases
+      switch (response.status) {
+        case 400:
+          logMessages(payload);
+          return;
+
+        case 409:
+          setError(
+            "username",
+            {
+              type: "elaboration",
+              message: t("alreadyExist"),
+            },
+            {
+              shouldFocus: true,
+            }
+          );
+          return;
+      }
+
+      response = await login(data.username, data.password);
+      payload = await response.json();
+
+      // error cases
+      switch (response.status) {
+        case 400:
+          logMessages(payload);
+          return;
+
+        case 404:
+          logMessages(payload);
+          return;
+      }
+
+      const token: string = payload.token;
 
       dispatch(
         updateState({
-          token: "",
+          token: token,
           username: data.username,
           name: data.name,
           surname: data.surname,

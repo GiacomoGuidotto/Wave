@@ -3,8 +3,8 @@
 import React, { useEffect } from "react";
 import { useReduxSelector } from "../../../store/hooks";
 import { retrieveTheme, updateTheme } from "../../../store/slices/user";
-import { useDispatch } from "react-redux";
 import Head from "next/head";
+import { useDispatch } from "react-redux";
 
 type Props = {
   children: React.ReactChild;
@@ -14,6 +14,7 @@ const Layout: React.FC<Props> = ({ children }) => {
   const storeTheme = useReduxSelector(retrieveTheme);
   const dispatch = useDispatch();
 
+  // initialize the theme from the session storage value
   useEffect(() => {
     if (sessionStorage.getItem("theme") === "light") {
       if (storeTheme === "D") dispatch(updateTheme("L"));
@@ -42,7 +43,7 @@ const Layout: React.FC<Props> = ({ children }) => {
       <Head>
         <meta
           name="viewport"
-          content="minimum-scale=1, initial-scale=1, width=device-width, shrink-to-fit=no, user-scalable=no, viewport-fit=cover"
+          content="minimum-scale=1, initial-scale=1, width=device-width, shrink-to-fit=no, viewport-fit=cover"
         />
         <link rel="manifest" href="/manifest.json" />
       </Head>

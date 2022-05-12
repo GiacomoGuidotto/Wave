@@ -6,8 +6,8 @@ const Offline: NextPageWithLayout = () => {
   const router = useRouter();
   return (
     <>
-      <div>You&apos;re offline</div>
-      <button onClick={() => router.back()}>Retry connection</button>
+      <div>We cannot reach our servers</div>
+      <button onClick={() => router.reload()}>Retry connection</button>
     </>
   );
 };

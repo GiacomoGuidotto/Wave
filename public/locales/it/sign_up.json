@@ -27,5 +27,6 @@
   "phoneTooLong": "Il numero di telefono è troppo lungo",
   "phoneIncorrect": "Il numero di telefono deve contenere solo cifre",
   "create": "Crea",
-  "confirmation": "Sicuro?"
+  "confirmation": "Sicuro?",
+  "alreadyExist": "L'Username esiste già"
 }

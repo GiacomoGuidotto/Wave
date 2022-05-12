@@ -42,6 +42,7 @@ const ThemeButton: React.FC<Props> = ({ persistent }) => {
   return (
     <button
       id="theme-toggle"
+      aria-label="Theme toggle"
       type="button"
       className={styles.themeButton}
       onClick={onChange}

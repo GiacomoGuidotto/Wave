@@ -12,5 +12,6 @@
   "passwordIncorrect": "The password must contain at least one lowercase letter, one uppercase letter, one digit and one special character: \"_-:.;,!'\"£$%&/=?^{}[]()\"",
   "showPassword": "Show password",
   "hidePassword": "Hide password",
+  "userNotFound": "User not found",
   "enter": "Enter"
 }

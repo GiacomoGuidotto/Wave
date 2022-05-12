@@ -1,17 +1,20 @@
 import { AccessLayout, AccessPage, Layout } from "../components";
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
-import React, { useState } from "react";
+import React from "react";
 import { NextPageWithLayout } from "./_app";
 import { GetServerSideProps } from "next";
 import wrapper from "../store/store";
 import { updateLanguage } from "../store/slices/user";
+import { useRouter } from "next/router";
 
 const Access: NextPageWithLayout = () => {
-  const [connected, setConnected] = useState(true);
-
+  const router = useRouter();
   return (
     <>
-      <AccessPage login onConnectionFail={() => setConnected(false)} />
+      <AccessPage
+        login
+        onConnectionFail={() => router.push("/offline", "/access")}
+      />
     </>
   );
 };

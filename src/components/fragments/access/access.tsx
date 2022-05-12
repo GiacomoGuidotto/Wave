@@ -2,7 +2,7 @@ import { Login, SignUp } from "../../index";
 import React, { useEffect, useState } from "react";
 import styles from "./access.module.css";
 import { useTranslation } from "next-i18next";
-import { testConnection } from "../../../lib/service/test_connection";
+import { test } from "../../../lib/service/api_server";
 
 type Props = {
   login?: boolean;
@@ -12,7 +12,7 @@ type Props = {
 const Access: React.FC<Props> = ({ login = false, onConnectionFail }) => {
   useEffect(() => {
     (async () => {
-      const connection = await testConnection();
+      const connection = await test();
       if (!connection) onConnectionFail();
     })();
     /* eslint-disable-next-line react-hooks/exhaustive-deps */

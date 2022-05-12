@@ -3,8 +3,9 @@ import { useTranslation } from "next-i18next";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { useDispatch } from "react-redux";
 import styles from "./login.module.css";
-import { updateUsername } from "../../../store/slices/user";
+import { updateToken, updateUsername } from "../../../store/slices/user";
 import { useRouter } from "next/router";
+import { login, logMessages } from "../../../lib/service/api_server";
 
 type Inputs = {
   username: string;
@@ -18,17 +19,44 @@ const Login: React.FC = () => {
     handleSubmit,
     formState: { errors },
     reset,
+    setError,
   } = useForm<Inputs>();
   const dispatch = useDispatch();
   const router = useRouter();
 
   const onSignUp: SubmitHandler<Inputs> = async (data) => {
     // call API
+    const response = await login(data.username, data.password);
+    const payload = await response.json();
 
+    // error cases
+    switch (response.status) {
+      case 400:
+        logMessages(payload);
+        return;
+
+      case 404:
+        setError(
+          "username",
+          {
+            type: "elaboration",
+            message: t("userNotFound"),
+          },
+          {
+            shouldFocus: true,
+          }
+        );
+        return;
+    }
+
+    const token: string = payload.token;
+
+    // update store
+    dispatch(updateToken(token));
     dispatch(updateUsername(data.username));
 
+    // reset view and proceed home
     reset();
-
     await router.push("/home");
   };
 
@@ -60,6 +88,7 @@ const Login: React.FC = () => {
                 value: 32,
                 message: t("usernameTooLong"),
               },
+
               pattern: {
                 value: /^[a-z\d_]*$/,
                 message: t("usernameIncorrect"),

@@ -1,0 +1,19 @@
+.offlineBox {
+  @apply
+  h-screen w-screen
+  flex flex-col
+  place-items-center place-content-center
+  gap-8
+  dark:bg-gray-900
+  dark:text-white
+}
+
+.offlineText {
+  @apply
+  uppercase font-bold
+  flex flex-col place-content-center place-items-center gap-2
+}
+
+.offlineText > button {
+  @apply uppercase text-xs cursor-pointer border-b
+}
