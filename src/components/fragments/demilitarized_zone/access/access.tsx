@@ -1,8 +1,8 @@
-import { Login, SignUp } from "../../index";
-import React, { useEffect, useState } from "react";
 import styles from "./access.module.css";
+import React, { useEffect, useState } from "react";
 import { useTranslation } from "next-i18next";
-import { test } from "../../../lib/service/api_server";
+import { test } from "services/api_server";
+import { Login, SignUp } from "fragments";
 
 type Props = {
   login?: boolean;
@@ -18,6 +18,7 @@ const Access: React.FC<Props> = ({ login = false, onConnectionFail }) => {
     /* eslint-disable-next-line react-hooks/exhaustive-deps */
   }, []);
 
+  // TODO save into store
   const [rightPage, setRightPage] = useState(false);
   const { t } = useTranslation("access");
 
@@ -26,7 +27,11 @@ const Access: React.FC<Props> = ({ login = false, onConnectionFail }) => {
       <div
         className={`${styles.leftPage} ${rightPage && styles.leftPageHidden}`}
       >
-        {login ? <Login /> : <SignUp />}
+        {login ? (
+          <Login onConnectionFail={onConnectionFail} />
+        ) : (
+          <SignUp onConnectionFail={onConnectionFail} />
+        )}
       </div>
       <div
         className={`${styles.toggle} ${rightPage && styles.toggled}`}
@@ -47,7 +52,11 @@ const Access: React.FC<Props> = ({ login = false, onConnectionFail }) => {
           !rightPage && styles.rightPageHidden
         }`}
       >
-        {login ? <SignUp /> : <Login />}
+        {login ? (
+          <SignUp onConnectionFail={onConnectionFail} />
+        ) : (
+          <Login onConnectionFail={onConnectionFail} />
+        )}
       </div>
     </div>
   );

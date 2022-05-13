@@ -1,11 +1,12 @@
-import { AccessPage, IndexLayout, Intro, Layout, Welcome } from "../components";
 import React, { ReactElement, useRef } from "react";
-import { serverSideTranslations } from "next-i18next/serverSideTranslations";
-import wrapper from "../store/store";
-import { updateLanguage } from "../store/slices/user";
-import { NextPageWithLayout } from "./_app";
 import { GetServerSideProps } from "next";
 import { useRouter } from "next/router";
+import { serverSideTranslations } from "next-i18next/serverSideTranslations";
+import wrapper from "store/store";
+import { updateLanguage } from "store/slices/user";
+import { NextPageWithLayout } from "pages/_app";
+import { IndexLayout, Layout } from "layouts";
+import { AccessPage, Intro, Welcome } from "fragments";
 
 const Index: NextPageWithLayout = () => {
   const router = useRouter();
@@ -22,7 +23,9 @@ const Index: NextPageWithLayout = () => {
       <div ref={startRef}>
         <Intro />
       </div>
-      <AccessPage onConnectionFail={() => router.push("/offline", "/")} />
+      <AccessPage
+        onConnectionFail={() => router.push("/_servers_unreachable", "/")}
+      />
     </>
   );
 };

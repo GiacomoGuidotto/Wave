@@ -1,3 +1,4 @@
+import styles from "./home_layout.module.css";
 import React from "react";
 import Head from "next/head";
 
@@ -11,7 +12,7 @@ const HomeLayout: React.FC<Props> = ({ children }) => {
       <Head>
         <title>Wave</title>
       </Head>
-      {children}
+      <div className={styles.homeBox}>{children}</div>
     </>
   );
 };

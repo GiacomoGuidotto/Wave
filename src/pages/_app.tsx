@@ -1,10 +1,10 @@
-import "../../styles/globals.css";
-import type { AppProps } from "next/app";
-import wrapper from "../store/store";
-import { globals, GlobalsContext } from "../lib/global_consts";
-import { appWithTranslation } from "next-i18next";
+import "styles/globals.css";
 import { ReactElement, ReactNode } from "react";
 import { NextPage } from "next";
+import type { AppProps } from "next/app";
+import { appWithTranslation } from "next-i18next";
+import wrapper from "store/store";
+import { globals, GlobalsContext } from "globals/global_consts";
 
 type AppPropsWithLayout = AppProps & {
   Component: NextPageWithLayout;

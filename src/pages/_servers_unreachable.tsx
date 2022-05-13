@@ -1,8 +1,8 @@
-import { NextPageWithLayout } from "./_app";
-import { Layout, OfflineLayout } from "../components";
 import { useRouter } from "next/router";
+import { NextPageWithLayout } from "pages/_app";
+import { Layout, OfflineLayout } from "layouts";
 
-const Offline: NextPageWithLayout = () => {
+const _servers_unreachable: NextPageWithLayout = () => {
   const router = useRouter();
   return (
     <>
@@ -12,10 +12,10 @@ const Offline: NextPageWithLayout = () => {
   );
 };
 
-Offline.getLayout = (page) => (
+_servers_unreachable.getLayout = (page) => (
   <Layout>
     <OfflineLayout>{page}</OfflineLayout>
   </Layout>
 );
 
-export default Offline;
+export default _servers_unreachable;

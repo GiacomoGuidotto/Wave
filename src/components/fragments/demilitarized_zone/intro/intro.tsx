@@ -1,5 +1,5 @@
-import React from "react";
 import styles from "./intro.module.css";
+import React from "react";
 import { useTranslation } from "next-i18next";
 
 const Intro: React.FC = () => {

@@ -1,10 +1,8 @@
-// noinspection HtmlRequiredTitleElement
-
 import React, { useEffect } from "react";
-import { useReduxSelector } from "../../../store/hooks";
-import { retrieveTheme, updateTheme } from "../../../store/slices/user";
-import Head from "next/head";
 import { useDispatch } from "react-redux";
+import Head from "next/head";
+import { useReduxSelector } from "store/hooks";
+import { retrieveTheme, updateTheme } from "store/slices/user";
 
 type Props = {
   children: React.ReactChild;
@@ -38,6 +36,7 @@ const Layout: React.FC<Props> = ({ children }) => {
     }
   }, [storeTheme]);
 
+  // noinspection HtmlRequiredTitleElement
   return (
     <>
       <Head>

@@ -5,9 +5,9 @@ export class ErrorResponse {
   prettierMessage: string;
 
   constructor(
-    timestamp: Date,
-    code: number,
-    message: string,
+    timestamp = new Date(),
+    code = -1,
+    message = "",
     prettierMessage = ""
   ) {
     this.timestamp = timestamp;

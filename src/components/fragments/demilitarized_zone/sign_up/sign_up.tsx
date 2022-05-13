@@ -1,18 +1,19 @@
 import styles from "./sign_up.module.css";
-import { useTranslation } from "next-i18next";
-import { SubmitHandler, useForm } from "react-hook-form";
+import React, { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
+import { SubmitHandler, useForm } from "react-hook-form";
+import { useRouter } from "next/router";
+import Image from "next/image";
+import { useTranslation } from "next-i18next";
+import { useReduxSelector } from "store/hooks";
 import {
   retrieveLanguage,
   retrievePicture,
   retrieveTheme,
   updateState,
-} from "../../../store/slices/user";
-import { useReduxSelector } from "../../../store/hooks";
-import React, { useEffect, useState } from "react";
-import Image from "next/image";
-import { useRouter } from "next/router";
-import { login, logMessages, signUp } from "../../../lib/service/api_server";
+} from "store/slices/user";
+import { login, logMessages, signUp } from "services/api_server";
+import { ErrorResponse } from "models/error_response";
 
 const getBase64 = (file: File) =>
   new Promise<string>((resolve, reject) => {
@@ -31,8 +32,15 @@ type Inputs = {
   phone: string;
 };
 
-const SignUp: React.FC = () => {
+type Props = {
+  onConnectionFail: () => void;
+};
+
+const SignUp: React.FC<Props> = ({ onConnectionFail }) => {
   const { t } = useTranslation("sign_up");
+  const dispatch = useDispatch();
+  const theme = useReduxSelector(retrieveTheme);
+  const language = useReduxSelector(retrieveLanguage);
   const {
     register,
     handleSubmit,
@@ -42,9 +50,6 @@ const SignUp: React.FC = () => {
     getValues,
     setError,
   } = useForm<Inputs>();
-  const dispatch = useDispatch();
-  const theme = useReduxSelector(retrieveTheme);
-  const language = useReduxSelector(retrieveLanguage);
 
   // change picture preview
   const [picture, setPicture] = useState(useReduxSelector(retrievePicture));
@@ -74,6 +79,12 @@ const SignUp: React.FC = () => {
         picture,
         data.phone
       );
+
+      if (response instanceof ErrorResponse) {
+        onConnectionFail();
+        return;
+      }
+
       let payload = await response.json();
 
       // error cases
@@ -97,6 +108,12 @@ const SignUp: React.FC = () => {
       }
 
       response = await login(data.username, data.password);
+
+      if (response instanceof ErrorResponse) {
+        onConnectionFail();
+        return;
+      }
+
       payload = await response.json();
 
       // error cases

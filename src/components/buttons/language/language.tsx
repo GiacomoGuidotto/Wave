@@ -1,12 +1,10 @@
-// noinspection JSIgnoredPromiseFromCall
-
 import React, { useContext } from "react";
-import { GlobalsContext } from "../../../lib/global_consts";
 import { useDispatch } from "react-redux";
 import Select, { MultiValue, SingleValue } from "react-select";
-import { retrieveLanguage, updateLanguage } from "../../../store/slices/user";
-import { useReduxSelector } from "../../../store/hooks";
 import { useRouter } from "next/router";
+import { GlobalsContext } from "globals/global_consts";
+import { useReduxSelector } from "store/hooks";
+import { retrieveLanguage, updateLanguage } from "store/slices/user";
 
 type Props = {
   persistent: boolean;
@@ -40,6 +38,7 @@ const LanguageButton: React.FC<Props> = ({ persistent }) => {
       // call API
     }
 
+    // noinspection JSIgnoredPromiseFromCall
     router.push(router.pathname, router.pathname, {
       locale: newLanguage.toLowerCase(),
       scroll: false,

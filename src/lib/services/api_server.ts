@@ -1,6 +1,6 @@
-import { globals } from "../global_consts";
 import { v4 as uuid } from "uuid";
-import { ErrorResponse } from "../models/error_response";
+import { globals } from "globals/global_consts";
+import { ErrorResponse } from "models/error_response";
 
 const server = globals.server;
 const baseUrl = `${server.protocol}://${server.hostname}`;
@@ -10,6 +10,12 @@ type ErrorPayload = {
   error: number;
   message: string;
 };
+
+// export function responseTypeCheck(
+//   response: Response | ErrorResponse
+// ): response is Response {
+//   return (response as Response) !== undefined;
+// }
 
 export const test = async (): Promise<boolean> => {
   const url = `${baseUrl}${server.endpoints.root}`;
@@ -24,7 +30,7 @@ export const test = async (): Promise<boolean> => {
 export const login = (
   username: string,
   password: string
-): Promise<Response> => {
+): Promise<Response | ErrorResponse> => {
   const device: string = uuid();
 
   const url = `${baseUrl}${server.endpoints.auth}`;
@@ -38,10 +44,12 @@ export const login = (
   return fetch(url, {
     method: method,
     headers: headers,
-  }).then((value) => {
-    if (!value.ok) console.clear();
-    return value;
-  });
+  })
+    .then((value) => {
+      if (!value.ok) console.clear();
+      return value;
+    })
+    .catch(() => new ErrorResponse());
 };
 
 export const signUp = async (
@@ -51,7 +59,7 @@ export const signUp = async (
   surname: string,
   picture: string,
   phone: string
-) => {
+): Promise<Response | ErrorResponse> => {
   const url = `${baseUrl}${server.endpoints.user}`;
   const method = "POST";
   const headers = {
@@ -69,10 +77,12 @@ export const signUp = async (
     method: method,
     headers: headers,
     body: JSON.stringify(body),
-  }).then((value) => {
-    if (!value.ok) console.clear();
-    return value;
-  });
+  })
+    .then((value) => {
+      if (!value.ok) console.clear();
+      return value;
+    })
+    .catch(() => new ErrorResponse());
 };
 
 export const logMessages = (

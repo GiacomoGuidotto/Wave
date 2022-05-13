@@ -1,6 +1,6 @@
-import { NextPageWithLayout } from "./_app";
-import { Layout, OfflineLayout } from "../components";
 import { useRouter } from "next/router";
+import { NextPageWithLayout } from "pages/_app";
+import { Layout, OfflineLayout } from "layouts";
 
 const Offline: NextPageWithLayout = () => {
   const router = useRouter();

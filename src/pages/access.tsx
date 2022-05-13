@@ -1,11 +1,12 @@
-import { AccessLayout, AccessPage, Layout } from "../components";
-import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 import React from "react";
-import { NextPageWithLayout } from "./_app";
 import { GetServerSideProps } from "next";
-import wrapper from "../store/store";
-import { updateLanguage } from "../store/slices/user";
 import { useRouter } from "next/router";
+import { serverSideTranslations } from "next-i18next/serverSideTranslations";
+import wrapper from "store/store";
+import { updateLanguage } from "store/slices/user";
+import { NextPageWithLayout } from "pages/_app";
+import { AccessLayout, Layout } from "layouts";
+import { AccessPage } from "fragments";
 
 const Access: NextPageWithLayout = () => {
   const router = useRouter();
@@ -13,7 +14,7 @@ const Access: NextPageWithLayout = () => {
     <>
       <AccessPage
         login
-        onConnectionFail={() => router.push("/offline", "/access")}
+        onConnectionFail={() => router.push("/_servers_unreachable", "/access")}
       />
     </>
   );

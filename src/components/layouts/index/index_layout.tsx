@@ -1,6 +1,7 @@
 import React from "react";
 import Head from "next/head";
-import { Header, LanguageButton, ThemeButton } from "../../index";
+import { Header } from "fragments";
+import { LanguageButton, ThemeButton } from "buttons";
 
 type Props = {
   children: React.ReactChild;

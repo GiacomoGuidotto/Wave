@@ -1,8 +1,8 @@
+import styles from "./theme.module.css";
 import React, { useEffect } from "react";
 import { useDispatch } from "react-redux";
-import styles from "./theme.module.css";
-import { retrieveTheme, updateTheme } from "../../../store/slices/user";
-import { useReduxSelector } from "../../../store/hooks";
+import { useReduxSelector } from "store/hooks";
+import { retrieveTheme, updateTheme } from "store/slices/user";
 
 type Props = {
   persistent: boolean;

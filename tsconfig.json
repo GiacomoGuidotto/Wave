@@ -1,5 +1,44 @@
 {
   "compilerOptions": {
+    "baseUrl": "./",
+    "paths": {
+      "buttons": [
+        "src/components/buttons"
+      ],
+      //      "buttons/*": [
+      //        "src/components/buttons/*"
+      //      ],
+      "fragments": [
+        "src/components/fragments"
+      ],
+      //      "fragments/*": [
+      //        "src/components/fragments/*"
+      //      ],
+      "layouts": [
+        "src/components/layouts"
+      ],
+      //      "layouts/*": [
+      //        "src/components/layouts/*"
+      //      ],
+      "pages/*": [
+        "src/pages/*"
+      ],
+      "globals/*": [
+        "src/lib/globals/*"
+      ],
+      "models/*": [
+        "src/lib/models/*"
+      ],
+      "services/*": [
+        "src/lib/services/*"
+      ],
+      "store/*": [
+        "src/store/*"
+      ],
+      "styles/*": [
+        "styles/*"
+      ]
+    },
     "target": "es5",
     "lib": [
       "dom",

@@ -1,7 +1,7 @@
+import styles from "./offline_layout.module.css";
 import React from "react";
 import Head from "next/head";
 import Image from "next/image";
-import styles from "./offline_layout.module.css";
 
 type Props = {
   children: React.ReactChild;

@@ -1,19 +1,26 @@
-import React, { useState } from "react";
-import { useTranslation } from "next-i18next";
-import { SubmitHandler, useForm } from "react-hook-form";
-import { useDispatch } from "react-redux";
 import styles from "./login.module.css";
-import { updateToken, updateUsername } from "../../../store/slices/user";
+import React, { useState } from "react";
+import { useDispatch } from "react-redux";
+import { SubmitHandler, useForm } from "react-hook-form";
 import { useRouter } from "next/router";
-import { login, logMessages } from "../../../lib/service/api_server";
+import { useTranslation } from "next-i18next";
+import { updateToken, updateUsername } from "store/slices/user";
+import { login, logMessages } from "services/api_server";
+import { ErrorResponse } from "models/error_response";
 
 type Inputs = {
   username: string;
   password: string;
 };
 
-const Login: React.FC = () => {
+type Props = {
+  onConnectionFail: () => void;
+};
+
+const Login: React.FC<Props> = ({ onConnectionFail }) => {
   const { t } = useTranslation("login");
+  const dispatch = useDispatch();
+  const router = useRouter();
   const {
     register,
     handleSubmit,
@@ -21,12 +28,16 @@ const Login: React.FC = () => {
     reset,
     setError,
   } = useForm<Inputs>();
-  const dispatch = useDispatch();
-  const router = useRouter();
 
   const onSignUp: SubmitHandler<Inputs> = async (data) => {
     // call API
     const response = await login(data.username, data.password);
+
+    if (response instanceof ErrorResponse) {
+      onConnectionFail();
+      return;
+    }
+
     const payload = await response.json();
 
     // error cases
