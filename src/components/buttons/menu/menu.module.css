@@ -1,0 +1,46 @@
+
+.menuButtonBox {
+  @apply
+  text-gray-900
+  dark:text-white
+  w-10 h-10 relative
+  focus:outline-none
+}
+
+.menuButton {
+  @apply
+  block
+  w-5
+  absolute left-1/2 top-1/2
+  transform -translate-x-1/2 -translate-y-1/2
+}
+
+.menuButtonBar {
+  @apply
+  block absolute
+  h-0.5 w-5 bg-current transition-all duration-500 ease-in-out
+}
+
+.menuButtonFirstBar {
+  @apply -translate-y-1.5
+}
+
+.menuButtonFirstBarActive {
+  @apply rotate-45
+}
+
+.menuButtonSecondBar {
+
+}
+
+.menuButtonSecondBarActive {
+  @apply opacity-0
+}
+
+.menuButtonThirdBar {
+  @apply translate-y-1.5
+}
+
+.menuButtonThirdBarActive {
+  @apply -rotate-45
+}

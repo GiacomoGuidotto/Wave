@@ -11,21 +11,7 @@ type ErrorPayload = {
   message: string;
 };
 
-// export function responseTypeCheck(
-//   response: Response | ErrorResponse
-// ): response is Response {
-//   return (response as Response) !== undefined;
-// }
-
-export const test = async (): Promise<boolean> => {
-  const url = `${baseUrl}${server.endpoints.root}`;
-  try {
-    const result = await fetch(url);
-    return result.status === 200;
-  } catch (e) {
-    return false;
-  }
-};
+// ==== Auth ===================================================================
 
 export const login = (
   username: string,
@@ -41,16 +27,26 @@ export const login = (
     device: device,
   };
 
-  return fetch(url, {
+  return request(url, {
     method: method,
     headers: headers,
-  })
-    .then((value) => {
-      if (!value.ok) console.clear();
-      return value;
-    })
-    .catch(() => new ErrorResponse());
+  });
 };
+
+export const poke = (token: string): Promise<Response | ErrorResponse> => {
+  const url = `${baseUrl}${server.endpoints.auth}`;
+  const method = "PUT";
+  const headers = {
+    token: token,
+  };
+
+  return request(url, {
+    method: method,
+    headers: headers,
+  });
+};
+
+// ==== User ===================================================================
 
 export const signUp = async (
   username: string,
@@ -73,20 +69,68 @@ export const signUp = async (
     ...(picture.length && { picture: picture }),
   };
 
-  return fetch(url, {
+  return request(url, {
     method: method,
     headers: headers,
     body: JSON.stringify(body),
-  })
+  });
+};
+
+export const getUserInformation = (
+  token: string
+): Promise<Response | ErrorResponse> => {
+  const url = `${baseUrl}${server.endpoints.user}`;
+  const method = "GET";
+  const headers = {
+    token: token,
+  };
+
+  return request(url, {
+    method: method,
+    headers: headers,
+  });
+};
+
+// ==== Contacts ===============================================================
+
+export const getAllContacts = (
+  token: string
+): Promise<Response | ErrorResponse> => {
+  const url = `${baseUrl}${server.endpoints.contact}`;
+  const method = "GET";
+  const headers = {
+    token: token,
+  };
+
+  return request(url, {
+    method: method,
+    headers: headers,
+  });
+};
+
+// ==== Utility ================================================================
+
+export const test = async (): Promise<boolean> => {
+  const url = `${baseUrl}${server.endpoints.root}`;
+  try {
+    const result = await fetch(url);
+    return result.status === 200;
+  } catch (e) {
+    return false;
+  }
+};
+
+const request = (input: RequestInfo, init?: RequestInit | undefined) =>
+  fetch(input, init)
     .then((value) => {
       if (!value.ok) console.clear();
       return value;
     })
     .catch(() => new ErrorResponse());
-};
 
 export const logMessages = (
   payload: ErrorPayload,
+  method: string,
   prettierMessage = ""
 ): void => {
   const error = new ErrorResponse(
@@ -96,7 +140,7 @@ export const logMessages = (
     prettierMessage
   );
   console.error(
-    "Failed to query the server:\n",
+    `Failed to query the server from "${method}":\n`,
     `[${error.timestamp}] ${error.code} | ${
       error.prettierMessage.length === 0 ? error.message : error.prettierMessage
     }`

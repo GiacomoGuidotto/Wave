@@ -1,0 +1,98 @@
+.listBox {
+  @apply
+  h-screen
+  w-[90vw]
+  md:w-[40vw]
+  relative
+  overflow-y-scroll
+  px-4
+  dark:bg-gray-900
+}
+
+.searchBarBox {
+  @apply
+  w-full h-10
+  mt-2  mb-8
+  flex place-content-between place-items-center gap-2
+}
+
+.menuButton {
+  @apply
+  hidden
+  md:block
+}
+
+.searchBar {
+  @apply
+  border
+  w-full h-10
+  flex place-items-center place-content-between
+  px-2
+  text-sm capitalize font-light
+  text-gray-600
+  dark:text-gray-200
+  dark:bg-gray-900
+  cursor-pointer
+}
+
+.searchBarText {
+  @apply w-full text-center
+}
+
+.list {
+  @apply
+  border-x border-t
+  w-full min-h-min
+  relative
+  flex flex-col place-items-center
+  mb-14
+  md:mb-4
+}
+
+.option {
+  @apply
+  border-b w-full h-10
+  flex place-items-center place-content-between
+  px-4
+  font-light capitalize
+  cursor-pointer
+  bg-gray-200
+  dark:text-white
+  dark:bg-gray-900
+}
+
+.dropdown {
+  @apply
+  rotate-0
+  flex place-content-center place-items-center
+  transition-transform duration-500 ease-in-out
+}
+
+.dropdownActive {
+  @apply rotate-180
+}
+
+.optionChat {
+  @apply
+  h-0
+  transition-all duration-500 ease-in-out
+}
+
+.optionChatActive {
+  @apply chat
+}
+
+
+.chat {
+  @apply border-b w-full h-12
+}
+
+.bottomBar {
+  @apply
+  border-t
+  h-10  w-[90vw]
+  fixed bottom-0 left-0
+  bg-white
+  dark:bg-gray-900
+  md:hidden
+}

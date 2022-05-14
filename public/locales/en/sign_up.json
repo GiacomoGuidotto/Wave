@@ -21,12 +21,12 @@
   "surnameTooShort": "The surname is too short",
   "surnameTooLong": "The surname is too long",
   "picture": "Profile picture",
-  "phone": "Phone",
-  "phoneRequired": "The phone is required",
-  "phoneTooShort": "The phone is too short",
-  "phoneTooLong": "The phone is too long",
-  "phoneIncorrect": "The phone must contain only digits",
+  "phone": "Phone number",
+  "phoneRequired": "The phone number is required",
+  "phoneTooShort": "The phone number is too short",
+  "phoneTooLong": "The phone number is too long",
+  "phoneIncorrect": "The phone number must contain only digits",
   "create": "Create",
   "confirmation": "Sure?",
-  "alreadyExist": "Username already exist"
+  "alreadyExist": "Username not available"
 }

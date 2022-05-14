@@ -21,6 +21,7 @@ type Globals = {
       member: string;
       message: string;
     };
+    sessionDuration: number;
   };
 };
 
@@ -57,6 +58,7 @@ export const globals: Globals = {
       member: "/member",
       message: "/message",
     },
+    sessionDuration: 900000, // 15 minutes
   },
 };
 

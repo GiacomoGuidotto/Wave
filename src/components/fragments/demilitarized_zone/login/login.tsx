@@ -5,7 +5,7 @@ import { SubmitHandler, useForm } from "react-hook-form";
 import { useRouter } from "next/router";
 import { useTranslation } from "next-i18next";
 import { updateToken, updateUsername } from "store/slices/user";
-import { login, logMessages } from "services/api_server";
+import { login, logMessages } from "services/api_service";
 import { ErrorResponse } from "models/error_response";
 
 type Inputs = {
@@ -29,7 +29,7 @@ const Login: React.FC<Props> = ({ onConnectionFail }) => {
     setError,
   } = useForm<Inputs>();
 
-  const onSignUp: SubmitHandler<Inputs> = async (data) => {
+  const onLogin: SubmitHandler<Inputs> = async (data) => {
     // call API
     const response = await login(data.username, data.password);
 
@@ -43,7 +43,7 @@ const Login: React.FC<Props> = ({ onConnectionFail }) => {
     // error cases
     switch (response.status) {
       case 400:
-        logMessages(payload);
+        logMessages(payload, "login");
         return;
 
       case 404:
@@ -76,7 +76,7 @@ const Login: React.FC<Props> = ({ onConnectionFail }) => {
   return (
     <div className={styles.loginBox}>
       <div className={styles.title}>{t("title")}</div>
-      <form onSubmit={handleSubmit(onSignUp)} className={styles.form}>
+      <form onSubmit={handleSubmit(onLogin)} className={styles.form}>
         {/*Username field*/}
         <div className={styles.field}>
           <label className={styles.label} htmlFor="username">

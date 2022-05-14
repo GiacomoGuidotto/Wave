@@ -1,0 +1,22 @@
+.menuBox {
+  @apply
+  h-screen
+  w-[40vw]
+  hidden
+  md:flex
+  place-content-center place-items-center
+  dark:text-white
+  dark:bg-gray-900
+}
+
+.bannerBox {
+
+}
+
+.usersChoice {
+  
+}
+
+.menu {
+
+}

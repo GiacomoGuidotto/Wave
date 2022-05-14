@@ -21,12 +21,12 @@
   "surnameTooShort": "Il cognome è troppo corto",
   "surnameTooLong": "Il cognome è troppo lungo",
   "picture": "Foto profilo",
-  "phone": "Telefono",
+  "phone": "Numero di telefono",
   "phoneRequired": "Il numero di telefono è richiesto",
   "phoneTooShort": "Il numero di telefono è troppo corto",
   "phoneTooLong": "Il numero di telefono è troppo lungo",
   "phoneIncorrect": "Il numero di telefono deve contenere solo cifre",
   "create": "Crea",
   "confirmation": "Sicuro?",
-  "alreadyExist": "L'Username esiste già"
+  "alreadyExist": "L'Username non è disponibile"
 }

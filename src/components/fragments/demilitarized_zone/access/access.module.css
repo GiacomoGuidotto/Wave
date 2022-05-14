@@ -49,19 +49,13 @@
   dark:text-gray-200
   dark:border-gray-200
   cursor-pointer
-  transition-all duration-1000 ease-in-out
+  transition-[left] duration-1000 ease-in-out
+  invisible
+  md:visible
 }
 
 
 .toggled > div {
   @apply
   md:-left-[40%]
-}
-
-@media (max-width: 768px) {
-  .toggle {
-    @apply
-    hidden
-  }
-
 }

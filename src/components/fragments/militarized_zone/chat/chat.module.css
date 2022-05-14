@@ -1,0 +1,35 @@
+.chatBox {
+  @apply
+  border-l
+  h-screen
+  w-screen
+  md:w-[60vw]
+  flex place-content-center place-items-center
+  dark:text-white
+  dark:bg-gray-900
+}
+
+.chatBoxActive {
+  @apply cursor-pointer
+}
+
+.infoBox {
+
+}
+
+.info {
+
+}
+
+.chat {
+
+}
+
+.writingBox {
+
+}
+
+.menuButton {
+  @apply
+  md:hidden
+}

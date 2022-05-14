@@ -1,13 +1,17 @@
-import React from "react";
-import { Categories } from "globals/globals_types";
+import styles from "./menu.module.css";
+import React, { useState } from "react";
 
-type Props = {
-  onMenuItemSelected: (menuItemSelected: Categories) => void;
-};
+const Menu: React.FC = () => {
+  const [usersActive] = useState();
 
-// visible only on large screens
-const Menu: React.FC<Props> = () => {
-  return <>menu works!</>;
+  return (
+    <div className={styles.menuBox}>
+      <div className={styles.userBanner}></div>
+      {usersActive && <div className={styles.usersChoice}></div>}
+      menu works!
+      <div className={styles.menu}></div>
+    </div>
+  );
 };
 
 export default Menu;

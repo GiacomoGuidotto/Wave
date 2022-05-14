@@ -1,6 +1,6 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { HYDRATE } from "next-redux-wrapper";
-import { ReduxState } from "../store";
+import { ReduxState } from "store/store";
 
 // user slice type
 export interface userState {
@@ -8,7 +8,7 @@ export interface userState {
   username: string;
   name: string;
   surname: string;
-  picture: string; // TODO forward study
+  picture: string;
   phone: string;
   theme: string;
   language: string;
@@ -35,7 +35,7 @@ export const userSlice = createSlice({
       state.token = action.payload;
     },
     updateUsername: (state, action: PayloadAction<string>) => {
-      state.surname = action.payload;
+      state.username = action.payload;
     },
     updateName: (state, action: PayloadAction<string>) => {
       state.name = action.payload;
@@ -55,7 +55,6 @@ export const userSlice = createSlice({
     updateLanguage: (state, action: PayloadAction<string>) => {
       state.language = action.payload;
     },
-    // test
     updateState: (state, action: PayloadAction<userState>) => {
       state.token = action.payload.token;
       state.username = action.payload.username;

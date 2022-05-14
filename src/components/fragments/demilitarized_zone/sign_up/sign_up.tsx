@@ -12,7 +12,7 @@ import {
   retrieveTheme,
   updateState,
 } from "store/slices/user";
-import { login, logMessages, signUp } from "services/api_server";
+import { login, logMessages, signUp } from "services/api_service";
 import { ErrorResponse } from "models/error_response";
 
 const getBase64 = (file: File) =>
@@ -90,7 +90,7 @@ const SignUp: React.FC<Props> = ({ onConnectionFail }) => {
       // error cases
       switch (response.status) {
         case 400:
-          logMessages(payload);
+          logMessages(payload, "sign up");
           return;
 
         case 409:
@@ -119,11 +119,11 @@ const SignUp: React.FC<Props> = ({ onConnectionFail }) => {
       // error cases
       switch (response.status) {
         case 400:
-          logMessages(payload);
+          logMessages(payload, "sign up");
           return;
 
         case 404:
-          logMessages(payload);
+          logMessages(payload, "sign up");
           return;
       }
 

@@ -1,8 +1,14 @@
 import styles from "./access.module.css";
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import { useTranslation } from "next-i18next";
-import { test } from "services/api_server";
+import { test } from "services/api_service";
 import { Login, SignUp } from "fragments";
+import { useReduxSelector } from "store/hooks";
+import {
+  retrieveAccessRightPage,
+  updateAccessRightPage,
+} from "store/slices/wireframe";
+import { useDispatch } from "react-redux";
 
 type Props = {
   login?: boolean;
@@ -18,8 +24,8 @@ const Access: React.FC<Props> = ({ login = false, onConnectionFail }) => {
     /* eslint-disable-next-line react-hooks/exhaustive-deps */
   }, []);
 
-  // TODO save into store
-  const [rightPage, setRightPage] = useState(false);
+  const rightPage = useReduxSelector(retrieveAccessRightPage);
+  const dispatch = useDispatch();
   const { t } = useTranslation("access");
 
   return (
@@ -35,7 +41,7 @@ const Access: React.FC<Props> = ({ login = false, onConnectionFail }) => {
       </div>
       <div
         className={`${styles.toggle} ${rightPage && styles.toggled}`}
-        onClick={() => setRightPage(!rightPage)}
+        onClick={() => dispatch(updateAccessRightPage(!rightPage))}
       >
         <div>
           {login

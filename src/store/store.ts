@@ -1,6 +1,7 @@
 import { createWrapper } from "next-redux-wrapper";
 import { Action, configureStore, ThunkAction } from "@reduxjs/toolkit";
-import userReducer from "./slices/user";
+import userReducer from "store/slices/user";
+import wireframeReducer from "store/slices/wireframe";
 
 // Global Redux store types
 export type ReduxStore = ReturnType<typeof makeStore>;
@@ -21,6 +22,7 @@ const makeStore = () =>
   configureStore({
     reducer: {
       user: userReducer,
+      wireframe: wireframeReducer,
     },
     devTools: true,
   });
