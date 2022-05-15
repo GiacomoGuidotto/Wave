@@ -107,4 +107,16 @@ Home.getLayout = (page) => (
   </Layout>
 );
 
+// export const getServerSideProps = wrapper.getServerSideProps(
+//   (store): GetServerSideProps =>
+//     async ({ locale }) => {
+//       store.dispatch(updateLanguage(locale?.toUpperCase() ?? "EN"));
+//       return {
+//         props: {
+//           ...(await serverSideTranslations(locale ?? "en", ["home"])),
+//         },
+//       };
+//     }
+// );
+
 export default Home;

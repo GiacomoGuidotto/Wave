@@ -84,15 +84,26 @@
 
 
 .chat {
-  @apply border-b w-full h-12
+  @apply border-b w-full h-12 cursor-pointer
 }
 
 .bottomBar {
   @apply
   border-t
-  h-10  w-[90vw]
+  h-14  w-[90vw]
   fixed bottom-0 left-0
   bg-white
   dark:bg-gray-900
+  dark:text-white
   md:hidden
+  transition-[left] duration-[750ms] ease-in-out
+  flex place-content-around place-items-center
+}
+
+.bottomBarHidden {
+  @apply -left-[90%]
+}
+
+.bottomBarItem {
+
 }

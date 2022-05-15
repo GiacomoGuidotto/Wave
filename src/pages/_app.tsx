@@ -5,6 +5,9 @@ import type { AppProps } from "next/app";
 import { appWithTranslation } from "next-i18next";
 import wrapper from "store/store";
 import { globals, GlobalsContext } from "globals/global_consts";
+import { useStore } from "react-redux";
+import { PersistGate } from "redux-persist/integration/react";
+import { SplashScreen } from "fragments";
 
 type AppPropsWithLayout = AppProps & {
   Component: NextPageWithLayout;
@@ -18,10 +21,14 @@ const WrapperApp = ({ Component, pageProps }: AppPropsWithLayout) => {
   // Use the layout defined at the page level, if available
   const getLayout = Component.getLayout ?? ((page) => page);
 
+  const store = useStore();
+
   return (
-    <GlobalsContext.Provider value={globals}>
-      {getLayout(<Component {...pageProps} />)}
-    </GlobalsContext.Provider>
+    <PersistGate persistor={store.__persistor} loading={<SplashScreen />}>
+      <GlobalsContext.Provider value={globals}>
+        {getLayout(<Component {...pageProps} />)}
+      </GlobalsContext.Provider>
+    </PersistGate>
   );
 };
 

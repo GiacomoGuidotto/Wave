@@ -1,0 +1,5 @@
+.splashScreenBox {
+  @apply
+  h-screen w-screen flex place-items-center place-content-center
+  dark:bg-gray-900
+}

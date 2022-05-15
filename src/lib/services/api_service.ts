@@ -108,6 +108,23 @@ export const getAllContacts = (
   });
 };
 
+// ==== Groups =================================================================
+
+export const getAllGroups = (
+  token: string
+): Promise<Response | ErrorResponse> => {
+  const url = `${baseUrl}${server.endpoints.group}`;
+  const method = "GET";
+  const headers = {
+    token: token,
+  };
+
+  return request(url, {
+    method: method,
+    headers: headers,
+  });
+};
+
 // ==== Utility ================================================================
 
 export const test = async (): Promise<boolean> => {
@@ -121,12 +138,7 @@ export const test = async (): Promise<boolean> => {
 };
 
 const request = (input: RequestInfo, init?: RequestInit | undefined) =>
-  fetch(input, init)
-    .then((value) => {
-      if (!value.ok) console.clear();
-      return value;
-    })
-    .catch(() => new ErrorResponse());
+  fetch(input, init).catch(() => new ErrorResponse());
 
 export const logMessages = (
   payload: ErrorPayload,

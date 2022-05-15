@@ -1,7 +1,23 @@
 import { createWrapper } from "next-redux-wrapper";
-import { Action, configureStore, ThunkAction } from "@reduxjs/toolkit";
+import {
+  Action,
+  combineReducers,
+  configureStore,
+  ThunkAction,
+} from "@reduxjs/toolkit";
 import userReducer from "store/slices/user";
 import wireframeReducer from "store/slices/wireframe";
+import storage from "redux-persist/lib/storage/session";
+import {
+  FLUSH,
+  PAUSE,
+  PERSIST,
+  persistReducer,
+  persistStore,
+  PURGE,
+  REGISTER,
+  REHYDRATE,
+} from "redux-persist";
 
 // Global Redux store types
 export type ReduxStore = ReturnType<typeof makeStore>;
@@ -17,16 +33,41 @@ export type ReduxThunk<ReturnType = void> = ThunkAction<
   Action
 >;
 
-// Redux store instance constructor
-const makeStore = () =>
-  configureStore({
-    reducer: {
-      user: userReducer,
-      wireframe: wireframeReducer,
-    },
-    devTools: true,
-  });
+// Redux reducer composition
+const reducers = combineReducers({
+  user: userReducer,
+  wireframe: wireframeReducer,
+});
 
+// Redux persisted storage configuration
+const persistConfig = {
+  key: "root",
+  version: 1,
+  storage,
+};
+
+const persistedReducer = persistReducer(persistConfig, reducers);
+
+// Redux store instance constructor
+const store = configureStore({
+  reducer: persistedReducer,
+  devTools: true,
+  middleware: (getDefaultMiddleware) =>
+    getDefaultMiddleware({
+      serializableCheck: {
+        ignoredActions: [FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER],
+      },
+    }),
+});
+
+// Redux persisted storage initialization
+// TODO refactor store type
+store.__persistor = persistStore(store);
+
+const makeStore = () => {
+  // const isServer = typeof window === "undefined";
+  return store;
+};
 // Next Redux wrapper creation
 const wrapper = createWrapper<ReduxStore>(makeStore);
 

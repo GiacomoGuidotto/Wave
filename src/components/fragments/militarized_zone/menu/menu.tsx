@@ -6,8 +6,10 @@ const Menu: React.FC = () => {
 
   return (
     <div className={styles.menuBox}>
-      <div className={styles.userBanner}></div>
-      {usersActive && <div className={styles.usersChoice}></div>}
+      <div className={styles.bannerBox}>
+        <div className={styles.userBanner}></div>
+        {usersActive && <div className={styles.usersChoice}></div>}
+      </div>
       menu works!
       <div className={styles.menu}></div>
     </div>

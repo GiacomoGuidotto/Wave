@@ -1,8 +1,7 @@
 import React, { useEffect } from "react";
-import { useDispatch } from "react-redux";
 import Head from "next/head";
 import { useReduxSelector } from "store/hooks";
-import { retrieveTheme, updateTheme } from "store/slices/user";
+import { retrieveTheme } from "store/slices/user";
 
 type Props = {
   children: React.ReactChild;
@@ -10,17 +9,6 @@ type Props = {
 
 const Layout: React.FC<Props> = ({ children }) => {
   const storeTheme = useReduxSelector(retrieveTheme);
-  const dispatch = useDispatch();
-
-  // initialize the theme from the session storage value
-  useEffect(() => {
-    if (sessionStorage.getItem("theme") === "light") {
-      if (storeTheme === "D") dispatch(updateTheme("L"));
-    } else {
-      if (storeTheme === "L") dispatch(updateTheme("D"));
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
 
   // update theme on store change
   useEffect(() => {
@@ -28,10 +16,8 @@ const Layout: React.FC<Props> = ({ children }) => {
       storeTheme === "D" &&
       window.matchMedia("(prefers-color-scheme: dark)").matches
     ) {
-      sessionStorage.setItem("theme", "dark");
       document.documentElement.classList.add("dark");
     } else {
-      sessionStorage.setItem("theme", "light");
       document.documentElement.classList.remove("dark");
     }
   }, [storeTheme]);

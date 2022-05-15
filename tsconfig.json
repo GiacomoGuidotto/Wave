@@ -5,21 +5,15 @@
       "buttons": [
         "src/components/buttons"
       ],
-      //      "buttons/*": [
-      //        "src/components/buttons/*"
-      //      ],
       "fragments": [
         "src/components/fragments"
       ],
-      //      "fragments/*": [
-      //        "src/components/fragments/*"
-      //      ],
       "layouts": [
         "src/components/layouts"
       ],
-      //      "layouts/*": [
-      //        "src/components/layouts/*"
-      //      ],
+      "items": [
+        "src/components/items"
+      ],
       "pages/*": [
         "src/pages/*"
       ],
