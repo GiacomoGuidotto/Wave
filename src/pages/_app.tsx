@@ -24,7 +24,7 @@ const WrapperApp = ({ Component, pageProps }: AppPropsWithLayout) => {
   const store = useStore();
 
   return (
-    <PersistGate persistor={store.__persistor} loading={<SplashScreen />}>
+    <PersistGate persistor={store.persistor} loading={<SplashScreen />}>
       <GlobalsContext.Provider value={globals}>
         {getLayout(<Component {...pageProps} />)}
       </GlobalsContext.Provider>

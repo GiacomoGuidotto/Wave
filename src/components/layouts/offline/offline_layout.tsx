@@ -14,7 +14,12 @@ const OfflineLayout: React.FC<Props> = ({ children }) => {
         <title>Wave</title>
       </Head>
       <div className={styles.offlineBox}>
-        <Image src="/icons/offline.png" alt="offline" width="64" height="64" />
+        <Image
+          src="/icons/wireframe/offline.png"
+          alt="offline"
+          width="64"
+          height="64"
+        />
         <div className={styles.offlineText}>{children}</div>
       </div>
     </>

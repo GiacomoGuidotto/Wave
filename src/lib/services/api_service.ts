@@ -108,6 +108,25 @@ export const getAllContacts = (
   });
 };
 
+export const respondPending = (
+  token: string,
+  user: string,
+  directive: "A" | "D" | "B"
+) => {
+  const url = `${baseUrl}${server.endpoints.contact}`;
+  const method = "PUT";
+  const headers = {
+    token: token,
+    user: user,
+    directive: directive,
+  };
+
+  return request(url, {
+    method: method,
+    headers: headers,
+  });
+};
+
 // ==== Groups =================================================================
 
 export const getAllGroups = (
@@ -117,6 +136,44 @@ export const getAllGroups = (
   const method = "GET";
   const headers = {
     token: token,
+  };
+
+  return request(url, {
+    method: method,
+    headers: headers,
+  });
+};
+
+// ==== Messages ===============================================================
+
+const formatDate = (date: Date): string =>
+  `${date.getFullYear()}-${date.getMonth().toString().padStart(2, "0")}-${date
+    .getDate()
+    .toString()
+    .padStart(2, "0")} ${date.getHours().toString().padStart(2, "0")}:${date
+    .getMinutes()
+    .toString()
+    .padStart(2, "0")}:${date.getSeconds().toString().padStart(2, "0")}`;
+
+export const getRangeMessages = (
+  token: string,
+  chat: string,
+  from: Date,
+  to: Date
+): Promise<Response | ErrorResponse> => {
+  const isGroup =
+    /^[a-fA-F\d]{8}-[a-fA-F\d]{4}-[a-fA-F\d]{4}-[a-fA-F\d]{4}-[a-fA-F\d]{12}$/.test(
+      chat
+    );
+
+  const url = `${baseUrl}${server.endpoints.message}`;
+  const method = "GET";
+  const headers = {
+    token: token,
+    ...(isGroup && { group: chat }),
+    ...(!isGroup && { contact: chat }),
+    from: formatDate(from),
+    to: formatDate(to),
   };
 
   return request(url, {

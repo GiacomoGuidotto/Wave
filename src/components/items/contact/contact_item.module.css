@@ -1,0 +1,45 @@
+.contactPicture {
+  @apply
+  h-full aspect-square
+  flex place-content-center place-items-center
+  mx-2
+}
+
+.contactBox {
+  @apply
+  w-full h-full
+  flex place-content-between place-items-center
+  bg-white
+  dark:bg-gray-900
+  hover:dark:bg-gray-800
+  dark:text-white
+  relative
+}
+
+.contactInfo {
+  @apply
+  h-full w-full
+  flex flex-col place-content-evenly
+
+}
+
+.contactBox:hover .contactAside {
+  @apply bg-gray-800
+}
+
+.contactAside {
+  @apply
+  w-32 h-full
+  z-20
+  absolute right-0
+  dark:bg-gray-900
+  flex place-items-center place-content-evenly
+}
+
+.contactAside > button {
+  @apply
+  flex place-items-center place-content-center
+  p-1
+  hover:dark:bg-gray-700
+
+}

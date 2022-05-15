@@ -41,50 +41,51 @@
 
 .list {
   @apply
-  border-x border-t
+  border
   w-full min-h-min
-  relative
   flex flex-col place-items-center
   mb-14
   md:mb-4
+  select-none
 }
 
-.option {
+
+.dropdownHeader {
   @apply
   border-b w-full h-10
   flex place-items-center place-content-between
   px-4
   font-light capitalize
+  select-none
   cursor-pointer
   bg-gray-200
   dark:text-white
   dark:bg-gray-900
 }
 
-.dropdown {
+.dropdownIcon {
   @apply
   rotate-0
   flex place-content-center place-items-center
-  transition-transform duration-500 ease-in-out
+  transition-transform duration-300 ease-in-out
 }
 
-.dropdownActive {
+.dropdownIconActive {
   @apply rotate-180
 }
 
-.optionChat {
+.dropdownCollapse {
   @apply
-  h-0
-  transition-all duration-500 ease-in-out
+  w-full min-h-min
+  flex flex-col place-items-center h-0
 }
 
-.optionChatActive {
-  @apply chat
+.dropdownExpanse {
+  @apply h-full
 }
 
-
-.chat {
-  @apply border-b w-full h-12 cursor-pointer
+.listItem {
+  @apply w-full h-24 cursor-pointer z-10
 }
 
 .bottomBar {
@@ -98,6 +99,7 @@
   md:hidden
   transition-[left] duration-[750ms] ease-in-out
   flex place-content-around place-items-center
+  z-20
 }
 
 .bottomBarHidden {

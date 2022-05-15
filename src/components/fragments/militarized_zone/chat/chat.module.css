@@ -1,35 +1,50 @@
 .chatBox {
   @apply
-  border-l
   h-screen
   w-screen
   md:w-[60vw]
-  flex place-content-center place-items-center
+  flex flex-col place-items-center place-content-between
   dark:text-white
   dark:bg-gray-900
+  border-l
+  border-l-gray-900
+  md:border-l-white
+  transition-colors duration-1000 ease-in-out
 }
 
 .chatBoxActive {
-  @apply cursor-pointer
+  @apply border-l-white
+  cursor-pointer
 }
 
 .infoBox {
-
-}
-
-.info {
-
-}
-
-.chat {
-
-}
-
-.writingBox {
-
+  @apply
+  w-full h-12
+  flex place-items-center
+  pl-2 gap-2
+  border-b
+  /*bg-gray-200*/
+  /*dark:bg-gray-800*/
 }
 
 .menuButton {
   @apply
   md:hidden
+}
+
+
+.info {
+  @apply
+  w-full h-full
+}
+
+.listItem {
+  @apply
+  w-full h-[calc(100vh_-_7rem)]
+}
+
+.writingBox {
+  @apply
+  border-t
+  w-full h-16
 }

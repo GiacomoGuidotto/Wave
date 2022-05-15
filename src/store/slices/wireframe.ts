@@ -6,7 +6,8 @@ import { Categories } from "globals/globals_types";
 // wireframe slice type
 export interface wireframeState {
   accessRightPage: boolean;
-  homeMenu: boolean;
+  homeMenuOpen: boolean;
+  homeDropdownOpen: boolean;
   homeCategory: Categories;
   homeChat: string;
 }
@@ -14,7 +15,8 @@ export interface wireframeState {
 // user slice initial state
 const initialState: wireframeState = {
   accessRightPage: false,
-  homeMenu: false,
+  homeMenuOpen: false,
+  homeDropdownOpen: false,
   homeCategory: "contacts",
   homeChat: "",
 };
@@ -27,8 +29,11 @@ export const wireframeSlice = createSlice({
     updateAccessRightPage: (state, action: PayloadAction<boolean>) => {
       state.accessRightPage = action.payload;
     },
-    updateHomeMenu: (state, action: PayloadAction<boolean>) => {
-      state.homeMenu = action.payload;
+    updateHomeMenuOpen: (state, action: PayloadAction<boolean>) => {
+      state.homeMenuOpen = action.payload;
+    },
+    updateHomeDropdownOpen: (state, action: PayloadAction<boolean>) => {
+      state.homeDropdownOpen = action.payload;
     },
     updateHomeCategory: (state, action: PayloadAction<Categories>) => {
       state.homeCategory = action.payload;
@@ -38,7 +43,8 @@ export const wireframeSlice = createSlice({
     },
     updateState: (state, action: PayloadAction<wireframeState>) => {
       state.accessRightPage = action.payload.accessRightPage;
-      state.homeMenu = action.payload.homeMenu;
+      state.homeMenuOpen = action.payload.homeMenuOpen;
+      state.homeDropdownOpen = action.payload.homeDropdownOpen;
       state.homeCategory = action.payload.homeCategory;
       state.homeChat = action.payload.homeChat;
     },
@@ -59,7 +65,8 @@ export const wireframeSlice = createSlice({
 // user slice reducers
 export const {
   updateAccessRightPage,
-  updateHomeMenu,
+  updateHomeMenuOpen,
+  updateHomeDropdownOpen,
   updateHomeCategory,
   updateHomeChat,
   updateState,
@@ -68,7 +75,10 @@ export const {
 // user slice selectors, for the extract of the single element in the user state
 export const retrieveAccessRightPage = (state: ReduxState) =>
   state.wireframe.accessRightPage;
-export const retrieveHomeMenu = (state: ReduxState) => state.wireframe.homeMenu;
+export const retrieveHomeMenuOpen = (state: ReduxState) =>
+  state.wireframe.homeMenuOpen;
+export const retrieveHomeDropdownOpen = (state: ReduxState) =>
+  state.wireframe.homeDropdownOpen;
 export const retrieveHomeCategory = (state: ReduxState): Categories =>
   state.wireframe.homeCategory;
 export const retrieveHomeChat = (state: ReduxState) => state.wireframe.homeChat;

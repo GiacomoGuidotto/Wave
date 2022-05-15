@@ -96,7 +96,7 @@ const Home: NextPageWithLayout = () => {
     <>
       <Menu />
       <List onConnectionFail={onConnectionFail} />
-      <Chat />
+      <Chat onConnectionFail={onConnectionFail} />
     </>
   );
 };

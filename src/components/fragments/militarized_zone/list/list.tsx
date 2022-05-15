@@ -3,10 +3,12 @@ import React, { useEffect, useState } from "react";
 import { useReduxSelector } from "store/hooks";
 import {
   retrieveHomeCategory,
-  retrieveHomeMenu,
+  retrieveHomeDropdownOpen,
+  retrieveHomeMenuOpen,
   updateHomeCategory,
   updateHomeChat,
-  updateHomeMenu,
+  updateHomeDropdownOpen,
+  updateHomeMenuOpen,
 } from "store/slices/wireframe";
 import { useDispatch } from "react-redux";
 import { MenuButton } from "buttons";
@@ -34,17 +36,17 @@ type Props = {
 const List: React.FC<Props> = ({ onConnectionFail }) => {
   const { t } = useTranslation("home");
   const dispatch = useDispatch();
-  const menuShown = useReduxSelector(retrieveHomeMenu);
+  const menuOpen = useReduxSelector(retrieveHomeMenuOpen);
+  const dropdownOpen = useReduxSelector(retrieveHomeDropdownOpen);
   const category = useReduxSelector(retrieveHomeCategory);
   const theme = useReduxSelector(retrieveTheme);
   const token = useReduxSelector(retrieveToken);
   const username = useReduxSelector(retrieveUsername);
 
   const [chats, setChats] = useState<Contact[] | Group[]>([]);
-  const [optionsSelected, setOptionsSelected] = useState<boolean>(false);
   const [optionsChats, setOptionsChats] = useState<Contact[] | Group[]>([]);
 
-  // ==== Logic ====================================================================================
+  // ==== List retrieve logic ======================================================================
   useEffect(() => {
     retrieveList();
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -107,14 +109,18 @@ const List: React.FC<Props> = ({ onConnectionFail }) => {
       <div className={styles.searchBarBox}>
         <div className={styles.menuButton}>
           <MenuButton
-            onClick={() => dispatch(updateHomeMenu(!menuShown))}
-            active={menuShown}
+            onClick={() => dispatch(updateHomeMenuOpen(!menuOpen))}
+            active={menuOpen}
           />
         </div>
         <div className={styles.searchBar}>
           <div className={styles.searchBarText}>{t("search")}</div>
           <Image
-            src={theme === "L" ? "/icons/search.png" : "/icons/search_dark.png"}
+            src={
+              theme === "L"
+                ? "/icons/wireframe/search.png"
+                : "/icons/wireframe/search_dark.png"
+            }
             alt="offline"
             width="16"
             height="16"
@@ -122,46 +128,52 @@ const List: React.FC<Props> = ({ onConnectionFail }) => {
         </div>
       </div>
       <div className={styles.list}>
+        {optionsChats.length !== 0 && (
+          <div
+            className={styles.dropdownHeader}
+            onClick={() => dispatch(updateHomeDropdownOpen(!dropdownOpen))}
+          >
+            {category === "contacts" ? "pending" : "archive"}
+            <div
+              className={`${styles.dropdownIcon} ${
+                dropdownOpen && styles.dropdownIconActive
+              }`}
+            >
+              <Image
+                src={
+                  theme === "L"
+                    ? "/icons/wireframe/dropdown.png"
+                    : "/icons/wireframe/dropdown_dark.png"
+                }
+                alt="offline"
+                width="16"
+                height="16"
+              />
+            </div>
+          </div>
+        )}
         <div
-          className={styles.option}
-          onClick={() => setOptionsSelected(!optionsSelected)}
+          className={`${styles.dropdownCollapse} ${
+            dropdownOpen && styles.dropdownExpanse
+          }`}
         >
-          {category === "contacts" ? "pending" : "archive"}
-          <div
-            className={`${styles.dropdown} ${
-              optionsSelected && styles.dropdownActive
-            }`}
-          >
-            <Image
-              src={
-                theme === "L"
-                  ? "/icons/dropdown.png"
-                  : "/icons/dropdown_dark.png"
-              }
-              alt="offline"
-              width="16"
-              height="16"
-            />
-          </div>
+          {optionsChats.map((value, index) => (
+            <div key={index} className={styles.listItem}>
+              {category === "contacts" ? (
+                <ContactItem
+                  onConnectionFail={onConnectionFail}
+                  contact={value as Contact}
+                />
+              ) : (
+                <GroupItem group={value as Group} />
+              )}
+            </div>
+          ))}
         </div>
-        {optionsChats.map((value, index) => (
-          <div
-            key={index}
-            className={`${styles.optionChat} ${
-              optionsSelected && styles.optionChatActive
-            }`}
-          >
-            {category === "contacts" ? (
-              <ContactItem contact={value as Contact} />
-            ) : (
-              <GroupItem group={value as Group} />
-            )}
-          </div>
-        ))}
         {chats.map((value, index) => (
           <div
             key={index}
-            className={styles.chat}
+            className={styles.listItem}
             onClick={() =>
               dispatch(
                 updateHomeChat(
@@ -173,7 +185,10 @@ const List: React.FC<Props> = ({ onConnectionFail }) => {
             }
           >
             {category === "contacts" ? (
-              <ContactItem contact={value as Contact} />
+              <ContactItem
+                onConnectionFail={onConnectionFail}
+                contact={value as Contact}
+              />
             ) : (
               <GroupItem group={value as Group} />
             )}
@@ -181,9 +196,7 @@ const List: React.FC<Props> = ({ onConnectionFail }) => {
         ))}
       </div>
       <div
-        className={`${styles.bottomBar} ${
-          !menuShown && styles.bottomBarHidden
-        }`}
+        className={`${styles.bottomBar} ${!menuOpen && styles.bottomBarHidden}`}
       >
         <button className={styles.bottomBarItem}>User</button>
         <button
