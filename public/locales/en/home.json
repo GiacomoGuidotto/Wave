@@ -1,3 +1,9 @@
 {
-  "search": "Search"
+  "search": "Search",
+  "user": "User",
+  "contacts": "Contacts",
+  "groups": "Groups",
+  "setting": "Settings",
+  "listPlaceholder": "No one here yet!",
+  "chatPlaceholder": "Select a chat to start!"
 }

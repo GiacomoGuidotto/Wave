@@ -1,3 +1,9 @@
 {
-  "search": "Ricerca"
+  "search": "Ricerca",
+  "user": "Utente",
+  "contacts": "Contatti",
+  "groups": "Gruppi",
+  "setting": "Impostazioni",
+  "listPlaceholder": "Qui non c'è ancora nessuno!",
+  "chatPlaceholder": "Seleziona una chat per cominciare!"
 }

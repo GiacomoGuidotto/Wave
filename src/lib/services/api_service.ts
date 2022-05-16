@@ -144,7 +144,33 @@ export const getAllGroups = (
   });
 };
 
-// ==== Messages ===============================================================
+// ==== Chats ===============================================================
+
+export const isGroup = (chat: string) =>
+  /^[a-fA-F\d]{8}-[a-fA-F\d]{4}-[a-fA-F\d]{4}-[a-fA-F\d]{4}-[a-fA-F\d]{12}$/.test(
+    chat
+  );
+
+export const getSingleChat = (
+  token: string,
+  chat: string
+): Promise<Response | ErrorResponse> => {
+  const endpoint = isGroup(chat)
+    ? server.endpoints.group
+    : server.endpoints.contact;
+  const url = `${baseUrl}${endpoint}`;
+  const method = "GET";
+  const headers = {
+    token: token,
+    ...(isGroup(chat) && { group: chat }),
+    ...(!isGroup(chat) && { user: chat }),
+  };
+
+  return request(url, {
+    method: method,
+    headers: headers,
+  });
+};
 
 const formatDate = (date: Date): string =>
   `${date.getFullYear()}-${date.getMonth().toString().padStart(2, "0")}-${date
@@ -161,17 +187,12 @@ export const getRangeMessages = (
   from: Date,
   to: Date
 ): Promise<Response | ErrorResponse> => {
-  const isGroup =
-    /^[a-fA-F\d]{8}-[a-fA-F\d]{4}-[a-fA-F\d]{4}-[a-fA-F\d]{4}-[a-fA-F\d]{12}$/.test(
-      chat
-    );
-
   const url = `${baseUrl}${server.endpoints.message}`;
   const method = "GET";
   const headers = {
     token: token,
-    ...(isGroup && { group: chat }),
-    ...(!isGroup && { contact: chat }),
+    ...(isGroup(chat) && { group: chat }),
+    ...(!isGroup(chat) && { contact: chat }),
     from: formatDate(from),
     to: formatDate(to),
   };

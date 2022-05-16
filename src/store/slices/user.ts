@@ -71,10 +71,7 @@ export const userSlice = createSlice({
   // used by the wrapper for pass the state from next server to next client
   extraReducers: {
     [HYDRATE]: (state, action) => {
-      return {
-        ...state,
-        ...action.payload.user,
-      };
+      state.language = action.payload.user.language;
     },
   },
 });

@@ -1,5 +1,4 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { HYDRATE } from "next-redux-wrapper";
 import { ReduxState } from "store/store";
 import { Categories } from "globals/globals_types";
 
@@ -8,6 +7,7 @@ export interface wireframeState {
   accessRightPage: boolean;
   homeMenuOpen: boolean;
   homeDropdownOpen: boolean;
+  homeUsersOpen: boolean;
   homeCategory: Categories;
   homeChat: string;
 }
@@ -17,6 +17,7 @@ const initialState: wireframeState = {
   accessRightPage: false,
   homeMenuOpen: false,
   homeDropdownOpen: false,
+  homeUsersOpen: false,
   homeCategory: "contacts",
   homeChat: "",
 };
@@ -35,6 +36,9 @@ export const wireframeSlice = createSlice({
     updateHomeDropdownOpen: (state, action: PayloadAction<boolean>) => {
       state.homeDropdownOpen = action.payload;
     },
+    updateHomeUsersOpen: (state, action: PayloadAction<boolean>) => {
+      state.homeUsersOpen = action.payload;
+    },
     updateHomeCategory: (state, action: PayloadAction<Categories>) => {
       state.homeCategory = action.payload;
     },
@@ -45,19 +49,9 @@ export const wireframeSlice = createSlice({
       state.accessRightPage = action.payload.accessRightPage;
       state.homeMenuOpen = action.payload.homeMenuOpen;
       state.homeDropdownOpen = action.payload.homeDropdownOpen;
+      state.homeUsersOpen = action.payload.homeUsersOpen;
       state.homeCategory = action.payload.homeCategory;
       state.homeChat = action.payload.homeChat;
-    },
-  },
-
-  // reducer called after server side rendering,
-  // used by the wrapper for pass the state from next server to next client
-  extraReducers: {
-    [HYDRATE]: (state, action) => {
-      return {
-        ...state,
-        ...action.payload.wireframe,
-      };
     },
   },
 });
@@ -67,9 +61,10 @@ export const {
   updateAccessRightPage,
   updateHomeMenuOpen,
   updateHomeDropdownOpen,
+  updateHomeUsersOpen,
   updateHomeCategory,
   updateHomeChat,
-  updateState,
+  updateState
 } = wireframeSlice.actions;
 
 // user slice selectors, for the extract of the single element in the user state
@@ -79,6 +74,8 @@ export const retrieveHomeMenuOpen = (state: ReduxState) =>
   state.wireframe.homeMenuOpen;
 export const retrieveHomeDropdownOpen = (state: ReduxState) =>
   state.wireframe.homeDropdownOpen;
+export const retrieveHomeUsersOpen = (state: ReduxState) =>
+  state.wireframe.homeUsersOpen;
 export const retrieveHomeCategory = (state: ReduxState): Categories =>
   state.wireframe.homeCategory;
 export const retrieveHomeChat = (state: ReduxState) => state.wireframe.homeChat;

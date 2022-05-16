@@ -1,5 +1,7 @@
 import React from "react";
 import { Group } from "models/group";
+import styles from "./group_item.module.css";
+import { FallbackImage } from "utilities";
 
 type Props = {
   group: Group;
@@ -7,10 +9,15 @@ type Props = {
 
 const GroupItem: React.FC<Props> = ({ group }) => {
   return (
-    <>
-      <p>Name: {group.name}</p>
-      <p>State: {group.state}</p>
-    </>
+    <div className={styles.groupBox}>
+      <div className={styles.groupPicture}>
+        <FallbackImage picture={group.picture} seed={group.name} size={90} />
+      </div>
+      <div className={styles.groupInfo}>
+        <div>{group.name}</div>
+        <div>{group.info}</div>
+      </div>
+    </div>
   );
 };
 

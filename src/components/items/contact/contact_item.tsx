@@ -7,6 +7,7 @@ import { useReduxSelector } from "store/hooks";
 import { retrieveTheme, retrieveToken } from "store/slices/user";
 import { logMessages, respondPending } from "services/api_service";
 import { ErrorResponse } from "models/error_response";
+import { FallbackImage } from "utilities";
 
 type Props = {
   onConnectionFail: () => void;
@@ -56,14 +57,11 @@ const ContactItem: React.FC<Props> = ({ contact, onConnectionFail }) => {
   return (
     <div className={styles.contactBox}>
       <div className={styles.contactPicture}>
-        {contact.picture && (
-          <Image
-            src={contact.picture}
-            alt={contact.username}
-            height={90}
-            width={90}
-          />
-        )}
+        <FallbackImage
+          picture={contact.picture}
+          seed={contact.username}
+          size={90}
+        />
       </div>
       <div className={styles.contactInfo}>
         <div>{contact.username}</div>

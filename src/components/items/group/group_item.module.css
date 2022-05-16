@@ -1,0 +1,24 @@
+.groupPicture {
+  @apply
+  h-full aspect-square
+  flex place-content-center place-items-center
+  mx-2
+}
+
+.groupBox {
+  @apply
+  w-full h-full
+  flex place-content-between place-items-center
+  bg-white
+  dark:bg-gray-900
+  hover:dark:bg-gray-800
+  dark:text-white
+  relative
+}
+
+.groupInfo {
+  @apply
+  h-full w-full
+  flex flex-col place-content-evenly
+
+}

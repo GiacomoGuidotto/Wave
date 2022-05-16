@@ -5,6 +5,9 @@ const withPWA = require("next-pwa");
 
 const nextConfig = {
   i18n: i18n,
+  images: {
+    domains: ["avatars.dicebear.com"],
+  },
   pwa: {
     dest: "public",
     disable: process.env.NODE_ENV === "development",

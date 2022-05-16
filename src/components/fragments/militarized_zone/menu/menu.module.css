@@ -2,21 +2,45 @@
   @apply
   h-screen
   w-[40vw]
-  hidden
-  md:flex
-  place-content-center place-items-center
+  hidden md:flex
+  flex-col place-content-between place-items-start
   dark:text-white
   dark:bg-gray-900
+  pr-4
 }
 
 .bannerBox {
-
+  @apply border-r h-[40%] w-full bg-gray-800
 }
 
 .usersChoice {
-  
+
+}
+
+.usersChoiceHidden {
+
 }
 
 .menu {
+  @apply
+  border-t
+  h-[50%] w-full
+  flex flex-col
+  overflow-y-scroll
+}
 
+.menuChoice {
+  @apply
+  h-12
+  shrink-0
+  flex place-items-center gap-4
+  pl-3
+  dark:hover:bg-gray-800
+  cursor-pointer
+}
+
+
+.menuChoiceActive {
+  @apply
+  dark:bg-gray-800
 }

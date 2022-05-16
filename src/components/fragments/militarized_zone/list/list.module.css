@@ -41,7 +41,7 @@
 
 .list {
   @apply
-  border
+  border-x
   w-full min-h-min
   flex flex-col place-items-center
   mb-14
@@ -88,6 +88,13 @@
   @apply w-full h-24 cursor-pointer z-10
 }
 
+.placeholder {
+  @apply
+  dark:text-white
+  h-[calc(100vh_-_5rem)]
+  flex place-items-center place-content-center
+}
+
 .bottomBar {
   @apply
   border-t
@@ -107,5 +114,5 @@
 }
 
 .bottomBarItem {
-
+  @apply h-full flex place-items-center gap-2
 }

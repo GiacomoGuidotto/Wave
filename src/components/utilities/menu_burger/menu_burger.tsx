@@ -6,7 +6,7 @@ type Props = {
   active: boolean;
 };
 
-const MenuButton: React.FC<Props> = ({ active, onClick }) => {
+const MenuBurger: React.FC<Props> = ({ active, onClick }) => {
   return (
     <button className={styles.menuButtonBox} onClick={onClick}>
       <div className={styles.menuButton}>
@@ -35,4 +35,4 @@ const MenuButton: React.FC<Props> = ({ active, onClick }) => {
   );
 };
 
-export default MenuButton;
+export default MenuBurger;

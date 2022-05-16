@@ -11,7 +11,7 @@ import {
   updateHomeMenuOpen,
 } from "store/slices/wireframe";
 import { useDispatch } from "react-redux";
-import { MenuButton } from "buttons";
+import { MenuBurger } from "utilities";
 import Image from "next/image";
 import {
   retrieveTheme,
@@ -42,12 +42,14 @@ const List: React.FC<Props> = ({ onConnectionFail }) => {
   const theme = useReduxSelector(retrieveTheme);
   const token = useReduxSelector(retrieveToken);
   const username = useReduxSelector(retrieveUsername);
-
+  
   const [chats, setChats] = useState<Contact[] | Group[]>([]);
-  const [optionsChats, setOptionsChats] = useState<Contact[] | Group[]>([]);
+  const [dropdownChats, setDropdownChats] = useState<Contact[] | Group[]>([]);
 
   // ==== List retrieve logic ======================================================================
   useEffect(() => {
+    setChats([]);
+    setDropdownChats([]);
     retrieveList();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [category]);
@@ -84,19 +86,19 @@ const List: React.FC<Props> = ({ onConnectionFail }) => {
       // save contact
       const list = payload as Contact[];
       const chats = list.filter((chat) => chat.status === "A");
-      const optionsChats = list.filter(
+      const dropdownChats = list.filter(
         (chat) => chat.status === "Pr" && chat.username !== username
       );
 
       setChats(chats);
-      setOptionsChats(optionsChats);
+      setDropdownChats(dropdownChats);
     } else if (category === "groups") {
       // save groups
       const list = payload as Group[];
       const chats = list.filter((chat) => chat.state !== "A");
-      const optionsChats = list.filter((chat) => chat.state === "A");
+      const dropdownChats = list.filter((chat) => chat.state === "A");
 
-      setOptionsChats(optionsChats);
+      setDropdownChats(dropdownChats);
       setChats(chats);
     } else {
       // error case
@@ -106,9 +108,10 @@ const List: React.FC<Props> = ({ onConnectionFail }) => {
 
   return (
     <div className={styles.listBox}>
+      {/*==== Search bar ========================================================================*/}
       <div className={styles.searchBarBox}>
         <div className={styles.menuButton}>
-          <MenuButton
+          <MenuBurger
             onClick={() => dispatch(updateHomeMenuOpen(!menuOpen))}
             active={menuOpen}
           />
@@ -127,8 +130,13 @@ const List: React.FC<Props> = ({ onConnectionFail }) => {
           />
         </div>
       </div>
+      {/*==== Placeholder =======================================================================*/}
+      {chats.length === 0 && dropdownChats.length === 0 && (
+        <div className={styles.placeholder}>{t("listPlaceholder")}</div>
+      )}
       <div className={styles.list}>
-        {optionsChats.length !== 0 && (
+        {/*==== Dropdown ========================================================================*/}
+        {dropdownChats.length !== 0 && (
           <div
             className={styles.dropdownHeader}
             onClick={() => dispatch(updateHomeDropdownOpen(!dropdownOpen))}
@@ -157,7 +165,7 @@ const List: React.FC<Props> = ({ onConnectionFail }) => {
             dropdownOpen && styles.dropdownExpanse
           }`}
         >
-          {optionsChats.map((value, index) => (
+          {dropdownChats.map((value, index) => (
             <div key={index} className={styles.listItem}>
               {category === "contacts" ? (
                 <ContactItem
@@ -170,6 +178,7 @@ const List: React.FC<Props> = ({ onConnectionFail }) => {
             </div>
           ))}
         </div>
+        {/*==== List ============================================================================*/}
         {chats.map((value, index) => (
           <div
             key={index}
@@ -195,21 +204,54 @@ const List: React.FC<Props> = ({ onConnectionFail }) => {
           </div>
         ))}
       </div>
+      {/*==== Bottom bar ========================================================================*/}
       <div
         className={`${styles.bottomBar} ${!menuOpen && styles.bottomBarHidden}`}
       >
-        <button className={styles.bottomBarItem}>User</button>
+        <button className={styles.bottomBarItem}>
+          <Image
+            src={
+              theme === "L"
+                ? "/icons/wireframe/user.png"
+                : "/icons/wireframe/user_dark.png"
+            }
+            alt={t("setting")}
+            width={24}
+            height={24}
+          />
+          {t("user")}
+        </button>
         <button
           className={styles.bottomBarItem}
           onClick={() => dispatch(updateHomeCategory("contacts"))}
         >
-          Contacts
+          <Image
+            src={
+              theme === "L"
+                ? "/icons/wireframe/contacts.png"
+                : "/icons/wireframe/contacts_dark.png"
+            }
+            alt={t("groups")}
+            width={24}
+            height={24}
+          />
+          {t("contacts")}
         </button>
         <button
           className={styles.bottomBarItem}
           onClick={() => dispatch(updateHomeCategory("groups"))}
         >
-          Groups
+          <Image
+            src={
+              theme === "L"
+                ? "/icons/wireframe/groups.png"
+                : "/icons/wireframe/groups_dark.png"
+            }
+            alt={t("groups")}
+            width={24}
+            height={24}
+          />
+          {t("groups")}
         </button>
       </div>
     </div>

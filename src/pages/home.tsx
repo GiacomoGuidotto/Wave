@@ -1,6 +1,10 @@
-import { useContext, useEffect } from "react";
+import { useContext, useEffect, useState } from "react";
 import { useRouter } from "next/router";
-import { retrieveToken, updateState } from "store/slices/user";
+import {
+  retrieveLanguage,
+  retrieveToken,
+  updateState,
+} from "store/slices/user";
 import { HomeLayout, Layout } from "layouts";
 import { Chat, List, Menu } from "fragments";
 import { getUserInformation, logMessages, poke } from "services/api_service";
@@ -9,17 +13,29 @@ import { useDispatch } from "react-redux";
 import { GlobalsContext } from "globals/global_consts";
 import { useReduxSelector } from "store/hooks";
 import { NextPageWithLayout } from "pages/_app";
+import { GetServerSideProps } from "next";
+import wrapper from "store/store";
+import { serverSideTranslations } from "next-i18next/serverSideTranslations";
+import { LanguagePopup } from "../components/utilities";
 
 const Home: NextPageWithLayout = () => {
   const sessionDuration = useContext(GlobalsContext).server.sessionDuration;
   const router = useRouter();
-  const token = useReduxSelector(retrieveToken);
   const dispatch = useDispatch();
+  const token = useReduxSelector(retrieveToken);
+  const language = useReduxSelector(retrieveLanguage);
 
+  const [languagePopup, setLanguagePopup] = useState(false);
+
+  // ==== Initialization logic =====================================================================
   useEffect(() => {
     if (token.length === 0) {
       router.push("/access");
       return;
+    }
+
+    if (language.toLowerCase() !== router.locale) {
+      setLanguagePopup(true);
     }
 
     updateUser();
@@ -92,8 +108,15 @@ const Home: NextPageWithLayout = () => {
 
   const onConnectionFail = () => router.push("/_unreachable_servers", "/home");
 
+  // ==== Build ====================================================================================
   return (
     <>
+      {languagePopup && (
+        <LanguagePopup
+          targetLanguage={language}
+          onDismiss={() => setLanguagePopup(false)}
+        />
+      )}
       <Menu />
       <List onConnectionFail={onConnectionFail} />
       <Chat onConnectionFail={onConnectionFail} />
@@ -107,16 +130,15 @@ Home.getLayout = (page) => (
   </Layout>
 );
 
-// export const getServerSideProps = wrapper.getServerSideProps(
-//   (store): GetServerSideProps =>
-//     async ({ locale }) => {
-//       store.dispatch(updateLanguage(locale?.toUpperCase() ?? "EN"));
-//       return {
-//         props: {
-//           ...(await serverSideTranslations(locale ?? "en", ["home"])),
-//         },
-//       };
-//     }
-// );
+export const getServerSideProps = wrapper.getServerSideProps(
+  (): GetServerSideProps =>
+    async ({ locale }) => {
+      return {
+        props: {
+          ...(await serverSideTranslations(locale ?? "en", ["home", "common"])),
+        },
+      };
+    }
+);
 
 export default Home;

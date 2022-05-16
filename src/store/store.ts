@@ -3,7 +3,6 @@ import {
   Action,
   combineReducers,
   configureStore,
-  EnhancedStore,
   ThunkAction,
 } from "@reduxjs/toolkit";
 import userReducer from "store/slices/user";
@@ -19,7 +18,6 @@ import {
   REGISTER,
   REHYDRATE,
 } from "redux-persist";
-import { Persistor } from "redux-persist/es/types";
 
 // Global Redux store types
 export type ReduxStore = ReturnType<typeof makeStore>;
@@ -35,9 +33,9 @@ export type ReduxThunk<ReturnType = void> = ThunkAction<
   Action
 >;
 
-export type PersistentEnhancedStore = EnhancedStore & {
-  persistor?: Persistor;
-};
+// export type PersistentEnhancedStore = EnhancedStore & {
+//   persistor?: Persistor;
+// };
 
 // Redux reducer composition
 const reducers = combineReducers({
@@ -55,15 +53,15 @@ const persistConfig = {
 const persistedReducer = persistReducer(persistConfig, reducers);
 
 // Redux store instance constructor
-const store: PersistentEnhancedStore = configureStore({
+const store = configureStore({
   reducer:    persistedReducer,
   devTools:   true,
   middleware: (getDefaultMiddleware) =>
                 getDefaultMiddleware({
                   serializableCheck: {
-                    ignoredActions: [FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER],
-                  },
-                }),
+                    ignoredActions: [FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER]
+                  }
+                })
 });
 
 // Redux persisted storage initialization
@@ -71,7 +69,6 @@ const store: PersistentEnhancedStore = configureStore({
 store.persistor = persistStore(store);
 
 const makeStore = () => {
-  // const isServer = typeof window === "undefined";
   return store;
 };
 // Next Redux wrapper creation
