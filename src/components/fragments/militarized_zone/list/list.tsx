@@ -28,6 +28,7 @@ import { ErrorResponse } from "models/error_response";
 import { Contact } from "models/contact";
 import { Group } from "models/group";
 import { ContactItem, GroupItem } from "items";
+import { setActionCallback } from "services/websocket_service";
 
 type Props = {
   onConnectionFail: () => void;
@@ -42,9 +43,24 @@ const List: React.FC<Props> = ({ onConnectionFail }) => {
   const theme = useReduxSelector(retrieveTheme);
   const token = useReduxSelector(retrieveToken);
   const username = useReduxSelector(retrieveUsername);
-  
+
   const [chats, setChats] = useState<Contact[] | Group[]>([]);
   const [dropdownChats, setDropdownChats] = useState<Contact[] | Group[]>([]);
+
+  // ==== Channel listener =========================================================================
+
+  useEffect(() => {
+    setActionCallback("createContact", ({ body }) => {
+      if (category === "contacts") {
+        setDropdownChats([body as Contact, ...(dropdownChats as Contact[])]);
+      }
+    });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  useEffect(() => {
+    // console.tr(dropdownChats);
+  }, [dropdownChats]);
 
   // ==== List retrieve logic ======================================================================
   useEffect(() => {
@@ -106,6 +122,35 @@ const List: React.FC<Props> = ({ onConnectionFail }) => {
     }
   };
 
+  // ==== Contact request logic ====================================================================
+
+  const onAccept = (chat: Contact, newInfo: Contact) => {
+    setChats([...(chats as Contact[]), newInfo]);
+
+    setDropdownChats(
+      (dropdownChats as Contact[]).filter(
+        (dropdownChat) => dropdownChat !== chat
+      )
+    );
+  };
+
+  const onDecline = (chat: Contact) => {
+    setDropdownChats(
+      (dropdownChats as Contact[]).filter(
+        (dropdownChat) => dropdownChat !== chat
+      )
+    );
+  };
+
+  const onBlock = (chat: Contact) => {
+    setDropdownChats(
+      (dropdownChats as Contact[]).filter(
+        (dropdownChat) => dropdownChat !== chat
+      )
+    );
+  };
+
+  // ==== Build ====================================================================================
   return (
     <div className={styles.listBox}>
       {/*==== Search bar ========================================================================*/}
@@ -171,6 +216,15 @@ const List: React.FC<Props> = ({ onConnectionFail }) => {
                 <ContactItem
                   onConnectionFail={onConnectionFail}
                   contact={value as Contact}
+                  onRequestAccept={(newInfo) => {
+                    onAccept(value as Contact, newInfo);
+                  }}
+                  onRequestDecline={() => {
+                    onDecline(value as Contact);
+                  }}
+                  onRequestBlock={() => {
+                    onBlock(value as Contact);
+                  }}
                 />
               ) : (
                 <GroupItem group={value as Group} />

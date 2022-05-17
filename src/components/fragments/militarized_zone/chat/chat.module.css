@@ -48,4 +48,9 @@
   @apply
   h-full w-full
   flex place-items-center place-content-center
+  relative
+}
+
+.placeholderBurger {
+  @apply absolute left-2 top-1
 }

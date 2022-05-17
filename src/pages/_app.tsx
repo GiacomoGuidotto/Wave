@@ -22,10 +22,11 @@ const WrapperApp = ({ Component, pageProps }: AppPropsWithLayout) => {
   // Use the layout defined at the page level, if available
   const getLayout = Component.getLayout ?? ((page) => page);
 
-  const store = useStore();
+  // Redux persisted storage initialization
+  const persistor = persistStore(useStore());
 
   return (
-    <PersistGate persistor={persistStore(store)} loading={<SplashScreen />}>
+    <PersistGate persistor={persistor} loading={<SplashScreen />}>
       <GlobalsContext.Provider value={globals}>
         {getLayout(<Component {...pageProps} />)}
       </GlobalsContext.Provider>

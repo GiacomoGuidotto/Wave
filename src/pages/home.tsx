@@ -13,6 +13,7 @@ import { GetServerSideProps } from "next";
 import wrapper from "store/store";
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 import { LanguagePopup } from "../components/utilities";
+import { authorizeConnection } from "services/websocket_service";
 
 const Home: NextPageWithLayout = () => {
   const sessionDuration = useContext(GlobalsContext).server.sessionDuration;
@@ -25,17 +26,24 @@ const Home: NextPageWithLayout = () => {
 
   // ==== Initialization logic =====================================================================
   useEffect(() => {
+    // check token existence
     if (token.length === 0) {
       router.push("/access");
       return;
     }
 
+    // warning if language mismatch between saved and router's
     if (language.toLowerCase() !== router.locale) {
       setLanguagePopup(true);
     }
-  
+
+    // open and authorize websocket connection
+    authorizeConnection(token);
+
+    // retrieve user info
     updateUserInfo();
 
+    // initialize poke loop
     const interval = setInterval(() => {
       updateSession();
     }, sessionDuration - 30000);
@@ -43,8 +51,9 @@ const Home: NextPageWithLayout = () => {
     return () => clearInterval(interval);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
-  
+
   const updateUserInfo = async () => {
+    // TODO avoid if already existing
     const response = await getUserInformation(token);
 
     if (response instanceof ErrorResponse) {

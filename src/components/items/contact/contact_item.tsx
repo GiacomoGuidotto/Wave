@@ -5,16 +5,31 @@ import { Contact } from "models/contact";
 import Image from "next/image";
 import { useReduxSelector } from "store/hooks";
 import { retrieveTheme, retrieveToken } from "store/slices/user";
+import { FallbackImage } from "utilities";
 import { logMessages, respondPending } from "services/api_service";
 import { ErrorResponse } from "models/error_response";
-import { FallbackImage } from "utilities";
 
 type Props = {
   onConnectionFail: () => void;
+  onRequestAccept?: (newInfo: Contact) => void;
+  onRequestDecline?: () => void;
+  onRequestBlock?: (newInfo: Contact) => void;
   contact: Contact;
 };
 
-const ContactItem: React.FC<Props> = ({ contact, onConnectionFail }) => {
+const ContactItem: React.FC<Props> = ({
+  contact,
+  onConnectionFail,
+  onRequestAccept = () => {
+    // accept the contact request
+  },
+  onRequestDecline = () => {
+    // decline the contact request
+  },
+  onRequestBlock = () => {
+    // block the contact
+  },
+}) => {
   const theme = useReduxSelector(retrieveTheme);
   const token = useReduxSelector(retrieveToken);
 
@@ -50,7 +65,19 @@ const ContactItem: React.FC<Props> = ({ contact, onConnectionFail }) => {
     }
 
     // safe zone
-
+    switch (directive) {
+      case "A":
+        const acceptPayload = (await response.json()) as Contact;
+        onRequestAccept(acceptPayload);
+        break;
+      case "D":
+        onRequestDecline();
+        break;
+      case "B":
+        const blockedPayload = (await response.json()) as Contact;
+        onRequestBlock(blockedPayload);
+        break;
+    }
     return;
   };
 

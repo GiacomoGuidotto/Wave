@@ -7,6 +7,7 @@ import {
 } from "@reduxjs/toolkit";
 import userReducer from "store/slices/user";
 import wireframeReducer from "store/slices/wireframe";
+import channelReducer from "store/slices/channel";
 import storage from "redux-persist/lib/storage/session";
 import {
   FLUSH,
@@ -32,14 +33,11 @@ export type ReduxThunk<ReturnType = void> = ThunkAction<
   Action
 >;
 
-// export type PersistentEnhancedStore = EnhancedStore & {
-//   persistor?: Persistor;
-// };
-
 // Redux reducer composition
 const reducers = combineReducers({
   user: userReducer,
   wireframe: wireframeReducer,
+  channel: channelReducer,
 });
 
 // Redux persisted storage configuration
@@ -53,23 +51,21 @@ const persistConfig = {
 const persistedReducer = persistReducer(persistConfig, reducers);
 
 // Redux store instance constructor
-const store = configureStore({
-  reducer:    persistedReducer,
-  devTools:   true,
+export const store = configureStore({
+  reducer: persistedReducer,
+  devTools: true,
   middleware: (getDefaultMiddleware) =>
-                getDefaultMiddleware({
-                  serializableCheck: {
-                    ignoredActions: [FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER]
-                  }
-                })
+    getDefaultMiddleware({
+      serializableCheck: {
+        ignoredActions: [FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER],
+      },
+    }),
 });
-
-// Redux persisted storage initialization
-// store.persistor = persistStore(store);
 
 const makeStore = () => {
   return store;
 };
+
 // Next Redux wrapper creation
 const wrapper = createWrapper<ReduxStore>(makeStore);
 

@@ -23,6 +23,10 @@ type Globals = {
     };
     sessionDuration: number;
   };
+  channel: {
+    hostname: string;
+    actions: string[];
+  };
 };
 
 export const globals: Globals = {
@@ -59,6 +63,24 @@ export const globals: Globals = {
       message: "/message",
     },
     sessionDuration: 900000, // 15 minutes
+  },
+  channel: {
+    hostname: "server.wave.com/channel",
+    actions: [
+      "newContactRequest",
+      "deletedContactRequest",
+      "newContactReply",
+      "newContactStatus",
+      "newContactInfos",
+      "newGroupInfos",
+      "removedMember",
+      "newMember",
+      "newMemberPermission",
+      "deletedGroup",
+      "newMessage",
+      "changedMessage",
+      "deletedMessage",
+    ],
   },
 };
 

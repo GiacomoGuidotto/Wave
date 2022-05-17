@@ -119,7 +119,15 @@ const Chat: React.FC<Props> = ({ onConnectionFail }) => {
         }}
       >
         {chat.length === 0 ? (
-          <div className={styles.placeholder}>{t("chatPlaceholder")}</div>
+          <div className={styles.placeholder}>
+            <div className={styles.placeholderBurger}>
+              <MenuBurger
+                onClick={() => dispatch(updateHomeMenuOpen(!menuShown))}
+                active={menuShown}
+              />
+            </div>
+            {t("chatPlaceholder")}
+          </div>
         ) : (
           <>
             <div className={styles.infoBox}>
