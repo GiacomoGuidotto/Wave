@@ -10,7 +10,7 @@ import {
   retrieveLanguage,
   retrievePicture,
   retrieveTheme,
-  updateState,
+  updateUser,
 } from "store/slices/user";
 import { login, logMessages, signUp } from "services/api_service";
 import { ErrorResponse } from "models/error_response";
@@ -130,7 +130,7 @@ const SignUp: React.FC<Props> = ({ onConnectionFail }) => {
       const token: string = payload.token;
 
       dispatch(
-        updateState({
+        updateUser({
           token: token,
           username: data.username,
           name: data.name,

@@ -8,6 +8,7 @@ import { globals, GlobalsContext } from "globals/global_consts";
 import { useStore } from "react-redux";
 import { PersistGate } from "redux-persist/integration/react";
 import { SplashScreen } from "fragments";
+import { persistStore } from "redux-persist";
 
 type AppPropsWithLayout = AppProps & {
   Component: NextPageWithLayout;
@@ -24,7 +25,7 @@ const WrapperApp = ({ Component, pageProps }: AppPropsWithLayout) => {
   const store = useStore();
 
   return (
-    <PersistGate persistor={store.persistor} loading={<SplashScreen />}>
+    <PersistGate persistor={persistStore(store)} loading={<SplashScreen />}>
       <GlobalsContext.Provider value={globals}>
         {getLayout(<Component {...pageProps} />)}
       </GlobalsContext.Provider>

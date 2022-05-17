@@ -55,7 +55,7 @@ export const userSlice = createSlice({
     updateLanguage: (state, action: PayloadAction<string>) => {
       state.language = action.payload;
     },
-    updateState: (state, action: PayloadAction<userState>) => {
+    updateUser: (state, action: PayloadAction<userState>) => {
       state.token = action.payload.token;
       state.username = action.payload.username;
       state.name = action.payload.name;
@@ -86,7 +86,7 @@ export const {
   updatePhone,
   updateTheme,
   updateLanguage,
-  updateState,
+  updateUser,
 } = userSlice.actions;
 
 // user slice selectors, for the extract of the single element in the user state
@@ -98,7 +98,7 @@ export const retrievePicture = (state: ReduxState) => state.user.picture;
 export const retrievePhone = (state: ReduxState) => state.user.phone;
 export const retrieveTheme = (state: ReduxState) => state.user.theme;
 export const retrieveLanguage = (state: ReduxState) => state.user.language;
-export const retrieveState = (state: ReduxState) => state.user;
+export const retrieveUser = (state: ReduxState) => state.user;
 
 // serve the reducers for the store configuration in "../store.ts"
 export default userSlice.reducer;

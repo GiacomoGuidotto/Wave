@@ -9,7 +9,7 @@
   border-l
   border-l-gray-900
   md:border-l-white
-  transition-colors duration-1000 ease-in-out
+  transition-[border] duration-1000 ease-in-out
   z-20
 }
 

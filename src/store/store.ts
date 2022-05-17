@@ -13,7 +13,6 @@ import {
   PAUSE,
   PERSIST,
   persistReducer,
-  persistStore,
   PURGE,
   REGISTER,
   REHYDRATE,
@@ -45,6 +44,7 @@ const reducers = combineReducers({
 
 // Redux persisted storage configuration
 const persistConfig = {
+  timeout: 1,
   key: "root",
   version: 1,
   storage,
@@ -65,8 +65,7 @@ const store = configureStore({
 });
 
 // Redux persisted storage initialization
-// TODO refactor store type
-store.persistor = persistStore(store);
+// store.persistor = persistStore(store);
 
 const makeStore = () => {
   return store;

@@ -3,18 +3,71 @@
   h-screen
   w-[40vw]
   hidden md:flex
-  flex-col place-content-between place-items-start
+  flex-col place-content-start place-items-start
   dark:text-white
   dark:bg-gray-900
   pr-4
 }
 
 .bannerBox {
-  @apply border-r h-[40%] w-full bg-gray-800
+  @apply
+  shrink-0
+  min-h-min w-full
+  border-r mb-32
+}
+
+
+.userBanner {
+  @apply
+  h-56
+  bg-gray-200 dark:bg-gray-800
+  flex flex-col
+  p-2
+}
+
+.userBannerMain {
+  @apply
+  h-[40%]
+  flex place-items-center gap-4
+}
+
+.userPicture {
+  @apply h-full aspect-square flex place-content-center place-items-center
+}
+
+.userUsername {
+  @apply text-truncate text-xl
+}
+
+.userBannerSecondary {
+  @apply h-full w-full flex
+}
+
+.userBannerSecondaryColumn {
+  @apply shrink-0 w-1/2 h-full flex flex-col place-content-evenly
+}
+
+.userBannerSecondaryColumn > div {
+  align-items: flex-end;
+  @apply h-full flex text-truncate
+}
+
+.userBannerSecondaryColumn:nth-child(2) {
+  align-items: flex-end;
+  @apply text-right
+}
+
+.userBannerSecondaryColumn:nth-child(2) > div {
+  @apply text-right place-content-end text-truncate
+}
+
+
+.userBannerLabel {
+  @apply font-light border-b w-3/4 text-truncate
 }
 
 .usersChoice {
-
+  @apply h-12
 }
 
 .usersChoiceHidden {
@@ -24,7 +77,7 @@
 .menu {
   @apply
   border-t
-  h-[50%] w-full
+  h-full w-full
   flex flex-col
   overflow-y-scroll
 }

@@ -1,10 +1,6 @@
 import { useContext, useEffect, useState } from "react";
 import { useRouter } from "next/router";
-import {
-  retrieveLanguage,
-  retrieveToken,
-  updateState,
-} from "store/slices/user";
+import { retrieveLanguage, retrieveToken, updateUser } from "store/slices/user";
 import { HomeLayout, Layout } from "layouts";
 import { Chat, List, Menu } from "fragments";
 import { getUserInformation, logMessages, poke } from "services/api_service";
@@ -37,8 +33,8 @@ const Home: NextPageWithLayout = () => {
     if (language.toLowerCase() !== router.locale) {
       setLanguagePopup(true);
     }
-
-    updateUser();
+  
+    updateUserInfo();
 
     const interval = setInterval(() => {
       updateSession();
@@ -47,8 +43,8 @@ const Home: NextPageWithLayout = () => {
     return () => clearInterval(interval);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
-
-  const updateUser = async () => {
+  
+  const updateUserInfo = async () => {
     const response = await getUserInformation(token);
 
     if (response instanceof ErrorResponse) {
@@ -72,7 +68,7 @@ const Home: NextPageWithLayout = () => {
       payload;
 
     dispatch(
-      updateState({
+      updateUser({
         token: token,
         username: username,
         name: name,

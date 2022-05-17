@@ -5,5 +5,13 @@
   "groups": "Gruppi",
   "setting": "Impostazioni",
   "listPlaceholder": "Qui non c'è ancora nessuno!",
-  "chatPlaceholder": "Seleziona una chat per cominciare!"
+  "chatPlaceholder": "Seleziona una chat per cominciare!",
+  "name": "Nome",
+  "favouriteTheme": "Tema preferito",
+  "L": "Chiaro",
+  "D": "Scuro",
+  "favouriteLanguage": "Lingua preferita",
+  "IT": "Italiano",
+  "EN": "English",
+  "phone": "Telefono"
 }

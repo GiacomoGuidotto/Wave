@@ -9,19 +9,51 @@ import {
 } from "store/slices/wireframe";
 import { useReduxSelector } from "store/hooks";
 import Image from "next/image";
-import { retrieveTheme } from "store/slices/user";
+import { retrieveUser } from "store/slices/user";
+import { FallbackImage } from "utilities";
 
 const Menu: React.FC = () => {
-  const { t } = useTranslation("home");
+  const { t } = useTranslation(["home", "common"]);
   const dispatch = useDispatch();
   const usersActive = useReduxSelector(retrieveHomeUsersOpen);
   const category = useReduxSelector(retrieveHomeCategory);
-  const theme = useReduxSelector(retrieveTheme);
+  const user = useReduxSelector(retrieveUser);
 
   return (
     <div className={styles.menuBox}>
       <div className={styles.bannerBox}>
-        <div className={styles.userBanner}></div>
+        <div className={styles.userBanner}>
+          <div className={styles.userBannerMain}>
+            <div className={styles.userPicture}>
+              <FallbackImage
+                picture={user.picture}
+                seed={user.username}
+                size={90}
+              />
+            </div>
+            <div className={styles.userUsername}>{user.username}</div>
+          </div>
+          <div className={styles.userBannerSecondary}>
+            <div className={styles.userBannerSecondaryColumn}>
+              <div className={styles.userBannerLabel}>{t("name")}</div>
+              <div>
+                {user.name} {user.surname}
+              </div>
+              <div className={styles.userBannerLabel}>{t("phone")}</div>
+              <div>{user.phone}</div>
+            </div>
+            <div className={styles.userBannerSecondaryColumn}>
+              <div className={styles.userBannerLabel}>
+                {t("favouriteTheme")}
+              </div>
+              <div>{t(`${user.theme}`)}</div>
+              <div className={styles.userBannerLabel}>
+                {t("favouriteLanguage")}
+              </div>
+              <div>{t(`${user.language}`)}</div>
+            </div>
+          </div>
+        </div>
         {usersActive && <div className={styles.usersChoice}></div>}
       </div>
       <div className={styles.menu}>
@@ -35,7 +67,7 @@ const Menu: React.FC = () => {
         >
           <Image
             src={
-              theme === "L"
+              user.theme === "L"
                 ? "/icons/wireframe/groups.png"
                 : "/icons/wireframe/groups_dark.png"
             }
@@ -55,7 +87,7 @@ const Menu: React.FC = () => {
         >
           <Image
             src={
-              theme === "L"
+              user.theme === "L"
                 ? "/icons/wireframe/contacts.png"
                 : "/icons/wireframe/contacts_dark.png"
             }
@@ -75,7 +107,7 @@ const Menu: React.FC = () => {
         >
           <Image
             src={
-              theme === "L"
+              user.theme === "L"
                 ? "/icons/wireframe/setting.png"
                 : "/icons/wireframe/setting_dark.png"
             }
