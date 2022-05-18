@@ -7,22 +7,26 @@
   dark:text-white
   dark:bg-gray-900
   border-l
-  border-l-gray-900
-  md:border-l-white
+  border-l-white
+  md:border-l-gray-400
+  dark:border-l-gray-900
+  md:dark:border-l-white
   transition-[border] duration-1000 ease-in-out
   z-20
 }
 
 .chatBoxActive {
-  @apply border-l-white
+  @apply
+  border-l-gray-400
+  dark:border-l-white
   cursor-pointer
 }
 
 .infoBox {
   @apply
-  w-full h-12
-  flex place-items-center
-  pl-2 gap-2
+  w-full h-16
+  flex place-items-center place-content-between
+  px-2 gap-2
   border-b
 }
 
@@ -31,17 +35,62 @@
   md:hidden
 }
 
-
 .info {
   @apply
-  w-full h-full
-  flex place-items-center
+  w-4/5
+  md:w-full
+  h-full
+  flex place-items-center justify-end gap-4
+}
+
+.info > div {
+  @apply w-full text-truncate text-right
+}
+
+.chat {
+  background: repeating-linear-gradient(
+      45deg,
+      rgba(24, 24, 24, .5),
+      rgba(24, 24, 24, .5) 10px,
+      rgba(255, 129, 52, .5) 10px,
+      rgba(255, 129, 52, .5) 20px
+  );
+  @apply
+  h-full w-full
+  flex flex-col place-items-center place-content-center gap-6
+}
+
+.chat > div {
+  @apply
+  dark:bg-gray-900
+  bg-white
+  p-2
 }
 
 .writingBox {
   @apply
   border-t
   w-full h-16
+  px-4 py-3.5
+  flex gap-4
+}
+
+.writingBox > input {
+  @apply
+  w-full
+  px-2
+
+  dark:bg-gray-800
+  shadow-lg
+  focus:outline-none
+}
+
+.writingBox > button {
+  @apply flex place-items-center place-content-center
+  aspect-square
+  hover:dark:bg-gray-800
+  hover:bg-gray-200
+
 }
 
 .placeholder {
@@ -52,5 +101,5 @@
 }
 
 .placeholderBurger {
-  @apply absolute left-2 top-1
+  @apply absolute left-2 top-2 md:hidden
 }

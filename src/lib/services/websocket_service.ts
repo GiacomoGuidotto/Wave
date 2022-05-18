@@ -5,7 +5,7 @@ import { updateConnectedStatus, updateValidStatus } from "store/slices/channel";
 // object containing all the callbacks for all che actions
 const actions: {
   [K in ChannelActions]: (payload: {
-    headers?: { [key: string]: string }[];
+    headers?: { [key: string]: string };
     body?: unknown;
   }) => void;
 } = {
@@ -102,22 +102,31 @@ const parsePacket = (
 ): {
   method: string;
   scope: string;
-  headers?: { [key: string]: string }[];
+  headers?: { [key: string]: string };
   body?: unknown;
 } => {
   const [header, body] = packet.split("\n\n");
   const lines = header.split("\n");
   const [method, scope] = lines[0].split(" ");
   const headers = lines.slice(1);
+  let objectHeaders;
+  if (headers) {
+    const objectHeadersList = headers.map((header) => {
+      const tuple = header
+        .split(":")
+        .map((tupleElement) => tupleElement.trim().replace(/['"]+/g, ""));
+      return { [tuple[0]]: tuple[1] };
+    });
+    objectHeaders = objectHeadersList.reduce(
+      (previousValue, currentValue) =>
+        Object.assign(previousValue, currentValue),
+      {}
+    );
+  }
   return {
     method: method,
     scope: scope,
-    ...(headers && {
-      headers: headers.map((header) => {
-        const [key, value] = header.split(":").map((string) => string.trim());
-        return { [key]: value };
-      }),
-    }),
+    headers: objectHeaders,
     ...(body && {
       body: JSON.parse(body),
     }),
@@ -142,7 +151,7 @@ export const authorizeConnection = (token: string) => {
 export const setActionCallback = (
   action: ChannelActions,
   callback: (payload: {
-    headers?: { [key: string]: string }[];
+    headers?: { [key: string]: string };
     body?: unknown;
   }) => void
 ) => {

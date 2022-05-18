@@ -7,14 +7,14 @@ import {
   retrieveHomeMenuOpen,
   updateHomeMenuOpen,
 } from "store/slices/wireframe";
-import { MenuBurger } from "utilities";
-import { Message } from "models/message";
-import { retrieveToken } from "store/slices/user";
+import { FallbackImage, MenuBurger } from "utilities";
+import { retrieveToken, retrieveUser } from "store/slices/user";
 import { Group } from "models/group";
 import { Contact } from "models/contact";
 import { getSingleChat, isGroup, logMessages } from "services/api_service";
 import { ErrorResponse } from "models/error_response";
 import { useTranslation } from "next-i18next";
+import Image from "next/image";
 
 type Props = {
   onConnectionFail: () => void;
@@ -24,11 +24,12 @@ const Chat: React.FC<Props> = ({ onConnectionFail }) => {
   const { t } = useTranslation("home");
   const menuShown = useReduxSelector(retrieveHomeMenuOpen);
   const chat = useReduxSelector(retrieveHomeChat);
+  const user = useReduxSelector(retrieveUser);
   const token = useReduxSelector(retrieveToken);
   const dispatch = useDispatch();
 
-  const [messages, setMessages] = useState<Message[]>();
-  const [endRange, setEndRange] = useState<Date>(new Date());
+  // const [messages, setMessages] = useState<Message[]>();
+  // const [endRange, setEndRange] = useState<Date>(new Date());
   const [chatInfos, setChatInfos] = useState<Group | Contact>();
 
   // ==== Messages retrieve logic ==================================================================
@@ -69,46 +70,6 @@ const Chat: React.FC<Props> = ({ onConnectionFail }) => {
     }
   };
 
-  // const retrieveChat = async () => {
-  //   if (chat.length === 0) return;
-  //
-  //   if (window.scrollY < window.innerHeight) {
-  //     const startRange = new Date(endRange);
-  //     startRange.setDate(startRange.getDate() - 1);
-  //
-  //     const response = await getRangeMessages(
-  //       token,
-  //       chat,
-  //       startRange,
-  //       endRange
-  //     );
-  //
-  //     if (response instanceof ErrorResponse) {
-  //       await onConnectionFail();
-  //       return;
-  //     }
-  //
-  //     // error cases
-  //     switch (response.status) {
-  //       case 400:
-  //         logMessages(await response.json(), `get chat messages: ${chat}`);
-  //         return;
-  //
-  //       case 401:
-  //         await onConnectionFail();
-  //         return;
-  //
-  //       case 404:
-  //         return;
-  //     }
-  //
-  //     // safe zone
-  //     const payload: Message[] = await response.json();
-  //     setMessages(payload);
-  //     setEndRange(startRange);
-  //   }
-  // };
-
   // ==== Build ====================================================================================
   return (
     <>
@@ -118,7 +79,7 @@ const Chat: React.FC<Props> = ({ onConnectionFail }) => {
           if (menuShown) dispatch(updateHomeMenuOpen(!menuShown));
         }}
       >
-        {chat.length === 0 ? (
+        {!chat ? (
           <div className={styles.placeholder}>
             <div className={styles.placeholderBurger}>
               <MenuBurger
@@ -137,14 +98,61 @@ const Chat: React.FC<Props> = ({ onConnectionFail }) => {
                   active={menuShown}
                 />
               </div>
-              <div className={styles.info}>
-                {isGroup(chat)
-                  ? (chatInfos as Group)?.name
-                  : (chatInfos as Contact)?.username}
-              </div>
+              {chatInfos && (
+                <div className={styles.info}>
+                  <div>
+                    {isGroup(chat)
+                      ? (chatInfos as Group).name
+                      : (chatInfos as Contact).username}
+                  </div>
+                  <FallbackImage
+                    picture={chatInfos.picture}
+                    seed={
+                      isGroup(chat)
+                        ? (chatInfos as Group).name
+                        : (chatInfos as Contact).username
+                    }
+                    size={46}
+                  />
+                </div>
+              )}
             </div>
-            <div className={styles.chat}></div>
-            <div className={styles.writingBox}></div>
+            <div className={styles.chat}>
+              <Image
+                src={"/icons/wireframe/work_in_progress.png"}
+                alt="work in progress"
+                width={128}
+                height={128}
+              />
+              <div>{t("workInProgress")}</div>
+            </div>
+            <div className={styles.writingBox}>
+              <input />
+              <button>
+                <Image
+                  src={
+                    user.theme === "L"
+                      ? "/icons/wireframe/image.png"
+                      : "/icons/wireframe/image_dark.png"
+                  }
+                  alt="image"
+                  width={16}
+                  height={16}
+                />
+              </button>
+              <button>
+                <Image
+                  src={
+                    user.theme === "L"
+                      ? "/icons/wireframe/send.png"
+                      : "/icons/wireframe/send_dark.png"
+                  }
+                  alt="send"
+                  width={24}
+                  height={24}
+                />
+              </button>
+            </div>
           </>
         )}
       </div>

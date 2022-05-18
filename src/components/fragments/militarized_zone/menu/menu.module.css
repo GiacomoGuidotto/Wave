@@ -9,25 +9,23 @@
   pr-4
 }
 
-.bannerBox {
-  @apply
-  shrink-0
-  min-h-min w-full
-  border-r mb-32
-}
-
-
 .userBanner {
   @apply
-  h-56
+  shrink-0
+  h-min w-full
+  border-r
+  border-gray-400
+  dark:border-white
+  mb-32
   bg-gray-200 dark:bg-gray-800
   flex flex-col
-  p-2
+  transition-all duration-700 ease-in-out
 }
 
 .userBannerMain {
   @apply
-  h-[40%]
+  px-2 pt-2 mb-2
+  h-20
   flex place-items-center gap-4
 }
 
@@ -40,7 +38,7 @@
 }
 
 .userBannerSecondary {
-  @apply h-full w-full flex
+  @apply px-2 pb-2 shrink-0 h-32 w-full flex
 }
 
 .userBannerSecondaryColumn {
@@ -63,20 +61,86 @@
 
 
 .userBannerLabel {
-  @apply font-light border-b w-3/4 text-truncate
+  @apply
+  font-light border-b
+  border-gray-400
+  dark:border-white
+  w-[90%] text-truncate
+}
+
+.dropdownIcon {
+  @apply
+  rotate-0
+  flex place-content-center place-items-center
+  transition-transform duration-300 ease-in-out
+}
+
+.dropdownIconActive {
+  @apply rotate-180
+}
+
+.userBannerExtension {
+  @apply
+  h-0
+  border-t dark:border-t-gray-900
+  flex place-content-between place-items-center
+  transition-all duration-150 ease-in-out
+
+  overflow-hidden
+}
+
+.userBannerExtension > button {
+  @apply
+  w-full h-full
+  flex place-items-center justify-start gap-2
+  pl-2
+  hover:dark:bg-gray-700
+  hover:bg-gray-300
+}
+
+.userBannerExtension > button:nth-child(2) {
+  @apply
+  pl-0 pr-2 justify-end
+}
+
+.userBanner:hover .userBannerExtension {
+  @apply userBannerExtended
+}
+
+.userBannerExtended {
+  @apply h-10  dark:border-t-white
 }
 
 .usersChoice {
-  @apply h-12
+  @apply h-min w-full flex-col
 }
 
-.usersChoiceHidden {
-
+.choicesUser {
+  @apply
+  h-12  px-2
+  flex place-content-between place-items-center
 }
+
+.choicesUserPicture {
+  @apply h-full flex place-items-center shrink-0
+}
+
+.choicesUserUsername {
+  @apply grow pl-2
+}
+
+.choicesUserRemove {
+  @apply shrink-0  flex place-items-center p-2
+  hover:dark:bg-gray-700
+  cursor-pointer
+}
+
 
 .menu {
   @apply
   border-t
+  border-gray-400
+  dark:border-white
   h-full w-full
   flex flex-col
   overflow-y-scroll
@@ -89,6 +153,7 @@
   flex place-items-center gap-4
   pl-3
   dark:hover:bg-gray-800
+  hover:bg-gray-200
   cursor-pointer
 }
 
@@ -96,4 +161,5 @@
 .menuChoiceActive {
   @apply
   dark:bg-gray-800
+  bg-gray-200
 }

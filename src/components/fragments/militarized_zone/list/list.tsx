@@ -1,28 +1,30 @@
 import styles from "./list.module.css";
-import React, { useEffect, useState } from "react";
+import React, {
+  ChangeEventHandler,
+  MutableRefObject,
+  useEffect,
+  useRef,
+  useState,
+} from "react";
 import { useReduxSelector } from "store/hooks";
 import {
-  retrieveHomeCategory,
-  retrieveHomeDropdownOpen,
-  retrieveHomeMenuOpen,
+  retrieveWireframe,
   updateHomeCategory,
   updateHomeChat,
   updateHomeDropdownOpen,
   updateHomeMenuOpen,
+  updateHomeSearchOpen,
 } from "store/slices/wireframe";
 import { useDispatch } from "react-redux";
 import { MenuBurger } from "utilities";
 import Image from "next/image";
-import {
-  retrieveTheme,
-  retrieveToken,
-  retrieveUsername,
-} from "store/slices/user";
+import { retrieveUser } from "store/slices/user";
 import { useTranslation } from "next-i18next";
 import {
   getAllContacts,
   getAllGroups,
   logMessages,
+  searchForContacts,
 } from "services/api_service";
 import { ErrorResponse } from "models/error_response";
 import { Contact } from "models/contact";
@@ -37,46 +39,82 @@ type Props = {
 const List: React.FC<Props> = ({ onConnectionFail }) => {
   const { t } = useTranslation("home");
   const dispatch = useDispatch();
-  const menuOpen = useReduxSelector(retrieveHomeMenuOpen);
-  const dropdownOpen = useReduxSelector(retrieveHomeDropdownOpen);
-  const category = useReduxSelector(retrieveHomeCategory);
-  const theme = useReduxSelector(retrieveTheme);
-  const token = useReduxSelector(retrieveToken);
-  const username = useReduxSelector(retrieveUsername);
+  const user = useReduxSelector(retrieveUser);
+  const wireframe = useReduxSelector(retrieveWireframe);
 
   const [chats, setChats] = useState<Contact[] | Group[]>([]);
   const [dropdownChats, setDropdownChats] = useState<Contact[] | Group[]>([]);
+  const [researchedChats, setResearchedChats] = useState<(Contact | Group)[]>(
+    []
+  );
+  const searchBar = useRef() as MutableRefObject<HTMLInputElement>;
 
-  // ==== Channel listener =========================================================================
+  // ==== Channel listener ==============================================================
 
   useEffect(() => {
     setActionCallback("createContact", ({ body }) => {
-      if (category === "contacts") {
+      if (!body) {
+        console.error("wrong channel packet");
+        return;
+      }
+      if (wireframe.homeCategory === "contacts") {
         setDropdownChats([body as Contact, ...(dropdownChats as Contact[])]);
+      }
+    });
+
+    setActionCallback("deleteContactStatus", ({ headers }) => {
+      const username = headers?.username;
+      if (!username) {
+        console.error("wrong channel packet");
+        return;
+      }
+
+      if (wireframe.homeCategory === "contacts") {
+        setDropdownChats(
+          (dropdownChats as Contact[]).filter(
+            (dropdownChat) => dropdownChat.username !== username
+          )
+        );
+      }
+    });
+
+    setActionCallback("updateContactStatus", ({ headers }) => {
+      const username = headers?.username;
+      const directive = headers?.directive;
+      if (!username || !directive) {
+        console.error(
+          `wrong channel packet: \n${!username ? "username not found\n" : ""}${
+            !directive ? "directive not found\n" : ""
+          }`
+        );
+        return;
+      }
+
+      switch (directive) {
+        case "A":
+        case "R":
+          retrieveList();
+          break;
       }
     });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  useEffect(() => {
-    // console.tr(dropdownChats);
-  }, [dropdownChats]);
-
-  // ==== List retrieve logic ======================================================================
+  // ==== List retrieve logic ===========================================================
   useEffect(() => {
     setChats([]);
     setDropdownChats([]);
     retrieveList();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [category]);
+  }, [wireframe.homeCategory]);
 
   const retrieveList = async () => {
-    if (!token) return;
+    if (!user.token) return;
 
     const response =
-      category === "contacts"
-        ? await getAllContacts(token)
-        : await getAllGroups(token);
+      wireframe.homeCategory === "contacts"
+        ? await getAllContacts(user.token)
+        : await getAllGroups(user.token);
     if (response instanceof ErrorResponse) {
       await onConnectionFail();
       return;
@@ -85,7 +123,7 @@ const List: React.FC<Props> = ({ onConnectionFail }) => {
     // error cases
     switch (response.status) {
       case 400:
-        logMessages(await response.json(), `get ${category}`);
+        logMessages(await response.json(), `get ${wireframe.homeCategory}`);
         return;
 
       case 401:
@@ -98,17 +136,17 @@ const List: React.FC<Props> = ({ onConnectionFail }) => {
 
     // safe zone
     const payload = await response.json();
-    if (category === "contacts") {
+    if (wireframe.homeCategory === "contacts") {
       // save contact
       const list = payload as Contact[];
       const chats = list.filter((chat) => chat.status === "A");
       const dropdownChats = list.filter(
-        (chat) => chat.status === "Pr" && chat.username !== username
+        (chat) => chat.status === "Pr" && chat.username !== user.username
       );
 
       setChats(chats);
       setDropdownChats(dropdownChats);
-    } else if (category === "groups") {
+    } else if (wireframe.homeCategory === "groups") {
       // save groups
       const list = payload as Group[];
       const chats = list.filter((chat) => chat.state !== "A");
@@ -118,11 +156,11 @@ const List: React.FC<Props> = ({ onConnectionFail }) => {
       setChats(chats);
     } else {
       // error case
-      console.error(`wrong category: ${category}`);
+      console.error(`wrong category: ${wireframe.homeCategory}`);
     }
   };
 
-  // ==== Contact request logic ====================================================================
+  // ==== Contact request logic =========================================================
 
   const onAccept = (chat: Contact, newInfo: Contact) => {
     setChats([...(chats as Contact[]), newInfo]);
@@ -150,22 +188,128 @@ const List: React.FC<Props> = ({ onConnectionFail }) => {
     );
   };
 
-  // ==== Build ====================================================================================
+  // ==== Search bar logic ==============================================================
+
+  useEffect(() => {
+    if (wireframe.homeSearchOpen) {
+      searchBar.current.focus();
+    } else {
+      setResearchedChats([]);
+      searchBar.current.value = "";
+    }
+  }, [wireframe.homeSearchOpen]);
+
+  const onChange: ChangeEventHandler = async (event) => {
+    const text = (event.target as HTMLTextAreaElement).value;
+
+    if (!text.length) return;
+
+    setResearchedChats([]);
+
+    // find contacts
+    if (text.length > 4 && text.length < 32) {
+      const contactResponse = await searchForContacts(user.token, text);
+      if (contactResponse instanceof ErrorResponse) {
+        await onConnectionFail();
+        return;
+      }
+
+      switch (contactResponse.status) {
+        // safe zone
+        case 200:
+          // const contacts = await contactResponse.json() as Contact[];
+          // setResearchedChats([...researchedChats, ...contacts]);
+          const contact = (await contactResponse.json()) as Contact;
+          setResearchedChats([...researchedChats, contact]);
+          break;
+
+        // error cases
+        case 400:
+          logMessages(await contactResponse.json(), `research contacts`);
+          break;
+
+        case 401:
+          await onConnectionFail();
+          return;
+
+        case 404:
+          break;
+      }
+    }
+
+    // TODO find groups
+    // const contactResponse = await searchForGroups(user.token, text);
+    // if (contactResponse instanceof ErrorResponse) {
+    //   await onConnectionFail();
+    //   return;
+    // }
+    //
+    // // error cases
+    // switch (contactResponse.status) {
+    //   // safe zone
+    //   case 200:
+    //     // const contacts = await contactResponse.json() as Contact[];
+    //     // setResearchedChats([...researchedChats, ...contacts]);
+    //     const group = (await contactResponse.json()) as Group;
+    //     setResearchedChats([...researchedChats, group]);
+    //     break;
+    //
+    //   // error cases
+    //   case 400:
+    //     logMessages(await contactResponse.json(), `research contacts`);
+    //     break;
+    //
+    //   case 401:
+    //     await onConnectionFail();
+    //     return;
+    //
+    //   case 404:
+    //     break;
+    // }
+  };
+
+  // ==== Build =========================================================================
   return (
     <div className={styles.listBox}>
-      {/*==== Search bar ========================================================================*/}
-      <div className={styles.searchBarBox}>
+      {/*==== Search bar =============================================================*/}
+      <div
+        className={[
+          styles.searchBarBox,
+          wireframe.homeSearchOpen && styles.searchBarBoxActive,
+        ].join(" ")}
+      >
         <div className={styles.menuButton}>
           <MenuBurger
-            onClick={() => dispatch(updateHomeMenuOpen(!menuOpen))}
-            active={menuOpen}
+            onClick={() =>
+              wireframe.homeSearchOpen
+                ? dispatch(updateHomeSearchOpen(!wireframe.homeSearchOpen))
+                : dispatch(updateHomeMenuOpen(!wireframe.homeMenuOpen))
+            }
+            active={
+              wireframe.homeSearchOpen
+                ? wireframe.homeSearchOpen
+                : wireframe.homeMenuOpen
+            }
           />
         </div>
-        <div className={styles.searchBar}>
-          <div className={styles.searchBarText}>{t("search")}</div>
+        <div
+          className={[
+            styles.searchBar,
+            wireframe.homeSearchOpen && styles.searchBarActive,
+          ].join(" ")}
+          onClick={() => dispatch(updateHomeSearchOpen(true))}
+        >
+          {/*<div className={styles.searchBarText}>{t("search")}</div>*/}
+          <input
+            ref={searchBar}
+            className={styles.searchBarText}
+            placeholder={t("search")}
+            disabled={!wireframe.homeSearchOpen}
+            onChange={onChange}
+          />
           <Image
             src={
-              theme === "L"
+              user.theme === "L"
                 ? "/icons/wireframe/search.png"
                 : "/icons/wireframe/search_dark.png"
             }
@@ -174,27 +318,56 @@ const List: React.FC<Props> = ({ onConnectionFail }) => {
             height="16"
           />
         </div>
+        <div className={wireframe.homeSearchOpen ? styles.list : "hidden"}>
+          {researchedChats.map((value, index) => {
+            const isContact = "username" in value;
+
+            return (
+              <div
+                key={index}
+                className={styles.listItem}
+                // onClick={() =>
+                //   dispatch(
+                //     updateHomeChat(isContact ? value.username : value.uuid)
+                //   )
+                // }
+              >
+                {isContact ? (
+                  <ContactItem
+                    onConnectionFail={onConnectionFail}
+                    contact={value}
+                  />
+                ) : (
+                  <GroupItem group={value} />
+                )}
+              </div>
+            );
+          })}
+        </div>
       </div>
-      {/*==== Placeholder =======================================================================*/}
+      {/*==== Placeholder ============================================================*/}
       {chats.length === 0 && dropdownChats.length === 0 && (
         <div className={styles.placeholder}>{t("listPlaceholder")}</div>
       )}
       <div className={styles.list}>
-        {/*==== Dropdown ========================================================================*/}
+        {/*==== Dropdown =============================================================*/}
         {dropdownChats.length !== 0 && (
           <div
             className={styles.dropdownHeader}
-            onClick={() => dispatch(updateHomeDropdownOpen(!dropdownOpen))}
+            onClick={() =>
+              dispatch(updateHomeDropdownOpen(!wireframe.homeDropdownOpen))
+            }
           >
-            {category === "contacts" ? "pending" : "archive"}
+            {wireframe.homeCategory === "contacts" ? "pending" : "archive"}
             <div
-              className={`${styles.dropdownIcon} ${
-                dropdownOpen && styles.dropdownIconActive
-              }`}
+              className={[
+                styles.dropdownIcon,
+                wireframe.homeDropdownOpen && styles.dropdownIconActive,
+              ].join(" ")}
             >
               <Image
                 src={
-                  theme === "L"
+                  user.theme === "L"
                     ? "/icons/wireframe/dropdown.png"
                     : "/icons/wireframe/dropdown_dark.png"
                 }
@@ -206,13 +379,14 @@ const List: React.FC<Props> = ({ onConnectionFail }) => {
           </div>
         )}
         <div
-          className={`${styles.dropdownCollapse} ${
-            dropdownOpen && styles.dropdownExpanse
-          }`}
+          className={[
+            styles.dropdownCollapse,
+            wireframe.homeDropdownOpen && styles.dropdownExpanse,
+          ].join(" ")}
         >
           {dropdownChats.map((value, index) => (
             <div key={index} className={styles.listItem}>
-              {category === "contacts" ? (
+              {wireframe.homeCategory === "contacts" ? (
                 <ContactItem
                   onConnectionFail={onConnectionFail}
                   contact={value as Contact}
@@ -232,7 +406,7 @@ const List: React.FC<Props> = ({ onConnectionFail }) => {
             </div>
           ))}
         </div>
-        {/*==== List ============================================================================*/}
+        {/*==== List =================================================================*/}
         {chats.map((value, index) => (
           <div
             key={index}
@@ -240,14 +414,14 @@ const List: React.FC<Props> = ({ onConnectionFail }) => {
             onClick={() =>
               dispatch(
                 updateHomeChat(
-                  category === "contacts"
+                  wireframe.homeCategory === "contacts"
                     ? (value as Contact).username
                     : (value as Group).uuid
                 )
               )
             }
           >
-            {category === "contacts" ? (
+            {wireframe.homeCategory === "contacts" ? (
               <ContactItem
                 onConnectionFail={onConnectionFail}
                 contact={value as Contact}
@@ -258,14 +432,17 @@ const List: React.FC<Props> = ({ onConnectionFail }) => {
           </div>
         ))}
       </div>
-      {/*==== Bottom bar ========================================================================*/}
+      {/*==== Bottom bar =============================================================*/}
       <div
-        className={`${styles.bottomBar} ${!menuOpen && styles.bottomBarHidden}`}
+        className={[
+          styles.bottomBar,
+          !wireframe.homeMenuOpen && styles.bottomBarHidden,
+        ].join(" ")}
       >
         <button className={styles.bottomBarItem}>
           <Image
             src={
-              theme === "L"
+              user.theme === "L"
                 ? "/icons/wireframe/user.png"
                 : "/icons/wireframe/user_dark.png"
             }
@@ -281,7 +458,7 @@ const List: React.FC<Props> = ({ onConnectionFail }) => {
         >
           <Image
             src={
-              theme === "L"
+              user.theme === "L"
                 ? "/icons/wireframe/contacts.png"
                 : "/icons/wireframe/contacts_dark.png"
             }
@@ -297,7 +474,7 @@ const List: React.FC<Props> = ({ onConnectionFail }) => {
         >
           <Image
             src={
-              theme === "L"
+              user.theme === "L"
                 ? "/icons/wireframe/groups.png"
                 : "/icons/wireframe/groups_dark.png"
             }

@@ -108,6 +108,23 @@ export const getAllContacts = (
   });
 };
 
+export const searchForContacts = (
+  token: string,
+  chat: string
+): Promise<Response | ErrorResponse> => {
+  const url = `${baseUrl}${server.endpoints.contact}`;
+  const method = "GET";
+  const headers = {
+    token: token,
+    user: chat,
+  };
+
+  return request(url, {
+    method: method,
+    headers: headers,
+  });
+};
+
 export const respondPending = (
   token: string,
   user: string,
@@ -135,21 +152,49 @@ export const getAllGroups = (
   const url = `${baseUrl}${server.endpoints.group}`;
   const method = "GET";
   const headers = {
-    token: token,
+    token: token
   };
-
+  
   return request(url, {
-    method: method,
-    headers: headers,
+    method:  method,
+    headers: headers
+  });
+};
+
+export const searchForGroups = (
+  token: string,
+  chat: string
+): Promise<Response | ErrorResponse> => {
+  const url = `${baseUrl}${server.endpoints.group}`;
+  const method = "GET";
+  const headers = {
+    token: token,
+    group: chat
+  };
+  
+  return request(url, {
+    method:  method,
+    headers: headers
   });
 };
 
 // ==== Chats ===============================================================
 
+// utility
 export const isGroup = (chat: string) =>
   /^[a-fA-F\d]{8}-[a-fA-F\d]{4}-[a-fA-F\d]{4}-[a-fA-F\d]{4}-[a-fA-F\d]{12}$/.test(
     chat
   );
+
+// utility
+const formatDate = (date: Date): string =>
+  `${date.getFullYear()}-${date.getMonth().toString().padStart(2, "0")}-${date
+  .getDate()
+  .toString()
+  .padStart(2, "0")} ${date.getHours().toString().padStart(2, "0")}:${date
+  .getMinutes()
+  .toString()
+  .padStart(2, "0")}:${date.getSeconds().toString().padStart(2, "0")}`;
 
 export const getSingleChat = (
   token: string,
@@ -171,15 +216,6 @@ export const getSingleChat = (
     headers: headers,
   });
 };
-
-const formatDate = (date: Date): string =>
-  `${date.getFullYear()}-${date.getMonth().toString().padStart(2, "0")}-${date
-    .getDate()
-    .toString()
-    .padStart(2, "0")} ${date.getHours().toString().padStart(2, "0")}:${date
-    .getMinutes()
-    .toString()
-    .padStart(2, "0")}:${date.getSeconds().toString().padStart(2, "0")}`;
 
 export const getRangeMessages = (
   token: string,

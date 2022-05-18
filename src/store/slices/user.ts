@@ -65,6 +65,16 @@ export const userSlice = createSlice({
       state.theme = action.payload.theme;
       state.language = action.payload.language;
     },
+    resetUser: (state) => {
+      state.token = "";
+      state.username = "";
+      state.name = "";
+      state.surname = "";
+      state.picture = "";
+      state.phone = "";
+      state.theme = "D";
+      state.language = "EN";
+    },
   },
 
   // reducer called after server side rendering,
@@ -87,6 +97,7 @@ export const {
   updateTheme,
   updateLanguage,
   updateUser,
+  resetUser,
 } = userSlice.actions;
 
 // user slice selectors, for the extract of the single element in the user state

@@ -11,7 +11,10 @@
   "L": "Light",
   "D": "Dark",
   "favouriteLanguage": "Favourite language",
-  "IT": "Italiano",
+  "IT": "Italian",
   "EN": "English",
-  "phone": "Phone"
+  "phone": "Phone",
+  "edit": "Edit your info",
+  "users": "Users",
+  "workInProgress": "Chat still under construction"
 }

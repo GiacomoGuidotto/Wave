@@ -6,16 +6,18 @@ import { Categories } from "globals/globals_types";
 export interface wireframeState {
   accessRightPage: boolean;
   homeMenuOpen: boolean;
+  homeSearchOpen: boolean;
   homeDropdownOpen: boolean;
   homeUsersOpen: boolean;
   homeCategory: Categories;
   homeChat: string;
 }
 
-// user slice initial state
+// wireframe slice initial state
 const initialState: wireframeState = {
   accessRightPage: false,
   homeMenuOpen: false,
+  homeSearchOpen: false,
   homeDropdownOpen: false,
   homeUsersOpen: false,
   homeCategory: "contacts",
@@ -33,6 +35,9 @@ export const wireframeSlice = createSlice({
     updateHomeMenuOpen: (state, action: PayloadAction<boolean>) => {
       state.homeMenuOpen = action.payload;
     },
+    updateHomeSearchOpen: (state, action: PayloadAction<boolean>) => {
+      state.homeSearchOpen = action.payload;
+    },
     updateHomeDropdownOpen: (state, action: PayloadAction<boolean>) => {
       state.homeDropdownOpen = action.payload;
     },
@@ -48,30 +53,42 @@ export const wireframeSlice = createSlice({
     updateState: (state, action: PayloadAction<wireframeState>) => {
       state.accessRightPage = action.payload.accessRightPage;
       state.homeMenuOpen = action.payload.homeMenuOpen;
+      state.homeSearchOpen = action.payload.homeSearchOpen;
       state.homeDropdownOpen = action.payload.homeDropdownOpen;
       state.homeUsersOpen = action.payload.homeUsersOpen;
       state.homeCategory = action.payload.homeCategory;
       state.homeChat = action.payload.homeChat;
     },
+    resetWireframe: (state) => {
+      state.accessRightPage = false;
+      state.homeMenuOpen = false;
+      state.homeSearchOpen = false;
+      state.homeDropdownOpen = false;
+      state.homeUsersOpen = false;
+      state.homeCategory = "contacts";
+      state.homeChat = "";
+    },
   },
 });
 
-// user slice reducers
 export const {
   updateAccessRightPage,
   updateHomeMenuOpen,
+  updateHomeSearchOpen,
   updateHomeDropdownOpen,
   updateHomeUsersOpen,
   updateHomeCategory,
   updateHomeChat,
-  updateState
+  updateState,
+  resetWireframe,
 } = wireframeSlice.actions;
 
-// user slice selectors, for the extract of the single element in the user state
 export const retrieveAccessRightPage = (state: ReduxState) =>
   state.wireframe.accessRightPage;
 export const retrieveHomeMenuOpen = (state: ReduxState) =>
   state.wireframe.homeMenuOpen;
+export const retrieveHomeSearchOpen = (state: ReduxState) =>
+  state.wireframe.homeSearchOpen;
 export const retrieveHomeDropdownOpen = (state: ReduxState) =>
   state.wireframe.homeDropdownOpen;
 export const retrieveHomeUsersOpen = (state: ReduxState) =>
@@ -79,6 +96,7 @@ export const retrieveHomeUsersOpen = (state: ReduxState) =>
 export const retrieveHomeCategory = (state: ReduxState): Categories =>
   state.wireframe.homeCategory;
 export const retrieveHomeChat = (state: ReduxState) => state.wireframe.homeChat;
+export const retrieveWireframe = (state: ReduxState) => state.wireframe;
 
 // serve the reducers for the store configuration in "../store.ts"
 export default wireframeSlice.reducer;

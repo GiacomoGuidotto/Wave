@@ -4,63 +4,101 @@
   w-[90vw]
   md:w-[40vw]
   relative
-  overflow-y-scroll
-  px-4
+    /*overflow-y-scroll*/
   dark:bg-gray-900
 }
 
 .searchBarBox {
   @apply
-  w-full h-10
-  mt-2  mb-8
-  flex place-content-between place-items-center gap-2
+  z-40
+  absolute
+  w-full h-14
+  dark:bg-gray-900
+  transition-height duration-500 ease-in-out
+}
+
+.searchBarBoxActive {
+  @apply h-full mt-0
 }
 
 .menuButton {
   @apply
-  hidden
-  md:block
+  absolute left-4 top-2
 }
 
 .searchBar {
   @apply
+  absolute right-4 top-2
+  z-50
   border
-  w-full h-10
-  flex place-items-center place-content-between
-  px-2
+  border-gray-400
+  dark:border-white
+  w-[calc(100%_-_2rem)]
+  md:w-[calc(100%_-_5rem)]
+  h-10 ml-2
+  flex place-items-center place-content-between gap-4
+  pr-2
   text-sm capitalize font-light
-  text-gray-600
+  text-gray-800
   dark:text-gray-200
   dark:bg-gray-900
+  hover:bg-gray-300
+  hover:dark:bg-gray-800
   cursor-pointer
+  transition-all duration-500 ease-in-out
+}
+
+.searchBarActive {
+  @apply
+  w-[calc(100%_-_5rem)]
+  hover:bg-white
+  hover:dark:bg-gray-900
+  cursor-auto
 }
 
 .searchBarText {
-  @apply w-full text-center
+  cursor: inherit;
+  @apply
+  w-full h-full
+  pl-2
+  flex place-items-center
+  bg-transparent
+  focus:outline-none
 }
 
 .list {
   @apply
-  border-x
-  w-full min-h-min
+    /*border-x*/
+    /*border-gray-400*/
+    /*dark:border-white*/
+  w-full
+  h-[calc(100vh_-_9.5rem)]
+  md:h-[calc(100vh_-_6rem)]
   flex flex-col place-items-center
-  mb-14
-  md:mb-4
+  overflow-y-scroll
+  mt-20
+  px-4
   select-none
 }
 
 
 .dropdownHeader {
   @apply
-  border-b w-full h-10
+  border
+  border-gray-400
+  dark:border-white
+  w-full h-10
+  shrink-0
   flex place-items-center place-content-between
   px-4
   font-light capitalize
   select-none
   cursor-pointer
   bg-gray-200
+  hover:bg-gray-300
+  dark:bg-gray-800
+  hover:dark:bg-gray-700
   dark:text-white
-  dark:bg-gray-900
 }
 
 .dropdownIcon {
@@ -77,15 +115,20 @@
 .dropdownCollapse {
   @apply
   w-full min-h-min
-  flex flex-col place-items-center h-0
+  flex flex-col place-items-center
+  h-0
 }
 
 .dropdownExpanse {
-  @apply h-full
+  @apply h-min
 }
 
 .listItem {
-  @apply w-full h-24 cursor-pointer z-10
+  @apply
+  border-x
+  border-gray-400
+  dark:border-white
+  w-full h-24 cursor-pointer z-10 shrink-0
 }
 
 .placeholder {
@@ -98,6 +141,8 @@
 .bottomBar {
   @apply
   border-t
+  border-gray-400
+  dark:border-white
   h-14  w-[90vw]
   fixed bottom-0 left-0
   bg-white
