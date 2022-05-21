@@ -12,6 +12,7 @@
   bg-white
   dark:bg-gray-900
   hover:dark:bg-gray-800
+  hover:bg-gray-200
   dark:text-white
   relative
 }
@@ -24,22 +25,26 @@
 }
 
 .contactBox:hover .contactAside {
-  @apply bg-gray-800
+  @apply
+  bg-gray-200
+  dark:bg-gray-800
 }
 
 .contactAside {
   @apply
-  w-32 h-full
-  z-20
+  w-max h-full
+  z-20 px-2
   absolute right-0
+  bg-white
   dark:bg-gray-900
-  flex place-items-center place-content-evenly
+  flex place-items-center gap-4
 }
 
 .contactAside > button {
   @apply
   flex place-items-center place-content-center
   p-1
+  hover:bg-gray-300
   hover:dark:bg-gray-700
 
 }

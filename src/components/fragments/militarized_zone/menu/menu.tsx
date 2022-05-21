@@ -7,6 +7,7 @@ import {
   retrieveHomeCategory,
   retrieveHomeUsersOpen,
   updateHomeCategory,
+  updateHomeDropdownOpen,
   updateHomeUsersOpen,
 } from "store/slices/wireframe";
 import { useReduxSelector } from "store/hooks";
@@ -75,10 +76,10 @@ const Menu: React.FC = () => {
               width={16}
               height={16}
             />
-            {t("users")}
+            <div>{t("users")}</div>
           </button>
           <button>
-            {t("edit")}
+            <div>{t("edit")}</div>
             <Image
               src={
                 user.theme === "L"
@@ -131,7 +132,10 @@ const Menu: React.FC = () => {
             styles.menuChoice,
             category === "groups" && styles.menuChoiceActive,
           ].join(" ")}
-          onClick={() => dispatch(updateHomeCategory("groups"))}
+          onClick={() => {
+            dispatch(updateHomeCategory("groups"));
+            dispatch(updateHomeDropdownOpen(false));
+          }}
         >
           <Image
             src={
@@ -150,7 +154,10 @@ const Menu: React.FC = () => {
             styles.menuChoice,
             category === "contacts" && styles.menuChoiceActive,
           ].join(" ")}
-          onClick={() => dispatch(updateHomeCategory("contacts"))}
+          onClick={() => {
+            dispatch(updateHomeCategory("contacts"));
+            dispatch(updateHomeDropdownOpen(false));
+          }}
         >
           <Image
             src={

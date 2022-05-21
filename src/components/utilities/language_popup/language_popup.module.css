@@ -1,6 +1,6 @@
 .languagePopupBox {
   @apply
-  fixed top-0 right-0 z-30
+  fixed top-0 right-0 z-50
   mt-4 mr-4
   flex place-items-center gap-2
   h-12

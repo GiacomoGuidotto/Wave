@@ -91,6 +91,23 @@ export const getUserInformation = (
   });
 };
 
+export const searchForUsers = (
+  token: string,
+  chat: string
+): Promise<Response | ErrorResponse> => {
+  const url = `${baseUrl}${server.endpoints.user}`;
+  const method = "GET";
+  const headers = {
+    token: token,
+    user: chat,
+  };
+
+  return request(url, {
+    method: method,
+    headers: headers,
+  });
+};
+
 // ==== Contacts ===============================================================
 
 export const getAllContacts = (
@@ -108,15 +125,26 @@ export const getAllContacts = (
   });
 };
 
-export const searchForContacts = (
-  token: string,
-  chat: string
-): Promise<Response | ErrorResponse> => {
+export const requestContact = (token: string, user: string) => {
   const url = `${baseUrl}${server.endpoints.contact}`;
-  const method = "GET";
+  const method = "POST";
   const headers = {
     token: token,
-    user: chat,
+    user: user,
+  };
+
+  return request(url, {
+    method: method,
+    headers: headers,
+  });
+};
+
+export const cancelContactRequest = (token: string, user: string) => {
+  const url = `${baseUrl}${server.endpoints.contact}`;
+  const method = "DELETE";
+  const headers = {
+    token: token,
+    user: user,
   };
 
   return request(url, {
@@ -152,29 +180,12 @@ export const getAllGroups = (
   const url = `${baseUrl}${server.endpoints.group}`;
   const method = "GET";
   const headers = {
-    token: token
-  };
-  
-  return request(url, {
-    method:  method,
-    headers: headers
-  });
-};
-
-export const searchForGroups = (
-  token: string,
-  chat: string
-): Promise<Response | ErrorResponse> => {
-  const url = `${baseUrl}${server.endpoints.group}`;
-  const method = "GET";
-  const headers = {
     token: token,
-    group: chat
   };
-  
+
   return request(url, {
-    method:  method,
-    headers: headers
+    method: method,
+    headers: headers,
   });
 };
 
@@ -189,12 +200,12 @@ export const isGroup = (chat: string) =>
 // utility
 const formatDate = (date: Date): string =>
   `${date.getFullYear()}-${date.getMonth().toString().padStart(2, "0")}-${date
-  .getDate()
-  .toString()
-  .padStart(2, "0")} ${date.getHours().toString().padStart(2, "0")}:${date
-  .getMinutes()
-  .toString()
-  .padStart(2, "0")}:${date.getSeconds().toString().padStart(2, "0")}`;
+    .getDate()
+    .toString()
+    .padStart(2, "0")} ${date.getHours().toString().padStart(2, "0")}:${date
+    .getMinutes()
+    .toString()
+    .padStart(2, "0")}:${date.getSeconds().toString().padStart(2, "0")}`;
 
 export const getSingleChat = (
   token: string,

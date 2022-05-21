@@ -4,82 +4,37 @@ import { Contact } from "models/contact";
 
 import Image from "next/image";
 import { useReduxSelector } from "store/hooks";
-import { retrieveTheme, retrieveToken } from "store/slices/user";
+import { retrieveTheme } from "store/slices/user";
 import { FallbackImage } from "utilities";
-import { logMessages, respondPending } from "services/api_service";
-import { ErrorResponse } from "models/error_response";
 
 type Props = {
-  onConnectionFail: () => void;
-  onRequestAccept?: (newInfo: Contact) => void;
-  onRequestDecline?: () => void;
-  onRequestBlock?: (newInfo: Contact) => void;
+  onRequest?: (targetedContact: Contact) => void;
+  onCancel?: (targetedContact: Contact) => void;
+  onAccept?: (targetedContact: Contact) => void;
+  onDecline?: (targetedContact: Contact) => void;
+  onBlock?: (targetedContact: Contact) => void;
   contact: Contact;
 };
 
 const ContactItem: React.FC<Props> = ({
   contact,
-  onConnectionFail,
-  onRequestAccept = () => {
+  onRequest = () => {
+    // request a contact
+  },
+  onCancel = () => {
+    // cancel a contact request
+  },
+  onAccept = () => {
     // accept the contact request
   },
-  onRequestDecline = () => {
+  onDecline = () => {
     // decline the contact request
   },
-  onRequestBlock = () => {
+  onBlock = () => {
     // block the contact
   },
 }) => {
   const theme = useReduxSelector(retrieveTheme);
-  const token = useReduxSelector(retrieveToken);
-
-  const onClick = async (directive: "A" | "B" | "D") => {
-    if (!token) return;
-
-    const response = await respondPending(token, contact.username, directive);
-
-    if (response instanceof ErrorResponse) {
-      await onConnectionFail();
-      return;
-    }
-
-    // error cases
-    switch (response.status) {
-      case 400:
-        logMessages(
-          await response.json(),
-          `respond pending contact: ${contact.username}`
-        );
-        return;
-
-      case 401:
-        await onConnectionFail();
-        return;
-
-      case 404:
-        logMessages(
-          await response.json(),
-          `respond pending contact: ${contact.username}`
-        );
-        return;
-    }
-
-    // safe zone
-    switch (directive) {
-      case "A":
-        const acceptPayload = (await response.json()) as Contact;
-        onRequestAccept(acceptPayload);
-        break;
-      case "D":
-        onRequestDecline();
-        break;
-      case "B":
-        const blockedPayload = (await response.json()) as Contact;
-        onRequestBlock(blockedPayload);
-        break;
-    }
-    return;
-  };
 
   return (
     <div className={styles.contactBox}>
@@ -98,7 +53,7 @@ const ContactItem: React.FC<Props> = ({
       </div>
       {contact.status === "Pr" && (
         <div className={styles.contactAside}>
-          <button onClick={() => onClick("B")}>
+          <button onClick={() => onBlock(contact)}>
             <Image
               src={
                 theme === "L"
@@ -110,7 +65,7 @@ const ContactItem: React.FC<Props> = ({
               height="24"
             />
           </button>
-          <button onClick={() => onClick("D")}>
+          <button onClick={() => onDecline(contact)}>
             <Image
               src={
                 theme === "L"
@@ -122,12 +77,44 @@ const ContactItem: React.FC<Props> = ({
               height="24"
             />
           </button>
-          <button onClick={() => onClick("A")}>
+          <button onClick={() => onAccept(contact)}>
             <Image
               src={
                 theme === "L"
                   ? "/icons/wireframe/accept.png"
                   : "/icons/wireframe/accept_dark.png"
+              }
+              alt="offline"
+              width="24"
+              height="24"
+            />
+          </button>
+        </div>
+      )}
+      {contact.status === "U" && (
+        <div className={styles.contactAside}>
+          <button onClick={() => onRequest(contact)}>
+            <Image
+              src={
+                theme === "L"
+                  ? "/icons/wireframe/add_contact.png"
+                  : "/icons/wireframe/add_contact_dark.png"
+              }
+              alt="offline"
+              width="24"
+              height="24"
+            />
+          </button>
+        </div>
+      )}
+      {contact.status === "Ps" && (
+        <div className={styles.contactAside}>
+          <button onClick={() => onCancel(contact)}>
+            <Image
+              src={
+                theme === "L"
+                  ? "/icons/wireframe/remove_contact.png"
+                  : "/icons/wireframe/remove_contact_dark.png"
               }
               alt="offline"
               width="24"

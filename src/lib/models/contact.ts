@@ -3,5 +3,5 @@ export interface Contact {
   name: string;
   surname: string;
   picture: string;
-  status: "A" | "B" | "Ps" | "Pr";
+  status: "A" | "B" | "Ps" | "Pr" | "U";
 }

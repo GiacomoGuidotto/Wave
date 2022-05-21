@@ -13,6 +13,7 @@
   z-40
   absolute
   w-full h-14
+  bg-white
   dark:bg-gray-900
   transition-height duration-500 ease-in-out
 }

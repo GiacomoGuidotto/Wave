@@ -89,8 +89,8 @@ const getInstance = () => {
       store.dispatch(updateConnectedStatus(false));
     };
 
-    instance.onerror = (event) => {
-      console.error(event);
+    instance.onerror = () => {
+      // console.error(event);
     };
   }
   return instance;

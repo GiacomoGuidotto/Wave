@@ -98,9 +98,17 @@
   hover:bg-gray-300
 }
 
+.userBannerExtension > button > div {
+  @apply w-full text-left text-truncate
+}
+
 .userBannerExtension > button:nth-child(2) {
   @apply
   pl-0 pr-2 justify-end
+}
+
+.userBannerExtension > button > div:nth-child(1) {
+  @apply text-right
 }
 
 .userBanner:hover .userBannerExtension {
@@ -144,6 +152,7 @@
   h-full w-full
   flex flex-col
   overflow-y-scroll
+  mb-4
 }
 
 .menuChoice {

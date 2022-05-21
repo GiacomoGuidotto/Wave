@@ -21,10 +21,13 @@ import Image from "next/image";
 import { retrieveUser } from "store/slices/user";
 import { useTranslation } from "next-i18next";
 import {
+  cancelContactRequest,
   getAllContacts,
   getAllGroups,
   logMessages,
-  searchForContacts,
+  requestContact,
+  respondPending,
+  searchForUsers,
 } from "services/api_service";
 import { ErrorResponse } from "models/error_response";
 import { Contact } from "models/contact";
@@ -42,33 +45,37 @@ const List: React.FC<Props> = ({ onConnectionFail }) => {
   const user = useReduxSelector(retrieveUser);
   const wireframe = useReduxSelector(retrieveWireframe);
 
-  const [chats, setChats] = useState<Contact[] | Group[]>([]);
-  const [dropdownChats, setDropdownChats] = useState<Contact[] | Group[]>([]);
-  const [researchedChats, setResearchedChats] = useState<(Contact | Group)[]>(
-    []
-  );
   const searchBar = useRef() as MutableRefObject<HTMLInputElement>;
+  const [researchedContacts, setResearchedContacts] = useState<Contact[]>([]);
+
+  const [dropdownChats, setDropdownChats] = useState<Contact[] | Group[]>([]);
+  const [chats, setChats] = useState<Contact[] | Group[]>([]);
 
   // ==== Channel listener ==============================================================
 
   useEffect(() => {
     setActionCallback("createContact", ({ body }) => {
-      if (!body) {
-        console.error("wrong channel packet");
+      const contact = body as Contact;
+
+      if (!contact) {
+        console.error("wrong [CREATE contact] channel packet");
         return;
       }
+
+      // add the contact to the dropdown
       if (wireframe.homeCategory === "contacts") {
-        setDropdownChats([body as Contact, ...(dropdownChats as Contact[])]);
+        setDropdownChats([contact, ...(dropdownChats as Contact[])]);
       }
     });
 
     setActionCallback("deleteContactStatus", ({ headers }) => {
       const username = headers?.username;
       if (!username) {
-        console.error("wrong channel packet");
+        console.error("wrong [DELETE contact/status] channel packet");
         return;
       }
 
+      // delete the contact from the dropdown
       if (wireframe.homeCategory === "contacts") {
         setDropdownChats(
           (dropdownChats as Contact[]).filter(
@@ -83,9 +90,9 @@ const List: React.FC<Props> = ({ onConnectionFail }) => {
       const directive = headers?.directive;
       if (!username || !directive) {
         console.error(
-          `wrong channel packet: \n${!username ? "username not found\n" : ""}${
-            !directive ? "directive not found\n" : ""
-          }`
+          `wrong [UPDATE contact/status] channel packet: \n${
+            !username ? "username not found\n" : ""
+          }${!directive ? "directive not found\n" : ""}`
         );
         return;
       }
@@ -93,8 +100,64 @@ const List: React.FC<Props> = ({ onConnectionFail }) => {
       switch (directive) {
         case "A":
         case "R":
+        case "D":
+          // lazy reload of the two list
           retrieveList();
+          // lazy reload of the research
+          if (wireframe.homeSearchOpen && searchBar.current.value !== "")
+            searchContacts(searchBar.current.value);
           break;
+      }
+    });
+
+    setActionCallback("updateContactInformation", ({ body }) => {
+      const contact = body as Contact;
+      if (!contact) {
+        console.error(`wrong [UPDATE contact/information] channel packet`);
+        return;
+      }
+
+      // lazy reload of the two list
+      retrieveList();
+      // lazy reload of the research
+      if (wireframe.homeSearchOpen && searchBar.current.value !== "")
+        searchContacts(searchBar.current.value);
+    });
+
+    setActionCallback("createGroup", ({ body }) => {
+      const group = body as Group;
+      if (!group) {
+        console.error(`wrong [CREATE group] channel packet`);
+        return;
+      }
+
+      // add the group to the list
+      if (wireframe.homeCategory === "groups") {
+        setChats([group, ...(chats as Group[])]);
+      }
+    });
+
+    setActionCallback("updateGroupInformation", ({ body }) => {
+      const group = body as Group;
+      if (!group) {
+        console.error(`wrong [UPDATE group/information] channel packet`);
+        return;
+      }
+
+      // lazy reload of the two list
+      retrieveList();
+    });
+
+    setActionCallback("deleteGroup", ({ headers }) => {
+      const group = headers?.group;
+      if (!group) {
+        console.error("wrong [DELETE group] channel packet");
+        return;
+      }
+
+      // delete the group from the list
+      if (wireframe.homeCategory === "groups") {
+        setChats((chats as Group[]).filter((chat) => chat.uuid !== group));
       }
     });
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -120,8 +183,8 @@ const List: React.FC<Props> = ({ onConnectionFail }) => {
       return;
     }
 
-    // error cases
     switch (response.status) {
+      // error cases
       case 400:
         logMessages(await response.json(), `get ${wireframe.homeCategory}`);
         return;
@@ -132,143 +195,315 @@ const List: React.FC<Props> = ({ onConnectionFail }) => {
 
       case 404:
         return;
-    }
 
-    // safe zone
-    const payload = await response.json();
-    if (wireframe.homeCategory === "contacts") {
-      // save contact
-      const list = payload as Contact[];
-      const chats = list.filter((chat) => chat.status === "A");
-      const dropdownChats = list.filter(
-        (chat) => chat.status === "Pr" && chat.username !== user.username
-      );
+      //safe zone
+      case 200:
+        const payload = await response.json();
+        if (wireframe.homeCategory === "contacts") {
+          // save contact
+          const list = payload as Contact[];
+          const chats = list.filter((chat) => chat.status === "A");
+          const dropdownChats = list.filter(
+            (chat) => chat.status === "Pr" && chat.username !== user.username
+          );
 
-      setChats(chats);
-      setDropdownChats(dropdownChats);
-    } else if (wireframe.homeCategory === "groups") {
-      // save groups
-      const list = payload as Group[];
-      const chats = list.filter((chat) => chat.state !== "A");
-      const dropdownChats = list.filter((chat) => chat.state === "A");
+          setChats(chats);
+          setDropdownChats(dropdownChats);
+        } else if (wireframe.homeCategory === "groups") {
+          // save groups
+          const list = payload as Group[];
+          const chats = list.filter((chat) => chat.state !== "A");
+          const dropdownChats = list.filter((chat) => chat.state === "A");
 
-      setDropdownChats(dropdownChats);
-      setChats(chats);
-    } else {
-      // error case
-      console.error(`wrong category: ${wireframe.homeCategory}`);
+          setDropdownChats(dropdownChats);
+          setChats(chats);
+        } else {
+          // error case
+          console.error(`wrong category: ${wireframe.homeCategory}`);
+        }
+        break;
     }
   };
 
   // ==== Contact request logic =========================================================
+  const onRequest = async (contact: Contact) => {
+    const response = await requestContact(user.token, contact.username);
+    if (response instanceof ErrorResponse) {
+      await onConnectionFail();
+      return;
+    }
 
-  const onAccept = (chat: Contact, newInfo: Contact) => {
-    setChats([...(chats as Contact[]), newInfo]);
+    switch (response.status) {
+      // error cases
+      case 400:
+        logMessages(
+          await response.json(),
+          `create a contact request with ${contact.username}`
+        );
+        break;
 
-    setDropdownChats(
-      (dropdownChats as Contact[]).filter(
-        (dropdownChat) => dropdownChat !== chat
-      )
-    );
+      case 401:
+        await onConnectionFail();
+        return;
+
+      case 404:
+        break;
+      case 406:
+        // TODO blocked case
+        break;
+      case 409:
+        break;
+
+      // safe zone
+      case 200:
+        // update the list by replacing the targeted contact with the updated one from the API
+        const newContact = (await response.json()) as Contact;
+        const updatedResearchedChats = researchedContacts.map((contact) =>
+          contact.username === newContact.username ? newContact : contact
+        );
+
+        setResearchedContacts(updatedResearchedChats);
+        break;
+    }
   };
 
-  const onDecline = (chat: Contact) => {
-    setDropdownChats(
-      (dropdownChats as Contact[]).filter(
-        (dropdownChat) => dropdownChat !== chat
-      )
-    );
+  const onCancel = async (contact: Contact) => {
+    const response = await cancelContactRequest(user.token, contact.username);
+    if (response instanceof ErrorResponse) {
+      await onConnectionFail();
+      return;
+    }
+
+    switch (response.status) {
+      // error cases
+      case 400:
+        logMessages(
+          await response.json(),
+          `cancel a contact request with ${contact.username}`
+        );
+        break;
+
+      case 401:
+        await onConnectionFail();
+        return;
+
+      case 404:
+        break;
+      case 406:
+        // TODO blocked case
+        break;
+      case 409:
+        break;
+
+      // safe zone
+      case 200:
+        // update the targeted contact with the "Unrelated" status
+        const updatedResearchedChats = researchedContacts.map(
+          (researchedContact) => {
+            if (researchedContact.username === contact.username) {
+              researchedContact.status = "U";
+            }
+            return researchedContact;
+          }
+        );
+
+        setResearchedContacts(updatedResearchedChats);
+        break;
+    }
   };
 
-  const onBlock = (chat: Contact) => {
-    setDropdownChats(
-      (dropdownChats as Contact[]).filter(
-        (dropdownChat) => dropdownChat !== chat
-      )
+  const onAccept = async (targetedContact: Contact) => {
+    if (!user.token) return;
+
+    const response = await respondPending(
+      user.token,
+      targetedContact.username,
+      "A"
     );
+
+    if (response instanceof ErrorResponse) {
+      await onConnectionFail();
+      return;
+    }
+
+    switch (response.status) {
+      // error cases
+      case 400:
+        logMessages(
+          await response.json(),
+          `accept pending contact: ${targetedContact.username}`
+        );
+        return;
+
+      case 401:
+        await onConnectionFail();
+        return;
+
+      case 404:
+        logMessages(
+          await response.json(),
+          `accept pending contact: ${targetedContact.username}`
+        );
+        return;
+
+      // safe zone
+      case 200:
+        // moving the targeted contact from the dropdown to the list
+        const updatedContact = (await response.json()) as Contact;
+        setChats([...(chats as Contact[]), updatedContact]);
+
+        setDropdownChats(
+          (dropdownChats as Contact[]).filter(
+            (dropdownChat) => dropdownChat !== targetedContact
+          )
+        );
+        break;
+    }
+  };
+
+  const onDecline = async (targetedContact: Contact) => {
+    if (!user.token) return;
+
+    const response = await respondPending(
+      user.token,
+      targetedContact.username,
+      "D"
+    );
+
+    if (response instanceof ErrorResponse) {
+      await onConnectionFail();
+      return;
+    }
+
+    switch (response.status) {
+      // error cases
+      case 400:
+        logMessages(
+          await response.json(),
+          `decline pending contact: ${targetedContact.username}`
+        );
+        return;
+
+      case 401:
+        await onConnectionFail();
+        return;
+
+      case 404:
+        logMessages(
+          await response.json(),
+          `decline pending contact: ${targetedContact.username}`
+        );
+        return;
+
+      // safe zone
+      case 200:
+        // removing the targeted contact from the list
+        setDropdownChats(
+          (dropdownChats as Contact[]).filter(
+            (dropdownChat) => dropdownChat !== targetedContact
+          )
+        );
+        break;
+    }
+  };
+
+  const onBlock = async (targetedContact: Contact) => {
+    if (!user.token) return;
+
+    const response = await respondPending(
+      user.token,
+      targetedContact.username,
+      "B"
+    );
+
+    if (response instanceof ErrorResponse) {
+      await onConnectionFail();
+      return;
+    }
+
+    switch (response.status) {
+      // error cases
+      case 400:
+        logMessages(
+          await response.json(),
+          `block pending contact: ${targetedContact.username}`
+        );
+        return;
+
+      case 401:
+        await onConnectionFail();
+        return;
+
+      case 404:
+        logMessages(
+          await response.json(),
+          `block pending contact: ${targetedContact.username}`
+        );
+        return;
+
+      // safe zone
+      case 200:
+        // removing the targeted contact from the list
+        setDropdownChats(
+          (dropdownChats as Contact[]).filter(
+            (dropdownChat) => dropdownChat !== targetedContact
+          )
+        );
+        break;
+    }
   };
 
   // ==== Search bar logic ==============================================================
+
+  const searchContacts = async (text: string) => {
+    const contactResponse = await searchForUsers(user.token, text);
+    if (contactResponse instanceof ErrorResponse) {
+      await onConnectionFail();
+      return;
+    }
+
+    switch (contactResponse.status) {
+      // error cases
+      case 400:
+        logMessages(await contactResponse.json(), `research contacts`);
+        break;
+
+      case 401:
+        await onConnectionFail();
+        return;
+
+      case 404:
+        break;
+
+      // safe zone
+      case 200:
+        const contacts = (await contactResponse.json()) as Contact[];
+        setResearchedContacts(contacts);
+        break;
+    }
+  };
 
   useEffect(() => {
     if (wireframe.homeSearchOpen) {
       searchBar.current.focus();
     } else {
-      setResearchedChats([]);
+      setResearchedContacts([]);
       searchBar.current.value = "";
     }
   }, [wireframe.homeSearchOpen]);
 
-  const onChange: ChangeEventHandler = async (event) => {
+  const onChange: ChangeEventHandler = (event) => {
     const text = (event.target as HTMLTextAreaElement).value;
+
+    setResearchedContacts([]);
 
     if (!text.length) return;
 
-    setResearchedChats([]);
-
-    // find contacts
-    if (text.length > 4 && text.length < 32) {
-      const contactResponse = await searchForContacts(user.token, text);
-      if (contactResponse instanceof ErrorResponse) {
-        await onConnectionFail();
-        return;
-      }
-
-      switch (contactResponse.status) {
-        // safe zone
-        case 200:
-          // const contacts = await contactResponse.json() as Contact[];
-          // setResearchedChats([...researchedChats, ...contacts]);
-          const contact = (await contactResponse.json()) as Contact;
-          setResearchedChats([...researchedChats, contact]);
-          break;
-
-        // error cases
-        case 400:
-          logMessages(await contactResponse.json(), `research contacts`);
-          break;
-
-        case 401:
-          await onConnectionFail();
-          return;
-
-        case 404:
-          break;
-      }
-    }
-
-    // TODO find groups
-    // const contactResponse = await searchForGroups(user.token, text);
-    // if (contactResponse instanceof ErrorResponse) {
-    //   await onConnectionFail();
-    //   return;
-    // }
-    //
-    // // error cases
-    // switch (contactResponse.status) {
-    //   // safe zone
-    //   case 200:
-    //     // const contacts = await contactResponse.json() as Contact[];
-    //     // setResearchedChats([...researchedChats, ...contacts]);
-    //     const group = (await contactResponse.json()) as Group;
-    //     setResearchedChats([...researchedChats, group]);
-    //     break;
-    //
-    //   // error cases
-    //   case 400:
-    //     logMessages(await contactResponse.json(), `research contacts`);
-    //     break;
-    //
-    //   case 401:
-    //     await onConnectionFail();
-    //     return;
-    //
-    //   case 404:
-    //     break;
-    // }
+    searchContacts(text);
   };
 
   // ==== Build =========================================================================
+  // ====================================================================================
   return (
     <div className={styles.listBox}>
       {/*==== Search bar =============================================================*/}
@@ -299,7 +534,6 @@ const List: React.FC<Props> = ({ onConnectionFail }) => {
           ].join(" ")}
           onClick={() => dispatch(updateHomeSearchOpen(true))}
         >
-          {/*<div className={styles.searchBarText}>{t("search")}</div>*/}
           <input
             ref={searchBar}
             className={styles.searchBarText}
@@ -319,30 +553,15 @@ const List: React.FC<Props> = ({ onConnectionFail }) => {
           />
         </div>
         <div className={wireframe.homeSearchOpen ? styles.list : "hidden"}>
-          {researchedChats.map((value, index) => {
-            const isContact = "username" in value;
-
-            return (
-              <div
-                key={index}
-                className={styles.listItem}
-                // onClick={() =>
-                //   dispatch(
-                //     updateHomeChat(isContact ? value.username : value.uuid)
-                //   )
-                // }
-              >
-                {isContact ? (
-                  <ContactItem
-                    onConnectionFail={onConnectionFail}
-                    contact={value}
-                  />
-                ) : (
-                  <GroupItem group={value} />
-                )}
-              </div>
-            );
-          })}
+          {researchedContacts.map((researchedContact, index) => (
+            <div key={index} className={styles.listItem}>
+              <ContactItem
+                onRequest={onRequest}
+                onCancel={onCancel}
+                contact={researchedContact}
+              />
+            </div>
+          ))}
         </div>
       </div>
       {/*==== Placeholder ============================================================*/}
@@ -388,17 +607,10 @@ const List: React.FC<Props> = ({ onConnectionFail }) => {
             <div key={index} className={styles.listItem}>
               {wireframe.homeCategory === "contacts" ? (
                 <ContactItem
-                  onConnectionFail={onConnectionFail}
                   contact={value as Contact}
-                  onRequestAccept={(newInfo) => {
-                    onAccept(value as Contact, newInfo);
-                  }}
-                  onRequestDecline={() => {
-                    onDecline(value as Contact);
-                  }}
-                  onRequestBlock={() => {
-                    onBlock(value as Contact);
-                  }}
+                  onAccept={onAccept}
+                  onDecline={onDecline}
+                  onBlock={onBlock}
                 />
               ) : (
                 <GroupItem group={value as Group} />
@@ -422,10 +634,7 @@ const List: React.FC<Props> = ({ onConnectionFail }) => {
             }
           >
             {wireframe.homeCategory === "contacts" ? (
-              <ContactItem
-                onConnectionFail={onConnectionFail}
-                contact={value as Contact}
-              />
+              <ContactItem contact={value as Contact} />
             ) : (
               <GroupItem group={value as Group} />
             )}
@@ -454,7 +663,10 @@ const List: React.FC<Props> = ({ onConnectionFail }) => {
         </button>
         <button
           className={styles.bottomBarItem}
-          onClick={() => dispatch(updateHomeCategory("contacts"))}
+          onClick={() => {
+            dispatch(updateHomeCategory("contacts"));
+            dispatch(updateHomeDropdownOpen(false));
+          }}
         >
           <Image
             src={
@@ -470,7 +682,10 @@ const List: React.FC<Props> = ({ onConnectionFail }) => {
         </button>
         <button
           className={styles.bottomBarItem}
-          onClick={() => dispatch(updateHomeCategory("groups"))}
+          onClick={() => {
+            dispatch(updateHomeCategory("groups"));
+            dispatch(updateHomeDropdownOpen(false));
+          }}
         >
           <Image
             src={
