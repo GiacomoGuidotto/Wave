@@ -1,0 +1,17 @@
+{
+  "title": "Entrar con una cuenta existente",
+  "username": "Nombre de usuario",
+  "usernameRequired": "El nombre de usuario es requerido",
+  "usernameTooShort": "El nombre de usuario es demasiado corto",
+  "usernameTooLong": "El nombre de usuario es demasiado largo",
+  "usernameIncorrect": "El nombre de usuario debe contener solo letras minúsculas o dígitos o \"_\"",
+  "password": "Contraseña",
+  "passwordRequired": "La contraseña es requerida",
+  "passwordTooShort": "La contraseña es demasiado corta",
+  "passwordTooLong": "La contraseña es demasiado largo",
+  "passwordIncorrect": "La contraseña debe contener al menos una letra minúscula, una letra mayúscula, un dígito y un carácter especial: \"_-:.;,!'\"£$%&/=?^{}[]()\"",
+  "showPassword": "Mostrar contraseña",
+  "hidePassword": "Contraseña oculta",
+  "userNotFound": "Usuario no encontrado",
+  "enter": "Entrar"
+}

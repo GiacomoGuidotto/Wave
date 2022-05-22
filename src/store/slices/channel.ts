@@ -37,6 +37,7 @@ export const { updateConnectedStatus, updateValidStatus, updateState } =
 export const retrieveConnectedStatus = (state: ReduxState) =>
   state.channel.connected;
 export const retrieveValidStatus = (state: ReduxState) => state.channel.valid;
+export const retrieveChannel = (state: ReduxState) => state.channel;
 
 // serve the reducers for the store configuration in "../store.ts"
 export default channelSlice.reducer;

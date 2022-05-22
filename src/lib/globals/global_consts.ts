@@ -39,6 +39,14 @@ export const globals: Globals = {
       name: "Italiano",
       value: "IT",
     },
+    {
+      name: "Español",
+      value: "ES",
+    },
+    {
+      name: "Deutsch",
+      value: "DE",
+    },
   ],
   themes: [
     {

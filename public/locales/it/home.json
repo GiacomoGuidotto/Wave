@@ -7,14 +7,17 @@
   "listPlaceholder": "Qui non c'è ancora nessuno!",
   "chatPlaceholder": "Seleziona una chat per cominciare!",
   "name": "Nome",
-  "favouriteTheme": "Tema preferito",
+  "favoriteTheme": "Tema preferito",
   "L": "Chiaro",
   "D": "Scuro",
-  "favouriteLanguage": "Lingua preferita",
+  "favoriteLanguage": "Lingua preferita",
   "IT": "Italiano",
   "EN": "Inglese",
+  "ES": "Spagnolo",
+  "DE": "Tedesco",
   "phone": "Telefono",
   "edit": "Modifica le tue info",
   "users": "Utenti",
-  "workInProgress": "Chat ancora in costruzione"
+  "workInProgress": "Chat ancora in costruzione",
+  "offline": "I server per i messaggi in tempo reale sono offline, per visualizzarli ricarica la pagina"
 }

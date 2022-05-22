@@ -1,0 +1,17 @@
+{
+  "title": "Geben Sie mit einem bestehenden Konto ein",
+  "username": "Nutzername",
+  "usernameRequired": "Der Benutzername ist erforderlich",
+  "usernameTooShort": "Der Benutzername ist zu kurz",
+  "usernameTooLong": "Der Benutzername ist zu lang",
+  "usernameIncorrect": "Der Benutzername darf nur Kleinbuchstaben oder Ziffern oder \"_\" enthalten",
+  "password": "Passwort",
+  "passwordRequired": "Das Passwort ist erforderlich",
+  "passwordTooShort": "Das Passwort ist zu kurz",
+  "passwordTooLong": "Das Passwort ist zu lang",
+  "passwordIncorrect": "Das Passwort muss mindestens einen Kleinbuchstaben, einen Großbuchstaben, eine Ziffer und ein Sonderzeichen enthalten: \"_-:.;,!'\"£$%&/=?^{}[]()\"",
+  "showPassword": "Passwort anzeigen",
+  "hidePassword": "Passwort verbergen",
+  "userNotFound": "Benutzer nicht gefunden",
+  "enter": "Eintreten"
+}

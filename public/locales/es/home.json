@@ -1,0 +1,23 @@
+{
+  "search": "Busca",
+  "user": "Usuario",
+  "contacts": "Contactos",
+  "groups": "Grupos",
+  "setting": "Ajustes",
+  "listPlaceholder": "Nadie aquí todavía!",
+  "chatPlaceholder": "Seleccione un chat para comenzar!",
+  "name": "Nombre",
+  "favoriteTheme": "Tema favorito",
+  "L": "Ligero",
+  "D": "Oscuro",
+  "favoriteLanguage": "Idioma favorito",
+  "IT": "Italiano",
+  "EN": "Inglés",
+  "ES": "Español",
+  "DE": "Alemán",
+  "phone": "Teléfono",
+  "edit": "Edita tu información",
+  "users": "Usuarios",
+  "workInProgress": "Chat aún en construcción",
+  "offline": "Los servidores en tiempo real están fuera de línea, para recibir mensajes recargar la página"
+}

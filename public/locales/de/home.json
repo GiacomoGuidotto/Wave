@@ -1,0 +1,23 @@
+{
+  "search": "Suchen",
+  "user": "Benutzer",
+  "contacts": "Kontakte",
+  "groups": "Gruppen",
+  "setting": "Einstellungen",
+  "listPlaceholder": "Noch niemand hier!",
+  "chatPlaceholder": "Wählen Sie einen zu startenden Chat aus!",
+  "name": "Bezeichnung",
+  "favoriteTheme": "Lieblingsthema",
+  "L": "Hell",
+  "D": "Dunkel",
+  "favoriteLanguage": "Lieblingssprache",
+  "IT": "Italienisch",
+  "EN": "Englisch",
+  "ES": "Spanisch",
+  "DE": "Deutsch",
+  "phone": "Telefon",
+  "edit": "Bearbeiten Sie Ihre Informationen",
+  "users": "Benutzer",
+  "workInProgress": "Chat noch im Aufbau",
+  "offline": "Die Echtzeitserver sind offline, um Nachrichten zu erhalten, laden Sie die Seite neu"
+}

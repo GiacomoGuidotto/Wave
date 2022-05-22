@@ -11,6 +11,8 @@ export interface wireframeState {
   homeUsersOpen: boolean;
   homeCategory: Categories;
   homeChat: string;
+  dismissedLanguagePopup: boolean;
+  dismissedOfflinePopup: boolean;
 }
 
 // wireframe slice initial state
@@ -22,6 +24,8 @@ const initialState: wireframeState = {
   homeUsersOpen: false,
   homeCategory: "contacts",
   homeChat: "",
+  dismissedLanguagePopup: false,
+  dismissedOfflinePopup: false,
 };
 
 // redux store partition ("slice") for the wireframe state management
@@ -50,6 +54,12 @@ export const wireframeSlice = createSlice({
     updateHomeChat: (state, action: PayloadAction<string>) => {
       state.homeChat = action.payload;
     },
+    updateDismissedLanguagePopup: (state, action: PayloadAction<boolean>) => {
+      state.dismissedLanguagePopup = action.payload;
+    },
+    updateDismissedOfflinePopup: (state, action: PayloadAction<boolean>) => {
+      state.dismissedOfflinePopup = action.payload;
+    },
     updateState: (state, action: PayloadAction<wireframeState>) => {
       state.accessRightPage = action.payload.accessRightPage;
       state.homeMenuOpen = action.payload.homeMenuOpen;
@@ -58,6 +68,8 @@ export const wireframeSlice = createSlice({
       state.homeUsersOpen = action.payload.homeUsersOpen;
       state.homeCategory = action.payload.homeCategory;
       state.homeChat = action.payload.homeChat;
+      state.dismissedLanguagePopup = action.payload.dismissedLanguagePopup;
+      state.dismissedOfflinePopup = action.payload.dismissedOfflinePopup;
     },
     resetWireframe: (state) => {
       state.accessRightPage = false;
@@ -67,6 +79,8 @@ export const wireframeSlice = createSlice({
       state.homeUsersOpen = false;
       state.homeCategory = "contacts";
       state.homeChat = "";
+      state.dismissedLanguagePopup = false;
+      state.dismissedOfflinePopup = false;
     },
   },
 });
@@ -81,6 +95,8 @@ export const {
   updateHomeChat,
   updateState,
   resetWireframe,
+  updateDismissedLanguagePopup,
+  updateDismissedOfflinePopup,
 } = wireframeSlice.actions;
 
 export const retrieveAccessRightPage = (state: ReduxState) =>
@@ -97,6 +113,9 @@ export const retrieveHomeCategory = (state: ReduxState): Categories =>
   state.wireframe.homeCategory;
 export const retrieveHomeChat = (state: ReduxState) => state.wireframe.homeChat;
 export const retrieveWireframe = (state: ReduxState) => state.wireframe;
-
+export const retrieveDismissedLanguagePopup = (state: ReduxState) =>
+  state.wireframe.dismissedLanguagePopup;
+export const retrieveDismissedOfflinePopup = (state: ReduxState) =>
+  state.wireframe.dismissedOfflinePopup;
 // serve the reducers for the store configuration in "../store.ts"
 export default wireframeSlice.reducer;

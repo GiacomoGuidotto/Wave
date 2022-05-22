@@ -1,0 +1,31 @@
+.languagePopupBox {
+  @apply
+  fixed top-0 right-0 z-50
+  mt-4 mr-4
+  flex place-items-center gap-2
+  h-12
+  bg-gray-200
+  dark:bg-gray-800
+  dark:text-white
+  px-4
+  transition-[top] duration-1000 ease-in-out
+}
+
+.languagePopupBoxHidden {
+  @apply -top-20
+}
+
+.languagePopupText {
+
+}
+
+.languagePopupBox > button {
+  @apply
+  z-40
+  flex place-items-center
+  p-2
+  hover:dark:bg-gray-700
+  hover:bg-gray-400
+  cursor-pointer
+
+}

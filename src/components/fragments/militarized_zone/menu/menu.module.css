@@ -66,6 +66,7 @@
   border-gray-400
   dark:border-white
   w-[90%] text-truncate
+  select-none
 }
 
 .dropdownIcon {
@@ -82,18 +83,19 @@
 .userBannerExtension {
   @apply
   h-0
-  border-t dark:border-t-gray-900
+  border-t
+  border-t-gray-200
+  dark:border-t-gray-900
   flex place-content-between place-items-center
   transition-all duration-150 ease-in-out
-
   overflow-hidden
 }
 
 .userBannerExtension > button {
   @apply
-  w-full h-full
+  w-1/2 h-full shrink-0
   flex place-items-center justify-start gap-2
-  pl-2
+  px-2
   hover:dark:bg-gray-700
   hover:bg-gray-300
 }
@@ -104,7 +106,7 @@
 
 .userBannerExtension > button:nth-child(2) {
   @apply
-  pl-0 pr-2 justify-end
+  justify-end
 }
 
 .userBannerExtension > button > div:nth-child(1) {
@@ -116,7 +118,9 @@
 }
 
 .userBannerExtended {
-  @apply h-10  dark:border-t-white
+  @apply h-10
+  border-t-gray-400
+  dark:border-t-white
 }
 
 .usersChoice {
@@ -164,6 +168,7 @@
   dark:hover:bg-gray-800
   hover:bg-gray-200
   cursor-pointer
+  select-none
 }
 
 

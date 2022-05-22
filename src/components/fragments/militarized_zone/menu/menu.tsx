@@ -47,10 +47,10 @@ const Menu: React.FC = () => {
             <div>{user.phone}</div>
           </div>
           <div className={styles.userBannerSecondaryColumn}>
-            <div className={styles.userBannerLabel}>{t("favouriteTheme")}</div>
+            <div className={styles.userBannerLabel}>{t("favoriteTheme")}</div>
             <div>{t(`${user.theme}`)}</div>
             <div className={styles.userBannerLabel}>
-              {t("favouriteLanguage")}
+              {t("favoriteLanguage")}
             </div>
             <div>{t(`${user.language}`)}</div>
           </div>
@@ -117,7 +117,7 @@ const Menu: React.FC = () => {
                       ? "/icons/wireframe/remove.png"
                       : "/icons/wireframe/remove_dark.png"
                   }
-                  alt={t("edit")}
+                  alt="remove"
                   width={16}
                   height={16}
                 />

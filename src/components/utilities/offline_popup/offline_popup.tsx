@@ -1,20 +1,17 @@
-import styles from "./language_popup.module.css";
+import styles from "./offline_popup.module.css";
 import React, { MouseEventHandler, useEffect, useState } from "react";
 import { useTranslation } from "next-i18next";
 import Image from "next/image";
 import { useReduxSelector } from "store/hooks";
 import { retrieveTheme } from "store/slices/user";
-import { useRouter } from "next/router";
 
 type Props = {
   onDismiss: () => void;
-  targetLanguage: string;
 };
 
-const LanguagePopup: React.FC<Props> = ({ targetLanguage, onDismiss }) => {
+const OfflinePopup: React.FC<Props> = ({ onDismiss }) => {
   const theme = useReduxSelector(retrieveTheme);
-  const router = useRouter();
-  const { t } = useTranslation("common");
+  const { t } = useTranslation("home");
 
   const [hide, setHide] = useState(true);
 
@@ -27,31 +24,20 @@ const LanguagePopup: React.FC<Props> = ({ targetLanguage, onDismiss }) => {
     setHide(true);
     setTimeout(() => onDismiss(), 1000);
   };
-  
-  const onAccept = async () => {
-    // noinspection JSIgnoredPromiseFromCall
-    await router.push(router.pathname, router.pathname, {
-      locale: targetLanguage.toLowerCase(),
-      scroll: false,
-    });
-  };
 
   return (
     <div
       className={`${styles.languagePopupBox} ${
         hide && styles.languagePopupBoxHidden
       }`}
-      onClick={onAccept}
     >
       <Image
-        src={`/icons/languages/${targetLanguage}.png`}
-        alt={targetLanguage}
-        height={50}
-        width={50}
+        src={"/icons/wireframe/offline.png"}
+        alt="offline"
+        width={42}
+        height={42}
       />
-      <div className={styles.languagePopupText}>
-        {t(`changeTo${targetLanguage}`)}
-      </div>
+      <div className={styles.languagePopupText}>{t("offline")}</div>
       <button onClick={onCancel}>
         <Image
           src={
@@ -68,4 +54,4 @@ const LanguagePopup: React.FC<Props> = ({ targetLanguage, onDismiss }) => {
   );
 };
 
-export default LanguagePopup;
+export default OfflinePopup;

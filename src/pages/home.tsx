@@ -1,6 +1,6 @@
 import { useContext, useEffect, useState } from "react";
 import { useRouter } from "next/router";
-import { retrieveLanguage, retrieveToken, updateUser } from "store/slices/user";
+import { retrieveUser, updateUser } from "store/slices/user";
 import { HomeLayout, Layout } from "layouts";
 import { Chat, List, Menu } from "fragments";
 import { getUserInformation, logMessages, poke } from "services/api_service";
@@ -14,31 +14,43 @@ import wrapper from "store/store";
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 import { LanguagePopup } from "../components/utilities";
 import { authorizeConnection } from "services/websocket_service";
+import { retrieveChannel } from "store/slices/channel";
+import OfflinePopup from "../components/utilities/offline_popup";
+import {
+  retrieveWireframe,
+  updateDismissedLanguagePopup,
+  updateDismissedOfflinePopup,
+} from "store/slices/wireframe";
 
 const Home: NextPageWithLayout = () => {
   const sessionDuration = useContext(GlobalsContext).server.sessionDuration;
   const router = useRouter();
   const dispatch = useDispatch();
-  const token = useReduxSelector(retrieveToken);
-  const language = useReduxSelector(retrieveLanguage);
+  const user = useReduxSelector(retrieveUser);
+  const wireframe = useReduxSelector(retrieveWireframe);
+  const channel = useReduxSelector(retrieveChannel);
 
   const [languagePopup, setLanguagePopup] = useState(false);
+  const [offlinePopup, setOfflinePopup] = useState(false);
 
   // ==== Initialization logic =====================================================================
   useEffect(() => {
     // check token existence
-    if (token.length === 0) {
+    if (user.token.length === 0) {
       router.push("/access");
       return;
     }
 
     // warning if language mismatch between saved and router's
-    if (language.toLowerCase() !== router.locale) {
+    if (
+      user.language.toLowerCase() !== router.locale &&
+      !wireframe.dismissedLanguagePopup
+    ) {
       setLanguagePopup(true);
     }
 
     // open and authorize websocket connection
-    authorizeConnection(token);
+    authorizeConnection(user.token);
 
     // retrieve user info
     updateUserInfo();
@@ -53,8 +65,9 @@ const Home: NextPageWithLayout = () => {
   }, []);
 
   const updateUserInfo = async () => {
-    // TODO avoid if already existing
-    const response = await getUserInformation(token);
+    if (user.username.length === 0) return;
+
+    const response = await getUserInformation(user.token);
 
     if (response instanceof ErrorResponse) {
       await onConnectionFail();
@@ -78,7 +91,7 @@ const Home: NextPageWithLayout = () => {
 
     dispatch(
       updateUser({
-        token: token,
+        token: user.token,
         username: username,
         name: name,
         surname: surname,
@@ -91,7 +104,7 @@ const Home: NextPageWithLayout = () => {
   };
 
   const updateSession = async () => {
-    const response = await poke(token);
+    const response = await poke(user.token);
 
     if (response instanceof ErrorResponse) {
       await onConnectionFail();
@@ -111,15 +124,37 @@ const Home: NextPageWithLayout = () => {
     }
   };
 
-  const onConnectionFail = () => router.push("/_unreachable_servers", "/home");
+  useEffect(() => {
+    if (channel.valid) {
+      dispatch(updateDismissedOfflinePopup(false));
+      setOfflinePopup(false);
+    } else {
+      if (wireframe.dismissedOfflinePopup) return;
+      setOfflinePopup(true);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [channel.valid]);
+
+  const onConnectionFail = () => router.push("/_servers_unreachable", "/home");
 
   // ==== Build ====================================================================================
   return (
     <>
       {languagePopup && (
         <LanguagePopup
-          targetLanguage={language}
-          onDismiss={() => setLanguagePopup(false)}
+          targetLanguage={user.language}
+          onDismiss={() => {
+            setLanguagePopup(false);
+            dispatch(updateDismissedLanguagePopup(true));
+          }}
+        />
+      )}
+      {offlinePopup && (
+        <OfflinePopup
+          onDismiss={() => {
+            setOfflinePopup(false);
+            dispatch(updateDismissedOfflinePopup(true));
+          }}
         />
       )}
       <Menu />

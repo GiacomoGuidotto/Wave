@@ -7,14 +7,17 @@
   "listPlaceholder": "No one here yet!",
   "chatPlaceholder": "Select a chat to start!",
   "name": "Name",
-  "favouriteTheme": "Favourite theme",
+  "favoriteTheme": "Favorite theme",
   "L": "Light",
   "D": "Dark",
-  "favouriteLanguage": "Favourite language",
+  "favoriteLanguage": "Favorite language",
   "IT": "Italian",
   "EN": "English",
+  "ES": "Spanish",
+  "DE": "German",
   "phone": "Phone",
   "edit": "Edit your info",
   "users": "Users",
-  "workInProgress": "Chat still under construction"
+  "workInProgress": "Chat still under construction",
+  "offline": "The real-time servers are offline, to receive messages reload the page"
 }

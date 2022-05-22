@@ -91,6 +91,43 @@ export const getUserInformation = (
   });
 };
 
+interface ChangeUserInformationParams {
+  token: string;
+  username?: string;
+  name?: string;
+  surname?: string;
+  phone?: string;
+  theme?: string;
+  language?: string;
+}
+
+export const changeUserInformation = ({
+  token,
+  username,
+  name,
+  surname,
+  phone,
+  theme,
+  language,
+}: ChangeUserInformationParams): Promise<Response | ErrorResponse> => {
+  const url = `${baseUrl}${server.endpoints.user}`;
+  const method = "PUT";
+  const headers = {
+    token: token,
+    ...(username && { username: username }),
+    ...(name && { name: name }),
+    ...(surname && { surname: surname }),
+    ...(phone && { phone: phone }),
+    ...(theme && { theme: theme }),
+    ...(language && { language: language }),
+  };
+
+  return request(url, {
+    method: method,
+    headers: headers,
+  });
+};
+
 export const searchForUsers = (
   token: string,
   chat: string

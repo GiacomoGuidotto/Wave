@@ -12,7 +12,12 @@ import {
   retrieveTheme,
   updateUser,
 } from "store/slices/user";
-import { login, logMessages, signUp } from "services/api_service";
+import {
+  changeUserInformation,
+  login,
+  logMessages,
+  signUp,
+} from "services/api_service";
 import { ErrorResponse } from "models/error_response";
 
 const getBase64 = (file: File) =>
@@ -66,11 +71,7 @@ const SignUp: React.FC<Props> = ({ onConnectionFail }) => {
     if (!confirmation) {
       setConfirmation(true);
     } else {
-      // picture conversion
-      const file = data.picture.item(0);
-      if (file) setPicture(await getBase64(file));
-
-      // call API
+      // create account
       let response = await signUp(
         data.username,
         data.password,
@@ -107,6 +108,7 @@ const SignUp: React.FC<Props> = ({ onConnectionFail }) => {
           return;
       }
 
+      // login the account
       response = await login(data.username, data.password);
 
       if (response instanceof ErrorResponse) {
@@ -128,6 +130,34 @@ const SignUp: React.FC<Props> = ({ onConnectionFail }) => {
       }
 
       const token: string = payload.token;
+
+      // change the theme and language
+      response = await changeUserInformation({
+        token: token,
+        theme: theme,
+        language: language,
+      });
+
+      if (response instanceof ErrorResponse) {
+        onConnectionFail();
+        return;
+      }
+
+      payload = await response.json();
+      // error cases
+      switch (response.status) {
+        case 400:
+          logMessages(payload, "change theme and language");
+          return;
+
+        case 401:
+          logMessages(payload, "change theme and language");
+          return;
+
+        case 409:
+          logMessages(payload, "change theme and language");
+          return;
+      }
 
       dispatch(
         updateUser({

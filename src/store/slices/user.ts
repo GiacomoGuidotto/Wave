@@ -1,5 +1,4 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { HYDRATE } from "next-redux-wrapper";
 import { ReduxState } from "store/store";
 
 // user slice type
@@ -79,11 +78,11 @@ export const userSlice = createSlice({
 
   // reducer called after server side rendering,
   // used by the wrapper for pass the state from next server to next client
-  extraReducers: {
-    [HYDRATE]: (state, action) => {
-      state.language = action.payload.user.language;
-    },
-  },
+  // extraReducers: {
+  //   [HYDRATE]: (state, action) => {
+  //     state.language = action.payload.user.language;
+  //   },
+  // },
 });
 
 // user slice reducers
